@@ -25,7 +25,6 @@ namespace CLHEP {
  */
 class EcalCoder {
 public:
-
   typedef CaloTSamples<float, 10> EcalSamples;
 
   typedef CorrelatedNoisifier<EcalCorrMatrix> Noisifier;

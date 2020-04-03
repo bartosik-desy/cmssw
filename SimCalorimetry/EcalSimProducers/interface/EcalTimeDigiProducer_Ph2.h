@@ -1,7 +1,6 @@
 #ifndef SimCalorimetry_EcalSimProducers_EcalTimeDigiProducer_Ph2_h
 #define SimCalorimetry_EcalSimProducers_EcalTimeDigiProducer_Ph2_h
 
-
 #include "DataFormats/Math/interface/Error.h"
 
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalDigitizerTraits_Ph2.h"
@@ -14,50 +13,48 @@
 
 #include <vector>
 
-class ESDigitizer ;
+class ESDigitizer;
 
-class CaloGeometry ;
-class EcalSimParameterMap_Ph2 ;
-class PileUpEventPrincipal ;
+class CaloGeometry;
+class EcalSimParameterMap_Ph2;
+class PileUpEventPrincipal;
 class EcalTimeMapDigitizer;
 
 namespace edm {
   class Event;
   class EventSetup;
-  template<typename T> class Handle;
+  template <typename T>
+  class Handle;
   class ParameterSet;
-}
+}  // namespace edm
 
 class EcalTimeDigiProducer_Ph2 : public DigiAccumulatorMixMod {
-   public:
+public:
+  EcalTimeDigiProducer_Ph2(const edm::ParameterSet& params, edm::ProducesCollector, edm::ConsumesCollector&);
+  ~EcalTimeDigiProducer_Ph2() override;
 
-  EcalTimeDigiProducer_Ph2( const edm::ParameterSet& params , edm::ProducesCollector, edm::ConsumesCollector&);
-      ~EcalTimeDigiProducer_Ph2() override;
+  void initializeEvent(edm::Event const& e, edm::EventSetup const& c) override;
+  void accumulate(edm::Event const& e, edm::EventSetup const& c) override;
+  void accumulate(PileUpEventPrincipal const& e, edm::EventSetup const& c, edm::StreamID const&) override;
+  void finalizeEvent(edm::Event& e, edm::EventSetup const& c) override;
 
-      void initializeEvent(edm::Event const& e, edm::EventSetup const& c) override;
-      void accumulate(edm::Event const& e, edm::EventSetup const& c) override;
-      void accumulate(PileUpEventPrincipal const& e, edm::EventSetup const& c, edm::StreamID const&) override;
-      void finalizeEvent(edm::Event& e, edm::EventSetup const& c) override;
+private:
+  typedef edm::Handle<std::vector<PCaloHit> > HitsHandle;
+  void accumulateCaloHits(HitsHandle const& ebHandle, int bunchCrossing);
 
-   private:
+  void checkGeometry(const edm::EventSetup& eventSetup);
 
-      typedef edm::Handle<std::vector<PCaloHit> > HitsHandle;
-      void accumulateCaloHits(HitsHandle const& ebHandle,  int bunchCrossing);
+  void updateGeometry();
 
-      void checkGeometry(const edm::EventSetup& eventSetup) ;
+  const std::string m_EBdigiCollection;
+  const edm::InputTag m_hitsProducerTagEB;
+  const edm::EDGetTokenT<std::vector<PCaloHit> > m_hitsProducerTokenEB;
 
-      void updateGeometry() ;
+private:
+  int m_timeLayerEB;
+  const CaloGeometry* m_Geometry;
 
-      const std::string m_EBdigiCollection ;
-      const edm::InputTag m_hitsProducerTagEB  ;
-      const edm::EDGetTokenT<std::vector<PCaloHit> > m_hitsProducerTokenEB  ;
-
-   private:
-      int m_timeLayerEB;
-      const CaloGeometry*   m_Geometry ;
-
-      EcalTimeMapDigitizer* m_BarrelDigitizer;
-
+  EcalTimeMapDigitizer* m_BarrelDigitizer;
 };
 
-#endif 
+#endif

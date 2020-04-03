@@ -11,16 +11,16 @@
 #include <fstream>
 
 EcalElectronicsSim_Ph2::EcalElectronicsSim_Ph2(const EcalSimParameterMap_Ph2* parameterMap,
-                                       EcalCoder_Ph2* coder,
-                                       bool applyConstantTerm,
-                                       double rmsConstantTerm)
+                                               EcalCoder_Ph2* coder,
+                                               bool applyConstantTerm,
+                                               double rmsConstantTerm)
     : m_simMap(parameterMap), m_theCoder(coder), m_thisCT(rmsConstantTerm), m_applyConstantTerm(applyConstantTerm) {}
 
 EcalElectronicsSim_Ph2::~EcalElectronicsSim_Ph2() {}
 
 void EcalElectronicsSim_Ph2::analogToDigital(CLHEP::HepRandomEngine* engine,
-                                         EcalElectronicsSim_Ph2::EcalSamples& clf,
-                                         EcalDataFrame& df) const {
+                                             EcalElectronicsSim_Ph2::EcalSamples& clf,
+                                             EcalDataFrame& df) const {
   //PG input signal is in pe.  Converted in GeV
   amplify(clf, engine);
 

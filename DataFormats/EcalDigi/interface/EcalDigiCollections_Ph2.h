@@ -24,41 +24,29 @@ class EcalDigiCollectionPh2 : public edm::DataFrameContainer {
 public:
   typedef edm::DataFrameContainer::size_type size_type;
   static const size_type MAXSAMPLES = ecalPh2::sampleSize;
-  explicit EcalDigiCollectionPh2(size_type istride=MAXSAMPLES, int isubdet=0)  : 
-    edm::DataFrameContainer(istride, isubdet){}
-  void swap(DataFrameContainer& other) {this->DataFrameContainer::swap(other);}
-  
+  explicit EcalDigiCollectionPh2(size_type istride = MAXSAMPLES, int isubdet = 0)
+      : edm::DataFrameContainer(istride, isubdet) {}
+  void swap(DataFrameContainer& other) { this->DataFrameContainer::swap(other); }
 };
 
 // make edm (and ecal client) happy
-class EBDigiCollectionPh2 : public  EcalDigiCollectionPh2 {
+class EBDigiCollectionPh2 : public EcalDigiCollectionPh2 {
 public:
   typedef edm::DataFrameContainer::size_type size_type;
   typedef EBDataFrame Digi;
   typedef Digi::key_type DetId;
 
-  EBDigiCollectionPh2(size_type istride=MAXSAMPLES) : 
-    EcalDigiCollectionPh2(istride, EcalBarrel){}
-  void swap(EBDigiCollectionPh2& other) {this->EcalDigiCollectionPh2::swap(other);}
-  void push_back(const Digi& digi){ DataFrameContainer::push_back(digi.id(), digi.frame().begin()); }
-  void push_back(id_type iid){DataFrameContainer::push_back(iid);}
-  void push_back(id_type iid,data_type const* idata){DataFrameContainer::push_back(iid,idata);}
-  
+  EBDigiCollectionPh2(size_type istride = MAXSAMPLES) : EcalDigiCollectionPh2(istride, EcalBarrel) {}
+  void swap(EBDigiCollectionPh2& other) { this->EcalDigiCollectionPh2::swap(other); }
+  void push_back(const Digi& digi) { DataFrameContainer::push_back(digi.id(), digi.frame().begin()); }
+  void push_back(id_type iid) { DataFrameContainer::push_back(iid); }
+  void push_back(id_type iid, data_type const* idata) { DataFrameContainer::push_back(iid, idata); }
 };
 
-
-
 // Free swap functions
-inline
-void swap(EcalDigiCollectionPh2& lhs, EcalDigiCollectionPh2& rhs) {
-  lhs.swap(rhs);
-}
+inline void swap(EcalDigiCollectionPh2& lhs, EcalDigiCollectionPh2& rhs) { lhs.swap(rhs); }
 
-inline
-void swap(EBDigiCollectionPh2& lhs, EBDigiCollectionPh2& rhs) {
-  lhs.swap(rhs);
-}
-
+inline void swap(EBDigiCollectionPh2& lhs, EBDigiCollectionPh2& rhs) { lhs.swap(rhs); }
 
 typedef edm::SortedCollection<EcalTimeDigi> EcalTimeDigiCollection;
 //DA ELIMINARE???

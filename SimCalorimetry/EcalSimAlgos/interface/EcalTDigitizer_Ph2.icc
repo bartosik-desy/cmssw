@@ -7,7 +7,9 @@
 #include "CalibFormats/CaloObjects/interface/CaloSamples.h"
 
 template <class Traits>
-EcalTDigitizer_Ph2<Traits>::EcalTDigitizer_Ph2(EcalHitResponse_Ph2* hitResponse, ElectronicsSim_Ph2* electronicsSim, bool addNoise)
+EcalTDigitizer_Ph2<Traits>::EcalTDigitizer_Ph2(EcalHitResponse_Ph2* hitResponse,
+                                               ElectronicsSim_Ph2* electronicsSim,
+                                               bool addNoise)
     : m_hitResponse(hitResponse),
       m_electronicsSim(electronicsSim),
       m_addNoise(addNoise),
@@ -17,7 +19,9 @@ template <class Traits>
 EcalTDigitizer_Ph2<Traits>::~EcalTDigitizer_Ph2() {}
 
 template <class Traits>
-void EcalTDigitizer_Ph2<Traits>::add(const std::vector<PCaloHit>& hits, int bunchCrossing, CLHEP::HepRandomEngine* engine) {
+void EcalTDigitizer_Ph2<Traits>::add(const std::vector<PCaloHit>& hits,
+                                     int bunchCrossing,
+                                     CLHEP::HepRandomEngine* engine) {
   if (m_hitResponse->withinBunchRange(bunchCrossing)) {
     for (std::vector<PCaloHit>::const_iterator it = hits.begin(), itEnd = hits.end(); it != itEnd; ++it) {
       m_hitResponse->add(*it, engine);

@@ -17,4 +17,3 @@ COND_SERIALIZATION_INSTANTIATE(EcalCondObjectContainer<float>);
 COND_SERIALIZATION_INSTANTIATE(EcalCondTowerObjectContainer<EcalChannelStatusCode>);
 COND_SERIALIZATION_INSTANTIATE(EcalCondTowerObjectContainer<EcalDAQStatusCode>);
 COND_SERIALIZATION_INSTANTIATE(EcalCondTowerObjectContainer<EcalDQMStatusCode>);
-

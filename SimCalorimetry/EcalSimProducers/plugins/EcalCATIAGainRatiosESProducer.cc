@@ -13,30 +13,25 @@
 const int kEBChannels = 61200;
 
 class EcalCATIAGainRatiosESProducer : public edm::ESProducer {
-
 public:
-
   EcalCATIAGainRatiosESProducer(const edm::ParameterSet& iConfig);
 
   typedef std::shared_ptr<EcalCATIAGainRatios> ReturnType;
 
   ReturnType produce(const EcalCATIAGainRatiosRcd& iRecord);
 
-
 private:
   edm::ParameterSet pset_;
 };
 
-EcalCATIAGainRatiosESProducer::EcalCATIAGainRatiosESProducer(const edm::ParameterSet& iConfig) : 
-  pset_(iConfig) {
+EcalCATIAGainRatiosESProducer::EcalCATIAGainRatiosESProducer(const edm::ParameterSet& iConfig) : pset_(iConfig) {
   //the following line is needed to tell the framework what
   // data is being produced
   //std::cout<<"*********Creating EcalCATIAGainRatiosESProducer"<<std::endl;
   setWhatProduced(this);
 }
 ////
-EcalCATIAGainRatiosESProducer::ReturnType
-EcalCATIAGainRatiosESProducer::produce(const EcalCATIAGainRatiosRcd& iRecord){
+EcalCATIAGainRatiosESProducer::ReturnType EcalCATIAGainRatiosESProducer::produce(const EcalCATIAGainRatiosRcd& iRecord) {
   //std::cout<<"********Starting Production"<<std::endl;
   auto prod = std::make_shared<EcalCATIAGainRatios>();
 
@@ -47,14 +42,12 @@ EcalCATIAGainRatiosESProducer::produce(const EcalCATIAGainRatiosRcd& iRecord){
     float val = 10.;
     prod->setValue(myEBDetId.rawId(), val);
   }
-  
+
   //std::cout<<prod->size()<<std::endl;
- 
+
   //std::cout<<"***********Returning"<<std::endl;
   return prod;
 }
-
-
 
 //Define this as a plug-in
 DEFINE_FWK_EVENTSETUP_MODULE(EcalCATIAGainRatiosESProducer);

@@ -2,7 +2,7 @@
 //
 // Package:    PhaseI/PhaseIAnalyzer
 // Class:      PhaseIAnalyzer
-// 
+//
 /**\class PhaseIAnalyzer PhaseIAnalyzer.cc PhaseI/PhaseIAnalyzer/plugins/PhaseIAnalyzer.cc
 
  Description: [one line class summary]
@@ -15,7 +15,6 @@
 //         Created:  Tue, 16 Jan 2018 11:56:05 GMT
 //
 //
-
 
 // system include files
 #include <memory>
@@ -63,116 +62,102 @@ using namespace edm;
 //
 // constructors and destructor
 //
-PhaseIAnalyzer::PhaseIAnalyzer(const edm::ParameterSet& iConfig)
-{
-//now do what ever initialization is needed
-usesResource("TFileService");
+PhaseIAnalyzer::PhaseIAnalyzer(const edm::ParameterSet& iConfig) {
+  //now do what ever initialization is needed
+  usesResource("TFileService");
 
- digiTagEB_= iConfig.getParameter<edm::InputTag>("BarrelDigis");
+  digiTagEB_ = iConfig.getParameter<edm::InputTag>("BarrelDigis");
 
- digiTokenEB_ = consumes<EBDigiCollection>(digiTagEB_);
- 
- //Files:
- edm::Service<TFileService> fs;
- //Histograms
+  digiTokenEB_ = consumes<EBDigiCollection>(digiTagEB_);
 
- for(int isample=0;isample<16;isample++) {
-   EBEnergyHisto[isample] = fs->make<TH1I>(Form("EnergyEB_%d", isample), Form("Energy sample %d  Barrel;ADC",isample), 950 , 100 , 2000 );
-   EBGainHisto[isample]   = fs->make<TH1I>(Form("GainEB_%d", isample), Form("Gain Barrel sample %d;Gain",isample) , 5 , 0 , 4 );
- }
-  SingleChannelE = fs->make<TH1I>("SingleChannelE", "Energy single channel Barrel;ADC", 17 , -0.5 , 16.5 );
-  SingleChannelELow = fs->make<TH1I>("SingleChannelELow", "Energy single channel Barrel;ADC", 17 , -0.5 , 16.5 );
+  //Files:
+  edm::Service<TFileService> fs;
+  //Histograms
+
+  for (int isample = 0; isample < 16; isample++) {
+    EBEnergyHisto[isample] =
+        fs->make<TH1I>(Form("EnergyEB_%d", isample), Form("Energy sample %d  Barrel;ADC", isample), 950, 100, 2000);
+    EBGainHisto[isample] =
+        fs->make<TH1I>(Form("GainEB_%d", isample), Form("Gain Barrel sample %d;Gain", isample), 5, 0, 4);
+  }
+  SingleChannelE = fs->make<TH1I>("SingleChannelE", "Energy single channel Barrel;ADC", 17, -0.5, 16.5);
+  SingleChannelELow = fs->make<TH1I>("SingleChannelELow", "Energy single channel Barrel;ADC", 17, -0.5, 16.5);
 
   Char_t histo[200];
- 
-  sprintf (histo, "EcalDigiTaskBarrelOccupancy" ) ;
+
+  sprintf(histo, "EcalDigiTaskBarrelOccupancy");
   meEBDigiOccupancy_ = fs->make<TH2D>(histo, histo, 360, 0., 360., 170, -85., 85.);
 
-  sprintf (histo, "EcalDigiTaskBarrelOccupancyHigh" ) ;
+  sprintf(histo, "EcalDigiTaskBarrelOccupancyHigh");
   meEBDigiOccupancyHigh_ = fs->make<TH2D>(histo, histo, 360, 0., 360., 170, -85., 85.);
 
-  sprintf (histo, "EcalDigiTaskBarrelOccupancyLow" ) ;
+  sprintf(histo, "EcalDigiTaskBarrelOccupancyLow");
   meEBDigiOccupancyLow_ = fs->make<TH2D>(histo, histo, 360, 0., 360., 170, -85., 85.);
-  
-  sprintf (histo, "EcalDigiTaskBarrelOccupancyMid" ) ;
+
+  sprintf(histo, "EcalDigiTaskBarrelOccupancyMid");
   meEBDigiOccupancyMid_ = fs->make<TH2D>(histo, histo, 360, 0., 360., 170, -85., 85.);
 
-  sprintf (histo, "EcalDigiTaskBarrelDigisMultiplicity" ) ;
+  sprintf(histo, "EcalDigiTaskBarrelDigisMultiplicity");
   meEBDigiMultiplicity_ = fs->make<TH1D>(histo, histo, 612, 0., 61200);
-  
-    
-  for (int i = 0; i < ecalPh2::sampleSize ; i++ ) {
 
-    sprintf (histo, "EcalDigiTaskBarrelAnalogPulse%02d", i+1) ;
+  for (int i = 0; i < ecalPh2::sampleSize; i++) {
+    sprintf(histo, "EcalDigiTaskBarrelAnalogPulse%02d", i + 1);
     meEBDigiADCAnalog_[i] = fs->make<TH1D>(histo, histo, 4000, 0., 400.);
 
-    sprintf (histo, "EcalDigiTaskBarrelADCPulse%02dGain0_Saturated", i+1) ;
+    sprintf(histo, "EcalDigiTaskBarrelADCPulse%02dGain0_Saturated", i + 1);
     meEBDigiADCgS_[i] = fs->make<TH1D>(histo, histo, 4096, -0.5, 4095.5);
-    sprintf (histo, "EcalDigiTaskBarrelGainPulse%02d", i+1) ;
+    sprintf(histo, "EcalDigiTaskBarrelGainPulse%02d", i + 1);
     meEBDigiGain_[i] = fs->make<TH1D>(histo, histo, 4, 0, 4);
-
   }
-    
-  sprintf (histo, "EcalDigiTaskBarrelPedestalForPreSample" ) ;
-  meEBPedestal_ = fs->make<TH1D>(histo, histo, 4096, -0.5, 4095.5) ;
 
-  sprintf (histo, "EcalDigiTaskBarrelMaximumPositionGt100ADC" ) ;
-  meEBMaximumgt100ADC_ = fs->make<TH1D>(histo, histo, 10, 0., 10.) ;
+  sprintf(histo, "EcalDigiTaskBarrelPedestalForPreSample");
+  meEBPedestal_ = fs->make<TH1D>(histo, histo, 4096, -0.5, 4095.5);
 
-  sprintf (histo, "EcalDigiTaskBarrelMaximumPositionGt10ADC" ) ;
-  meEBMaximumgt10ADC_ = fs->make<TH1D>(histo, histo, 10, 0., 10.) ;
+  sprintf(histo, "EcalDigiTaskBarrelMaximumPositionGt100ADC");
+  meEBMaximumgt100ADC_ = fs->make<TH1D>(histo, histo, 10, 0., 10.);
+
+  sprintf(histo, "EcalDigiTaskBarrelMaximumPositionGt10ADC");
+  meEBMaximumgt10ADC_ = fs->make<TH1D>(histo, histo, 10, 0., 10.);
 
   //   sprintf (histo, "EcalDigiTask Barrel ADC counts after gain switch" ) ;
   //meEBnADCafterSwitch_ = fs->make<TH1D>histo, histo, 10, 0., 10.) ;
-
-
- 
-}
-  
-
-PhaseIAnalyzer::~PhaseIAnalyzer()
-{
- 
-   // do anything here that needs to be done at desctruction time
-   // (e.g. close files, deallocate resources etc.)
-
 }
 
+PhaseIAnalyzer::~PhaseIAnalyzer() {
+  // do anything here that needs to be done at desctruction time
+  // (e.g. close files, deallocate resources etc.)
+}
 
 //
 // member functions
 //
 
 // ------------ method called for each event  ------------
-void
-PhaseIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
-{
-  
+void PhaseIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
   //LogInfo("PhaseI") << "new event ";
 
-   Handle<EBDigiCollection> pDigiEB;
-   iEvent.getByToken(digiTokenEB_,pDigiEB);
+  Handle<EBDigiCollection> pDigiEB;
+  iEvent.getByToken(digiTokenEB_, pDigiEB);
 
-   // edm::ESHandle<EcalIntercalibConstantsMC> ical;
-   // iSetup.get<EcalIntercalibConstantsMCRcd>().get(ical);
-   // const EcalIntercalibConstantsMC* ical_map = ical.product();
-   // EcalIntercalibConstantsMC::const_iterator itical = ical_map->getMap().find(2);
-   // cout << "intercalib: " << (*itical) << endl;
+  // edm::ESHandle<EcalIntercalibConstantsMC> ical;
+  // iSetup.get<EcalIntercalibConstantsMCRcd>().get(ical);
+  // const EcalIntercalibConstantsMC* ical_map = ical.product();
+  // EcalIntercalibConstantsMC::const_iterator itical = ical_map->getMap().find(2);
+  // cout << "intercalib: " << (*itical) << endl;
 
-   const int MAXSAMPLES=ecalPh1::sampleSize; 
+  const int MAXSAMPLES = ecalPh1::sampleSize;
 
-   std::vector<double> ebAnalogSignal ;
-   std::vector<double> ebADCCounts ;
-   std::vector<double> ebADCGains_temp ;
-   std::vector<double> ebADCGains ;
+  std::vector<double> ebAnalogSignal;
+  std::vector<double> ebADCCounts;
+  std::vector<double> ebADCGains_temp;
+  std::vector<double> ebADCGains;
 
+  ebAnalogSignal.reserve(EBDataFrame::MAXSAMPLES);
+  ebADCCounts.reserve(EBDataFrame::MAXSAMPLES);
+  ebADCGains_temp.reserve(EBDataFrame::MAXSAMPLES);
+  ebADCGains.reserve(EBDataFrame::MAXSAMPLES);
 
-   ebAnalogSignal.reserve(EBDataFrame::MAXSAMPLES);
-   ebADCCounts.reserve(EBDataFrame::MAXSAMPLES);
-   ebADCGains_temp.reserve(EBDataFrame::MAXSAMPLES);
-   ebADCGains.reserve(EBDataFrame::MAXSAMPLES);
-
-   //Take Pedestals:
+  //Take Pedestals:
   //  edm::ESHandle<EcalLiteDTUPedestals> peds;
   //  iSetup.get<EcalLiteDTUPedestalsRcd>().get(peds);
   //  const EcalLiteDTUPedestals* myped = peds.product();
@@ -180,128 +165,115 @@ PhaseIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   // for( EcalLiteDTUPedestals::const_iterator it = myped->barrelItems().begin(); it != myped->barrelItems().end(); ++it)
   //   {
   //     std::cout << "EcalPedestal: " << " BARREL " << cnt << " "
-  //               << "  mean:  " <<(*it).mean(0) << " rms: " << (*it).rms(0);                
+  //               << "  mean:  " <<(*it).mean(0) << " rms: " << (*it).rms(0);
   //     std::cout << std::endl;
   //           ++cnt;
   //   }
-  
-   int nDigis=0;
-   int LowGain(0),MidGain(0),HighGain(0);
-   int maxADCValue=0;
 
-   for (EBDigiCollection::const_iterator pDigi=pDigiEB->begin(); pDigi!=pDigiEB->end(); ++pDigi) 
-    {
-      LowGain=0;
-      MidGain=0;
-      HighGain=0;
-      maxADCValue=0;
-      
-      EBDataFrame digi( *pDigi );
-       int nrSamples = digi.size();
-       cout<<"NSamples found: "<<nrSamples<<endl;
-       EBDetId ebid = digi.id () ;
-       cout<<" Crystall ID "<<ebid<<endl;
-       nDigis++;
-       cout<<" nDigis aaaaaaa "<<nDigis<<endl;
-       double Emax = 0. ;
-       int Pmax = 0 ;
-       double pedestalPreSample = 0.;
-       double pedestalPreSampleAnalog = 0.;
-       int countsAfterGainSwitch = -1;
-     
-       for (int sample = 0 ; sample < nrSamples; ++sample) 
-        {
-          ebAnalogSignal[sample] = 0.;
-          ebADCCounts[sample] = 0.;
-          ebADCGains_temp[sample] = 0.;
-          ebADCGains[sample] = 0.;
-        }
+  int nDigis = 0;
+  int LowGain(0), MidGain(0), HighGain(0);
+  int maxADCValue = 0;
 
-       double  gainConv_[4]={0,12,6,1};
-      // saturated channels
-      double barrelADCtoGeV_ = 0.048; //GeV
+  for (EBDigiCollection::const_iterator pDigi = pDigiEB->begin(); pDigi != pDigiEB->end(); ++pDigi) {
+    LowGain = 0;
+    MidGain = 0;
+    HighGain = 0;
+    maxADCValue = 0;
 
-      // EcalIntercalibConstantsMC* ical = 
+    EBDataFrame digi(*pDigi);
+    int nrSamples = digi.size();
+    cout << "NSamples found: " << nrSamples << endl;
+    EBDetId ebid = digi.id();
+    cout << " Crystall ID " << ebid << endl;
+    nDigis++;
+    cout << " nDigis aaaaaaa " << nDigis << endl;
+    double Emax = 0.;
+    int Pmax = 0;
+    double pedestalPreSample = 0.;
+    double pedestalPreSampleAnalog = 0.;
+    int countsAfterGainSwitch = -1;
 
-      // EcalIntercalibConstantMCMap &icalMap = 
+    for (int sample = 0; sample < nrSamples; ++sample) {
+      ebAnalogSignal[sample] = 0.;
+      ebADCCounts[sample] = 0.;
+      ebADCGains_temp[sample] = 0.;
+      ebADCGains[sample] = 0.;
+    }
 
+    double gainConv_[4] = {0, 12, 6, 1};
+    // saturated channels
+    double barrelADCtoGeV_ = 0.048;  //GeV
 
-      
-      for (int sample = 0 ; sample < nrSamples; ++sample) 
-       {
+    // EcalIntercalibConstantsMC* ical =
 
-	 
-	  int thisSample = digi[sample];
-	  
-          ebADCCounts[sample] = (thisSample&0xFFF);
-          ebADCGains[sample]  = (thisSample&(0x3<<12))>>12;
-          ebAnalogSignal[sample] = (ebADCCounts[sample]*gainConv_[(int)ebADCGains[sample]]*barrelADCtoGeV_);
+    // EcalIntercalibConstantMCMap &icalMap =
 
-	  if(ebADCCounts[sample] > maxADCValue) maxADCValue = ebADCCounts[sample];
+    for (int sample = 0; sample < nrSamples; ++sample) {
+      int thisSample = digi[sample];
 
-	  if( ebid.iphi()==333 and ebid.ieta()==83) SingleChannelE -> SetBinContent(sample,ebADCCounts[sample]);
+      ebADCCounts[sample] = (thisSample & 0xFFF);
+      ebADCGains[sample] = (thisSample & (0x3 << 12)) >> 12;
+      ebAnalogSignal[sample] = (ebADCCounts[sample] * gainConv_[(int)ebADCGains[sample]] * barrelADCtoGeV_);
 
-	  if( ebid.iphi()==334 and ebid.ieta()==83) {
-	    SingleChannelELow -> SetBinContent(sample,ebADCCounts[sample]);
-	  }
-	  
-	  if( ebADCGains[sample]==3) LowGain=1;
-	  if( ebADCGains[sample]==2) MidGain=1;
-	  if( ebADCGains[sample]==1) HighGain=1;
-	  
-	   
-	  if(ebADCCounts[sample]>250) {
-	    cout<<"Channel: "<<ebid<<endl; 
-          cout<<"Sample "<<sample<<endl;
-          cout<<"		Full data "<<thisSample<<endl;
-          cout<<"		ebADCCounts "<<ebADCCounts[sample]<<endl;
-          cout<<"		ebADCGains "<<ebADCGains[sample]<<endl;
-          cout<<"		gainConv_ "<<gainConv_[(int)ebADCGains[sample]]<<endl;
-          cout<<"		barrelADCtoGeV_ "<<barrelADCtoGeV_<<endl;
-          cout<<"		ebAnalogSignal "<<ebAnalogSignal[sample]<<endl;
-	  }
-      
-          if(Emax < ebAnalogSignal[sample] ) 
-           {
-              Emax = ebAnalogSignal[sample] ;
-              Pmax = sample ;          
-           }
+      if (ebADCCounts[sample] > maxADCValue)
+        maxADCValue = ebADCCounts[sample];
 
+      if (ebid.iphi() == 333 and ebid.ieta() == 83)
+        SingleChannelE->SetBinContent(sample, ebADCCounts[sample]);
+
+      if (ebid.iphi() == 334 and ebid.ieta() == 83) {
+        SingleChannelELow->SetBinContent(sample, ebADCCounts[sample]);
       }
-      
-    if(1==1)cout<<"P max "<<Pmax<<endl;
-    cout<<"High Gain: "<<HighGain<<" MidGain "<<MidGain<<" LowGain "<<LowGain<<endl;
-      cout<<"maxADCValue "<<maxADCValue<<endl;
-      if(maxADCValue > 250) {
-	meEBDigiOccupancy_->SetBinContent( ebid.iphi(), ebid.ieta(),maxADCValue );
-	if(HighGain==1) meEBDigiOccupancyHigh_->SetBinContent( ebid.iphi(), ebid.ieta(),maxADCValue );
-	if(MidGain==1) 	meEBDigiOccupancyMid_->SetBinContent( ebid.iphi(), ebid.ieta(),maxADCValue );
-	if(LowGain==1) 	meEBDigiOccupancyLow_->SetBinContent( ebid.iphi(), ebid.ieta(),maxADCValue );
 
+      if (ebADCGains[sample] == 3)
+        LowGain = 1;
+      if (ebADCGains[sample] == 2)
+        MidGain = 1;
+      if (ebADCGains[sample] == 1)
+        HighGain = 1;
+
+      if (ebADCCounts[sample] > 250) {
+        cout << "Channel: " << ebid << endl;
+        cout << "Sample " << sample << endl;
+        cout << "		Full data " << thisSample << endl;
+        cout << "		ebADCCounts " << ebADCCounts[sample] << endl;
+        cout << "		ebADCGains " << ebADCGains[sample] << endl;
+        cout << "		gainConv_ " << gainConv_[(int)ebADCGains[sample]] << endl;
+        cout << "		barrelADCtoGeV_ " << barrelADCtoGeV_ << endl;
+        cout << "		ebAnalogSignal " << ebAnalogSignal[sample] << endl;
       }
-      
-  }//end digi
-   
-   
+
+      if (Emax < ebAnalogSignal[sample]) {
+        Emax = ebAnalogSignal[sample];
+        Pmax = sample;
+      }
+    }
+
+    if (1 == 1)
+      cout << "P max " << Pmax << endl;
+    cout << "High Gain: " << HighGain << " MidGain " << MidGain << " LowGain " << LowGain << endl;
+    cout << "maxADCValue " << maxADCValue << endl;
+    if (maxADCValue > 250) {
+      meEBDigiOccupancy_->SetBinContent(ebid.iphi(), ebid.ieta(), maxADCValue);
+      if (HighGain == 1)
+        meEBDigiOccupancyHigh_->SetBinContent(ebid.iphi(), ebid.ieta(), maxADCValue);
+      if (MidGain == 1)
+        meEBDigiOccupancyMid_->SetBinContent(ebid.iphi(), ebid.ieta(), maxADCValue);
+      if (LowGain == 1)
+        meEBDigiOccupancyLow_->SetBinContent(ebid.iphi(), ebid.ieta(), maxADCValue);
+    }
+
+  }  //end digi
 }
-
 
 // ------------ method called once each job just before starting event loop  ------------
-void 
-PhaseIAnalyzer::beginJob()
-{
-}
+void PhaseIAnalyzer::beginJob() {}
 
 // ------------ method called once each job just after ending the event loop  ------------
-void 
-PhaseIAnalyzer::endJob() 
-{
-}
-
+void PhaseIAnalyzer::endJob() {}
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void
-PhaseIAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+void PhaseIAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
   edm::ParameterSetDescription desc;

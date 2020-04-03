@@ -5,7 +5,6 @@
 #include "SimCalorimetry/CaloSimAlgos/interface/CaloVNoiseSignalGenerator.h"
 #include "CondFormats/EcalObjects/interface/EcalConstants.h"
 
-
 class EcalCoder_Ph2;
 class EcalDataFrame;
 class EcalSimParameterMap_Ph2;
@@ -24,9 +23,9 @@ public:
   typedef CaloTSamples_Ph2<float, ecalPh2::sampleSize> EcalSamples;
   //typedef CaloTSamples_Ph2<float, 10> EcalSamples;
   EcalElectronicsSim_Ph2(const EcalSimParameterMap_Ph2* parameterMap,
-                     EcalCoder_Ph2* coder,
-                     bool applyConstantTerm,
-                     double rmsConstantTerm);
+                         EcalCoder_Ph2* coder,
+                         bool applyConstantTerm,
+                         double rmsConstantTerm);
 
   ~EcalElectronicsSim_Ph2();
 
