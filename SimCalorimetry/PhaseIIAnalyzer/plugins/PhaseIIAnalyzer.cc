@@ -4,9 +4,7 @@
 // Class:      PhaseIIAnalyzer
 // 
 /**\class PhaseIIAnalyzer PhaseIIAnalyzer.cc PhaseII/PhaseIIAnalyzer/plugins/PhaseIIAnalyzer.cc
-
    Description: [one line class summary]
-
    Implementation:
    [Notes on implementation]
 */
@@ -187,17 +185,21 @@ PhaseIIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   int nDigis=0;
   int maxADCValue=0;
   int LowGain=0;
+  double  gainConv_[2]={10,1};
+  double barrelADCtoGeV_ = 0.048; //GeV
+
+
   for (EBDigiCollectionPh2::const_iterator pDigi=pDigiEB->begin(); pDigi!=pDigiEB->end(); ++pDigi) 
     {
       maxADCValue=0;
-      LowGain=1;
+      LowGain=0;
       
       EBDataFrame digi( *pDigi );
       int nrSamples = digi.size();
       EBDetId ebid = digi.id () ;
       nDigis++;
 
-	edm::ESHandle<EcalLiteDTUPedestals> peds;
+      edm::ESHandle<EcalLiteDTUPedestals> peds;
       iSetup.get<EcalLiteDTUPedestalsRcd>().get(peds);
       const EcalLiteDTUPedestalsMap* DTUpeds_map = peds.product();
       //      EcalLiteDTUPedestalsMap::const_iterator itped = DTUpeds_map->getMap().find(ebid);
@@ -219,43 +221,40 @@ PhaseIIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
           ebADCGains[sample] = 0.;
         }
 
-      double  gainConv_[2]={10,1};
-      // saturated channels
-      double barrelADCtoGeV_ = 0.048; //GeV
-
       // EcalIntercalibConstantsMC* ical = 
 
       // EcalIntercalibConstantMCMap &icalMap =        
      
       for (int sample = 0 ; sample < nrSamples; ++sample) 
 	{
-	 
+	   
 	  int thisSample = digi[sample];
-	  
+	    
           ebADCCounts[sample] = (thisSample&0xFFF);
           ebADCGains[sample]  = (thisSample&(0x3<<12))>>12;
           ebAnalogSignal[sample] = (ebADCCounts[sample]*gainConv_[(int)ebADCGains[sample]]*barrelADCtoGeV_);
 
 	  if(ebADCCounts[sample] > maxADCValue) maxADCValue = ebADCCounts[sample];
 
-	  if( ebADCGains[sample]==0) LowGain=1;
-	  else LowGain=0;
-	    
+	  if( ebADCGains[sample]==1) LowGain=1;
+	   
+	      
 	  if( ebid.iphi()==333 and ebid.ieta()==83) {
 	    SingleChannelE -> SetBinContent(sample,ebADCCounts[sample]);
 	  }
-	  if( ebid.iphi()==334 and ebid.ieta()==83) {
+	  if( ebid.iphi()==333 and ebid.ieta()==83) {
 	    SingleChannelELow -> SetBinContent(sample,ebADCCounts[sample]);
 	  }
-	  if(ebADCCounts[sample]>40) {
+	  if(ebADCCounts[sample] > 27) {
 	    cout<<"Channel: "<<ebid<<endl; 
 	    cout<<"Sample "<<sample<<endl;
-	    cout<<"		Full data "<<thisSample<<endl;
-	    cout<<"		ebADCCounts "<<ebADCCounts[sample]<<endl;
-	    cout<<"		ebADCGains "<<ebADCGains[sample]<<endl;
-	    cout<<"		gainConv_ "<<gainConv_[(int)ebADCGains[sample]]<<endl;
-	    cout<<"		barrelADCtoGeV_ "<<barrelADCtoGeV_<<endl;
-	    cout<<"		ebAnalogSignal "<<ebAnalogSignal[sample]<<endl;
+	    cout<<"Full data "<<thisSample<<endl;
+	    cout<<"ebADCCounts "<<ebADCCounts[sample]<<endl;
+	    cout<<"ebADCGains "<<ebADCGains[sample]<<endl;
+	    cout<<"gainConv_ "<<gainConv_[(int)ebADCGains[sample]]<<endl;
+	    cout<<"barrelADCtoGeV_ "<<barrelADCtoGeV_<<endl;
+	    cout<<"ebAnalogSignal "<<ebAnalogSignal[sample]<<endl;
+	    cout<<"LowGain "<<LowGain<<endl;
 
 	  }
         
@@ -267,9 +266,10 @@ PhaseIIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
 	} // end samples 
       if(maxADCValue > 27.5) {
+	cout<<"Filling Histo: "<<LowGain<<endl;
 	meEBDigiOccupancy_->SetBinContent( ebid.iphi(), ebid.ieta(),maxADCValue );
 	if(LowGain==0) meEBDigiOccupancyHigh_->SetBinContent( ebid.iphi(), ebid.ieta(),maxADCValue );
-	else 	meEBDigiOccupancyLow_->SetBinContent( ebid.iphi(), ebid.ieta(),maxADCValue );
+	else meEBDigiOccupancyLow_->SetBinContent( ebid.iphi(), ebid.ieta(),maxADCValue );
 
       }
  
