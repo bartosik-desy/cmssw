@@ -62,7 +62,9 @@ using namespace edm;
 //
 // constructors and destructor
 //
+
 PhaseIAnalyzer::PhaseIAnalyzer(const edm::ParameterSet& iConfig) {
+	
   //now do what ever initialization is needed
   usesResource("TFileService");
 
@@ -74,7 +76,7 @@ PhaseIAnalyzer::PhaseIAnalyzer(const edm::ParameterSet& iConfig) {
   edm::Service<TFileService> fs;
   //Histograms
 
-  for (int isample = 0; isample < 16; isample++) {
+  for (int isample = 0; isample < ecalPh1::sampleSize; isample++) {
     EBEnergyHisto[isample] =
         fs->make<TH1I>(Form("EnergyEB_%d", isample), Form("Energy sample %d  Barrel;ADC", isample), 950, 100, 2000);
     EBGainHisto[isample] =
@@ -145,7 +147,7 @@ void PhaseIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   // EcalIntercalibConstantsMC::const_iterator itical = ical_map->getMap().find(2);
   // cout << "intercalib: " << (*itical) << endl;
 
-  const int MAXSAMPLES = ecalPh1::sampleSize;
+  //const int MAXSAMPLES = ecalPh1::sampleSize;
 
   std::vector<double> ebAnalogSignal;
   std::vector<double> ebADCCounts;
@@ -189,9 +191,9 @@ void PhaseIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     cout << " nDigis aaaaaaa " << nDigis << endl;
     double Emax = 0.;
     int Pmax = 0;
-    double pedestalPreSample = 0.;
-    double pedestalPreSampleAnalog = 0.;
-    int countsAfterGainSwitch = -1;
+    //double pedestalPreSample = 0.;
+    //double pedestalPreSampleAnalog = 0.;
+    //int countsAfterGainSwitch = -1;
 
     for (int sample = 0; sample < nrSamples; ++sample) {
       ebAnalogSignal[sample] = 0.;

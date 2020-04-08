@@ -34,7 +34,7 @@ private:
   /// EE
   //CaloSimParameters theEndcapParameters;
   /// ES
-  CaloSimParameters theESParameters;
+  //CaloSimParameters theESParameters;
 };
 
 #endif

@@ -2,15 +2,15 @@
 #define DIGIECAL_ECALDIGICOLLECTION_PH2_H
 
 #include "DataFormats/EcalDigi/interface/EBDataFrame.h"
-#include "DataFormats/EcalDigi/interface/EEDataFrame.h"
-#include "DataFormats/EcalDigi/interface/ESDataFrame.h"
+//#include "DataFormats/EcalDigi/interface/EEDataFrame.h"
+//#include "DataFormats/EcalDigi/interface/ESDataFrame.h"
 #include "DataFormats/EcalDigi/interface/EcalTimeDigi.h"
 #include "DataFormats/EcalDigi/interface/EcalTriggerPrimitiveDigi.h"
 #include "DataFormats/EcalDigi/interface/EcalEBTriggerPrimitiveDigi.h"
 #include "DataFormats/EcalDigi/interface/EcalTrigPrimCompactColl.h"
 #include "DataFormats/EcalDigi/interface/EcalPseudoStripInputDigi.h"
 #include "DataFormats/EcalDigi/interface/EBSrFlag.h"
-#include "DataFormats/EcalDigi/interface/EESrFlag.h"
+//#include "DataFormats/EcalDigi/interface/EESrFlag.h"
 #include "DataFormats/EcalDigi/interface/EcalPnDiodeDigi.h"
 #include "DataFormats/EcalDigi/interface/EcalMatacqDigi.h"
 #include "DataFormats/Common/interface/SortedCollection.h"

@@ -62,6 +62,8 @@ using namespace edm;
 //
 // constructors and destructor
 //
+
+
 PhaseIIAnalyzer::PhaseIIAnalyzer(const edm::ParameterSet& iConfig) {
   //now do what ever initialization is needed
   usesResource("TFileService");
@@ -74,7 +76,7 @@ PhaseIIAnalyzer::PhaseIIAnalyzer(const edm::ParameterSet& iConfig) {
   edm::Service<TFileService> fs;
   //Histograms
 
-  for (int isample = 0; isample < 16; isample++) {
+  for (int isample = 0; isample < ecalPh2::sampleSize; isample++) {
     EBEnergyHisto[isample] =
         fs->make<TH1I>(Form("EnergyEB_%d", isample), Form("Energy sample %d  Barrel;ADC", isample), 950, 100, 2000);
     EBGainHisto[isample] =
@@ -143,7 +145,7 @@ void PhaseIIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
   // EcalIntercalibConstantsMC::const_iterator itical = ical_map->getMap().find(2);
   // cout << "intercalib: " << (*itical) << endl;
 
-  const int MAXSAMPLES = ecalPh2::sampleSize;
+  //const int MAXSAMPLES = ecalPh2::sampleSize;
 
   std::vector<double> ebAnalogSignal;
   std::vector<double> ebADCCounts;
@@ -185,16 +187,16 @@ void PhaseIIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
     edm::ESHandle<EcalLiteDTUPedestals> peds;
     iSetup.get<EcalLiteDTUPedestalsRcd>().get(peds);
-    const EcalLiteDTUPedestalsMap* DTUpeds_map = peds.product();
+    //const EcalLiteDTUPedestalsMap* DTUpeds_map = peds.product();
     //      EcalLiteDTUPedestalsMap::const_iterator itped = DTUpeds_map->getMap().find(ebid);
     //  cout << "mean dei piedistalli: " << (*itped).mean(0) << "   rms: " << (*itped).rms(0) << endl;
 
     double Emax = 0.;
     int Pmax = 0;
-    double pedestalPreSample = 0.;
-    double pedestalPreSampleAnalog = 0.;
-    int countsAfterGainSwitch = -1;
-    double higherGain = 1.;
+    //double pedestalPreSample = 0.;
+    //double pedestalPreSampleAnalog = 0.;
+    //int countsAfterGainSwitch = -1;
+    //double higherGain = 1.;
 
     for (int sample = 0; sample < nrSamples; ++sample) {
       ebAnalogSignal[sample] = 0.;
