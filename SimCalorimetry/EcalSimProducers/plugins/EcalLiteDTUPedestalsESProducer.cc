@@ -7,10 +7,15 @@
 #include "CondFormats/DataRecord/interface/EcalLiteDTUPedestalsRcd.h"
 #include "CondFormats/EcalObjects/interface/EcalLiteDTUPedestals.h"
 #include "CondFormats/EcalObjects/src/classes.h"
+#include "CondFormats/EcalObjects/interface/EcalConstants.h"
+
 //
 // class declaration
 //
-const int kEBChannels = 61200;
+//const int kEBChannels = 61200;
+
+
+
 
 class EcalLiteDTUPedestalsESProducer : public edm::ESProducer {
 public:
@@ -38,7 +43,7 @@ EcalLiteDTUPedestalsESProducer::ReturnType EcalLiteDTUPedestalsESProducer::produ
 
   //std::cout<<"**********Set EB Values "<<std::endl;
 
-  for (int iChannel = 0; iChannel < kEBChannels; iChannel++) {
+  for (int iChannel = 0; iChannel < ecalPh2::kEBChannels; iChannel++) {
     EBDetId myEBDetId = EBDetId::unhashIndex(iChannel);
     EcalLiteDTUPed ped;
     ped.setMean(0, 15.);

@@ -3,8 +3,9 @@
 
 #include "CondFormats/Serialization/interface/Serializable.h"
 #include "CondFormats/EcalObjects/interface/EcalCondObjectContainer.h"
+#include "CondFormats/EcalObjects/interface/EcalConstants.h"
 
-const int NGAINS = 2;
+//const int NGAINS = 2;
 
 const int gainId1 = 1;
 const int gainId10 = 0;
@@ -15,7 +16,7 @@ public:
   double rmsarray[2] = {2.8, 1.2};
 
   int setMean(int i, float value) {
-    if (i >= NGAINS || i < 0)
+    if (i >= ecalPh2::NGAINS || i < 0)
       return -1;
     else
       meanarray[i] = value;
@@ -23,7 +24,7 @@ public:
   }
 
   int setRMS(int i, float value) {
-    if (i >= NGAINS || i < 0)
+    if (i >= ecalPh2::NGAINS || i < 0)
       return -1;
     else
       rmsarray[i] = value;

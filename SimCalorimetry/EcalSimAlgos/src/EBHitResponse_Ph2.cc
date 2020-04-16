@@ -14,7 +14,7 @@
 
 #include "CondFormats/EcalObjects/interface/EcalConstants.h"
 
-using namespace ecalPh2;
+//using namespace ecalPh2;
 
 EBHitResponse_Ph2::EBHitResponse_Ph2(const CaloVSimParameterMap* parameterMap,
                                      const CaloVShape* shape,
@@ -92,7 +92,7 @@ void EBHitResponse_Ph2::putAPDSignal(const DetId& detId, double npe, double time
   }
 
   const double tzero(apdShape()->timeToRise() - jitter - offsets()[EBDetId(detId).denseIndex() % kNOffsets] -
-                     BUNCHSPACE * (parameters.binOfMaximum() - phaseShift()));
+                     ecalPh2::Samp_Period * (parameters.binOfMaximum() - phaseShift()));
 
   double binTime(tzero);
 
@@ -100,7 +100,7 @@ void EBHitResponse_Ph2::putAPDSignal(const DetId& detId, double npe, double time
 
   for (unsigned int bin(0); bin != result.size(); ++bin) {
     result[bin] += (*apdShape())(binTime)*signal;
-    binTime += BUNCHSPACE;
+    binTime += ecalPh2::Samp_Period;
   }
 }
 

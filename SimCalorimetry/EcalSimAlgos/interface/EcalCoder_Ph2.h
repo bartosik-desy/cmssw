@@ -31,9 +31,9 @@ public:
   typedef CorrelatedNoisifier<EcalCorrMatrix_Ph2> Noisifier;
 
   enum {
-    NBITS = 12,     // number of available bits
-    MAXADC = 4095,  // 2^12 -1,  adc max range
-    NGAINS = 2      // number of electronic gains
+   NBITS = ecalPh2::NBITS,     // number of available bits
+   MAXADC = ecalPh2::MAXADC,  // 2^12 -1,  adc max range
+   NGAINS = ecalPh2::NGAINS      // number of electronic gains
   };
 
   /// ctor
