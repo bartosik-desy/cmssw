@@ -1,5 +1,5 @@
-#ifndef CALOTSAMPLES_Pha2_H
-#define CALOTSAMPLES_Pha2_H 1
+#ifndef CALOTSAMPLES_Ph2_H
+#define CALOTSAMPLES_Ph2_H 1
 
 #include "CalibFormats/CaloObjects/interface/CaloTSamplesBase.h"
 

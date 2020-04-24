@@ -19,7 +19,7 @@ public:
 
   typedef std::vector<double> VecD;
 
-  enum { kNOffsets = 2000 };
+  enum { kNOffsets = ecalPh2::kNOffsets };
 
   EBHitResponse_Ph2(const CaloVSimParameterMap* parameterMap,
                     const CaloVShape* shape,

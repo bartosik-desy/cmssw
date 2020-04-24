@@ -229,15 +229,15 @@ void PhaseIIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         SingleChannelELow->SetBinContent(sample, ebADCCounts[sample]);
       }
       if (ebADCCounts[sample] > 27) {
-        cout << "Channel: " << ebid << endl;
-        cout << "Sample " << sample << endl;
-        cout << "Full data " << thisSample << endl;
-        cout << "ebADCCounts " << ebADCCounts[sample] << endl;
-        cout << "ebADCGains " << ebADCGains[sample] << endl;
-        cout << "gainConv_ " << gainConv_[(int)ebADCGains[sample]] << endl;
-        cout << "barrelADCtoGeV_ " << barrelADCtoGeV_ << endl;
-        cout << "ebAnalogSignal " << ebAnalogSignal[sample] << endl;
-        cout << "LowGain " << LowGain << endl;
+        std::cout << "Channel: " << ebid << std::endl;
+        std::cout << "Sample " << sample << std::endl;
+        std::cout << "Full data " << thisSample << std::endl;
+        std::cout << "ebADCCounts " << ebADCCounts[sample] << std::endl;
+        std::cout << "ebADCGains " << ebADCGains[sample] << std::endl;
+        std::cout << "gainConv_ " << gainConv_[(int)ebADCGains[sample]] << std::endl;
+        std::cout << "barrelADCtoGeV_ " << barrelADCtoGeV_ << std::endl;
+        std::cout << "ebAnalogSignal " << ebAnalogSignal[sample] << std::endl;
+        std::cout << "LowGain " << LowGain << std::endl;
       }
 
       if (Emax < ebAnalogSignal[sample]) {
@@ -247,7 +247,7 @@ void PhaseIIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
     }  // end samples
     if (maxADCValue > 27.5) {
-      cout << "Filling Histo: " << LowGain << endl;
+      std::cout << "Filling Histo: " << LowGain << std::endl;
       meEBDigiOccupancy_->SetBinContent(ebid.iphi(), ebid.ieta(), maxADCValue);
       if (LowGain == 0)
         meEBDigiOccupancyHigh_->SetBinContent(ebid.iphi(), ebid.ieta(), maxADCValue);
@@ -256,7 +256,7 @@ void PhaseIIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     }
 
     if (0 == 1)
-      cout << "P max " << Pmax << endl;
+      std::cout << "P max " << Pmax << std::endl;
   }  //end digi
 }
 
@@ -270,9 +270,9 @@ void PhaseIIAnalyzer::endJob() {}
 void PhaseIIAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
-  edm::ParameterSetDescription desc;
-  desc.setUnknown();
-  descriptions.addDefault(desc);
+  //edm::ParameterSetDescription desc;
+  //desc.setUnknown();
+  //descriptions.addDefault(desc);
 }
 
 //define this as a plug-in

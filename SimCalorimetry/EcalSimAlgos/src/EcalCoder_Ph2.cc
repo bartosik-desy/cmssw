@@ -1,8 +1,8 @@
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalCoder_Ph2.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "SimGeneral/NoiseGenerators/interface/CorrelatedNoisifier.h"
-#include "DataFormats/EcalDigi/interface/EcalMGPASample.h"
-#include "DataFormats/EcalDigi/interface/EcalDataFrame.h"
+#include "DataFormats/EcalDigi/interface/EcalLiteDTUSample.h"
+#include "DataFormats/EcalDigi/interface/EcalDataFrame_Ph2.h"
 
 #include "CondFormats/EcalObjects/interface/EcalConstants.h"
 
@@ -31,7 +31,7 @@ EcalCoder_Ph2::EcalCoder_Ph2(bool addNoise,
       m_gainRatios(nullptr),
       m_intercals(nullptr),
       //   m_maxEneEB    (      1668.3 ) , // 4095(MAXADC)*12(gain 2)*0.035(GeVtoADC)*0.97
-      m_maxEneEB(2000.),  // Maximum for CATIA: LSB gain 10: 0.048 MeV
+      m_maxEneEB(ecalPh2::maxEneEB),  // Maximum for CATIA: LSB gain 10: 0.048 MeV
       m_addNoise(addNoise),
       m_PreMix1(PreMix1)
 
@@ -45,7 +45,7 @@ EcalCoder_Ph2::~EcalCoder_Ph2() {}
 
 void EcalCoder_Ph2::setFullScaleEnergy(double EBscale) {
   //   m_maxEneEB = EBscale ;
-  m_maxEneEB = 2000.;  //I don 't know where is setFullScaleEnergy first call
+  m_maxEneEB = ecalPh2::maxEneEB;  //I don 't know where is setFullScaleEnergy first call
 }
 
 void EcalCoder_Ph2::setPedestals(const EcalLiteDTUPedestals* pedestals) { m_peds = pedestals; }
@@ -59,12 +59,12 @@ double EcalCoder_Ph2::fullScaleEnergy(const DetId& detId) const {
   return m_maxEneEB;
 }
 
-void EcalCoder_Ph2::analogToDigital(CLHEP::HepRandomEngine* engine, const EcalSamples& clf, EcalDataFrame& df) const {
+void EcalCoder_Ph2::analogToDigital(CLHEP::HepRandomEngine* engine, const EcalSamples& clf, EcalDataFrame_Ph2& df) const {
   df.setSize(clf.size());
   encode(clf, df, engine);
 }
 
-void EcalCoder_Ph2::encode(const EcalSamples& ecalSamples, EcalDataFrame& df, CLHEP::HepRandomEngine* engine) const {
+void EcalCoder_Ph2::encode(const EcalSamples& ecalSamples, EcalDataFrame_Ph2& df, CLHEP::HepRandomEngine* engine) const {
   assert(nullptr != m_peds);
 
   const unsigned int csize(ecalSamples.size());
@@ -109,7 +109,7 @@ void EcalCoder_Ph2::encode(const EcalSamples& ecalSamples, EcalDataFrame& df, CL
   const Noisifier* noisy[NGAINS] = {m_ebCorrNoise[0], m_ebCorrNoise[1]};
 
   if (m_addNoise) {
-#warning noise generation to be checked
+//#warning noise generation to be checked
     noisy[0]->noisify(noiseframe[0], engine);  // high gain
     //if( nullptr == noisy[1] ) noisy[0]->noisify( noiseframe[1] ,
     //                                             engine,
@@ -163,9 +163,9 @@ void EcalCoder_Ph2::encode(const EcalSamples& ecalSamples, EcalDataFrame& df, CL
       } else
         adctrace[i][igain] = adc;
 
-      if (ecalSamples[i] > 0.) {
+      //if (ecalSamples[i] > 0.) {
         //           std::cout<<" igain = "<<igain<<" pedestals[igain] = "<<pedestals[igain]<<" i = "<<i<<" trueRMS[igain] = "<<trueRMS[igain]<<" noiseframe[igain][i] = "<<noiseframe[igain][i]<<" asignal = "<<asignal<<" isignal = "<<isignal<<" adc = "<<adc<<std::endl;
-      }
+      //}
 
     }  // for adc
 
@@ -186,7 +186,7 @@ void EcalCoder_Ph2::encode(const EcalSamples& ecalSamples, EcalDataFrame& df, CL
     else
       igain = 0;
 
-    df.setSample(j, EcalMGPASample(adctrace[j][igain], igain));
+    df.setSample(j, EcalLiteDTUSample(adctrace[j][igain], igain));
   }
 }
 

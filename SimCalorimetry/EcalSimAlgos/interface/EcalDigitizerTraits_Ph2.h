@@ -4,8 +4,8 @@
 #include "DataFormats/EcalDigi/interface/EcalDigiCollections_Ph2.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalElectronicsSim_Ph2.h"
 #include "CalibFormats/CaloObjects/interface/CaloTSamples_Ph2.h"
-#include "DataFormats/EcalDigi/interface/EcalDataFrame.h"
-#include "DataFormats/EcalDigi/interface/EBDataFrame.h"
+#include "DataFormats/EcalDigi/interface/EcalDataFrame_Ph2.h"
+#include "DataFormats/EcalDigi/interface/EBDataFrame_Ph2.h"
 #include "CondFormats/EcalObjects/interface/EcalConstants.h"
 class EcalHitResponse;
 
@@ -14,7 +14,7 @@ public:
   /// the digis collection
   typedef EBDigiCollectionPh2 DigiCollection;
   /// the dataframes
-  typedef EBDataFrame Digi;
+  typedef EBDataFrame_Ph2 Digi;
   /// the electronics simulation
   typedef EcalElectronicsSim_Ph2 ElectronicsSim_Ph2;
 

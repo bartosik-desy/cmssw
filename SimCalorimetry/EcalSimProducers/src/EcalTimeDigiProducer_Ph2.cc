@@ -33,7 +33,7 @@ EcalTimeDigiProducer_Ph2::EcalTimeDigiProducer_Ph2(const edm::ParameterSet& para
 
   m_BarrelDigitizer = new EcalTimeMapDigitizer(EcalBarrel);
 
-#ifdef ecal_time_debug
+#ifdef ECAL_TIME_DEBUG
   std::cout << "[EcalTimeDigiProducer_Ph2]::Create EB " << m_EBdigiCollection << " collection and digitizer"
             << std::endl;
 #endif

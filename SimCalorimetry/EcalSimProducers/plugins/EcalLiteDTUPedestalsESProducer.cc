@@ -21,8 +21,9 @@ class EcalLiteDTUPedestalsESProducer : public edm::ESProducer {
 public:
   EcalLiteDTUPedestalsESProducer(const edm::ParameterSet& iConfig);
 
-  typedef std::shared_ptr<EcalLiteDTUPedestals> ReturnType;
-
+  //typedef std::shared_ptr<EcalLiteDTUPedestals> ReturnType;
+  typedef std::unique_ptr<EcalLiteDTUPedestals> ReturnType;
+  
   ReturnType produce(const EcalLiteDTUPedestalsRcd& iRecord);
 
 private:
@@ -39,7 +40,7 @@ EcalLiteDTUPedestalsESProducer::EcalLiteDTUPedestalsESProducer(const edm::Parame
 EcalLiteDTUPedestalsESProducer::ReturnType EcalLiteDTUPedestalsESProducer::produce(
     const EcalLiteDTUPedestalsRcd& iRecord) {
   //std::cout<<"********Starting Production"<<std::endl;
-  auto prod = std::make_shared<EcalLiteDTUPedestals>();
+  auto prod = std::make_unique<EcalLiteDTUPedestals>();
 
   //std::cout<<"**********Set EB Values "<<std::endl;
 

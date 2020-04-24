@@ -72,11 +72,11 @@
    <class name="std::vector<EcalMatacqDigi>"/>
    <class name="std::vector<EcalTimeDigi>"/>
 
-   <class name="EcalDigiCollectionPh2" ClassVersion="-1">
-     <version ClassVersion="-1" checksum="1399579625"/>
+   <class name="EcalDigiCollectionPh2" ClassVersion="3">
+     <version ClassVersion="3" checksum="1399579625"/>
    </class>
-   <class name="EBDigiCollectionPh2" ClassVersion="-1">
-     <version ClassVersion="-1" checksum="2118114201"/>
+   <class name="EBDigiCollectionPh2" ClassVersion="3">
+     <version ClassVersion="3" checksum="2118114201"/>
    </class>
 
    <class name="EcalDigiCollection" ClassVersion="11">

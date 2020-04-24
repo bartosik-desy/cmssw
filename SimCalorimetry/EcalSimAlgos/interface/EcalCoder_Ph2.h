@@ -1,5 +1,5 @@
 #ifndef EcalSimAlgos_EcalCoder_Ph2_h
-#define EcalSimAlgos_EcalCoder_Ph2_h 1
+#define EcalSimAlgos_EcalCoder_Ph2_h
 
 #include "CalibFormats/CaloObjects/interface/CaloTSamples_Ph2.h"
 //#include "CondFormats/EcalObjects/interface/EcalPedestals.h"
@@ -11,8 +11,8 @@
 
 template <typename M>
 class CorrelatedNoisifier;
-class EcalMGPASample;
-class EcalDataFrame;
+class EcalLiteDTUSample;
+class EcalDataFrame_Ph2;
 class DetId;
 class EcalLiteDTUPed;
 
@@ -51,15 +51,15 @@ public:
 
   void setIntercalibConstants(const EcalIntercalibConstantsMC* ical);
 
-  /// from EcalSamples to EcalDataFrame
-  virtual void analogToDigital(CLHEP::HepRandomEngine*, const EcalSamples& clf, EcalDataFrame& df) const;
+  /// from EcalSamples to EcalDataFrame_Ph2
+  virtual void analogToDigital(CLHEP::HepRandomEngine*, const EcalSamples& clf, EcalDataFrame_Ph2& df) const;
 
 private:
   /// limit on the energy scale due to the electronics range
   double fullScaleEnergy(const DetId& did) const;
 
   /// produce the pulse-shape
-  void encode(const EcalSamples& ecalSamples, EcalDataFrame& df, CLHEP::HepRandomEngine*) const;
+  void encode(const EcalSamples& ecalSamples, EcalDataFrame_Ph2& df, CLHEP::HepRandomEngine*) const;
 
   void findPedestal(const DetId& detId, int gainId, double& pedestal, double& width) const;
 

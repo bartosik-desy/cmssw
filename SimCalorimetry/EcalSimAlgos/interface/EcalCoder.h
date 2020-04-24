@@ -1,5 +1,5 @@
 #ifndef EcalSimAlgos_EcalCoder_h
-#define EcalSimAlgos_EcalCoder_h 1
+#define EcalSimAlgos_EcalCoder_h
 
 #include "CalibFormats/CaloObjects/interface/CaloTSamples.h"
 #include "CondFormats/EcalObjects/interface/EcalPedestals.h"

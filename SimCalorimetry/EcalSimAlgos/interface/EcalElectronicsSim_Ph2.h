@@ -4,9 +4,11 @@
 #include "CalibFormats/CaloObjects/interface/CaloTSamples_Ph2.h"
 #include "SimCalorimetry/CaloSimAlgos/interface/CaloVNoiseSignalGenerator.h"
 #include "CondFormats/EcalObjects/interface/EcalConstants.h"
+#include "DataFormats/EcalDigi/interface/EcalDataFrame_Ph2.h" 
+
 
 class EcalCoder_Ph2;
-class EcalDataFrame;
+//class EcalDataFrame_Ph2;
 class EcalSimParameterMap_Ph2;
 
 namespace CLHEP {
@@ -21,7 +23,6 @@ namespace CLHEP {
 class EcalElectronicsSim_Ph2 {
 public:
   typedef CaloTSamples_Ph2<float, ecalPh2::sampleSize> EcalSamples;
-  //typedef CaloTSamples_Ph2<float, 10> EcalSamples;
   EcalElectronicsSim_Ph2(const EcalSimParameterMap_Ph2* parameterMap,
                          EcalCoder_Ph2* coder,
                          bool applyConstantTerm,
@@ -29,8 +30,8 @@ public:
 
   ~EcalElectronicsSim_Ph2();
 
-  /// from EcalSamples to EcalDataFrame
-  void analogToDigital(CLHEP::HepRandomEngine*, EcalSamples& clf, EcalDataFrame& df) const;
+  /// from EcalSamples to EcalDataFrame_Ph2
+  void analogToDigital(CLHEP::HepRandomEngine*, EcalSamples& clf, EcalDataFrame_Ph2& df) const;
 
   void newEvent() {}
 

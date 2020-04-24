@@ -1,6 +1,7 @@
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalElectronicsSim_Ph2.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalCoder_Ph2.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalSimParameterMap_Ph2.h"
+#include "DataFormats/EcalDigi/interface/EcalDataFrame_Ph2.h" 
 
 #include "CLHEP/Random/RandGaussQ.h"
 
@@ -20,7 +21,7 @@ EcalElectronicsSim_Ph2::~EcalElectronicsSim_Ph2() {}
 
 void EcalElectronicsSim_Ph2::analogToDigital(CLHEP::HepRandomEngine* engine,
                                              EcalElectronicsSim_Ph2::EcalSamples& clf,
-                                             EcalDataFrame& df) const {
+                                             EcalDataFrame_Ph2& df) const {
   //PG input signal is in pe.  Converted in GeV
   amplify(clf, engine);
 

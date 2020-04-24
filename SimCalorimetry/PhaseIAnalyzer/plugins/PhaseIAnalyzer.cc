@@ -184,11 +184,11 @@ void PhaseIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 
     EBDataFrame digi(*pDigi);
     int nrSamples = digi.size();
-    cout << "NSamples found: " << nrSamples << endl;
+    std::cout << "NSamples found: " << nrSamples << std::endl;
     EBDetId ebid = digi.id();
-    cout << " Crystall ID " << ebid << endl;
+    std::cout << " Crystall ID " << ebid << std::endl;
     nDigis++;
-    cout << " nDigis aaaaaaa " << nDigis << endl;
+    std::cout << " nDigis aaaaaaa " << nDigis << std::endl;
     double Emax = 0.;
     int Pmax = 0;
     //double pedestalPreSample = 0.;
@@ -235,14 +235,14 @@ void PhaseIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
         HighGain = 1;
 
       if (ebADCCounts[sample] > 250) {
-        cout << "Channel: " << ebid << endl;
-        cout << "Sample " << sample << endl;
-        cout << "		Full data " << thisSample << endl;
-        cout << "		ebADCCounts " << ebADCCounts[sample] << endl;
-        cout << "		ebADCGains " << ebADCGains[sample] << endl;
-        cout << "		gainConv_ " << gainConv_[(int)ebADCGains[sample]] << endl;
-        cout << "		barrelADCtoGeV_ " << barrelADCtoGeV_ << endl;
-        cout << "		ebAnalogSignal " << ebAnalogSignal[sample] << endl;
+        std::cout << "Channel: " << ebid << std::endl;
+        std::cout << "Sample " << sample << std::endl;
+        std::cout << "		Full data " << thisSample << std::endl;
+        std::cout << "		ebADCCounts " << ebADCCounts[sample] << std::endl;
+        std::cout << "		ebADCGains " << ebADCGains[sample] << std::endl;
+        std::cout << "		gainConv_ " << gainConv_[(int)ebADCGains[sample]] << std::endl;
+        std::cout << "		barrelADCtoGeV_ " << barrelADCtoGeV_ << std::endl;
+        std::cout << "		ebAnalogSignal " << ebAnalogSignal[sample] << std::endl;
       }
 
       if (Emax < ebAnalogSignal[sample]) {
@@ -252,9 +252,9 @@ void PhaseIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     }
 
     if (1 == 1)
-      cout << "P max " << Pmax << endl;
-    cout << "High Gain: " << HighGain << " MidGain " << MidGain << " LowGain " << LowGain << endl;
-    cout << "maxADCValue " << maxADCValue << endl;
+      std::cout << "P max " << Pmax << std::endl;
+    std::cout << "High Gain: " << HighGain << " MidGain " << MidGain << " LowGain " << LowGain << std::endl;
+    std::cout << "maxADCValue " << maxADCValue << std::endl;
     if (maxADCValue > 250) {
       meEBDigiOccupancy_->SetBinContent(ebid.iphi(), ebid.ieta(), maxADCValue);
       if (HighGain == 1)
@@ -278,9 +278,9 @@ void PhaseIAnalyzer::endJob() {}
 void PhaseIAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
-  edm::ParameterSetDescription desc;
-  desc.setUnknown();
-  descriptions.addDefault(desc);
+  //edm::ParameterSetDescription desc;
+  //desc.setUnknown();
+  //descriptions.addDefault(desc);
 }
 
 //define this as a plug-in

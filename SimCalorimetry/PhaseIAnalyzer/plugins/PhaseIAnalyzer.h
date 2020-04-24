@@ -11,7 +11,8 @@
 #include <fstream>
 #include "CondFormats/EcalObjects/interface/EcalConstants.h"
 
-using namespace std;
+//using namespace std;
+
 //
 // class declaration
 //
@@ -34,10 +35,10 @@ private:
 
   edm::InputTag hitTagEB_;
 
-  edm::EDGetTokenT<vector<PCaloHit>> hitTokenEB_;
+  edm::EDGetTokenT<std::vector<PCaloHit>> hitTokenEB_;
 
   edm::InputTag trackTag_;
-  edm::EDGetTokenT<vector<SimTrack>> trackToken_;
+  edm::EDGetTokenT<std::vector<SimTrack>> trackToken_;
 
   //Histograms
   TH1I* EBEnergyHisto[ecalPh2::sampleSize];
