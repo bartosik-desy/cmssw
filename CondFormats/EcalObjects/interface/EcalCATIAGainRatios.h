@@ -1,5 +1,5 @@
-#ifndef _CondFormats_EcalObjects_EcalGainRatios_h_
-#define _CondFormats_EcalObjects_EcalGainRatios_h_
+#ifndef CondFormats_EcalObjects_EcalCATIAGainRatios_h
+#define CondFormats_EcalObjects_EcalCATIAGainRatios_h
 
 #include "CondFormats/EcalObjects/interface/EcalCondObjectContainer.h"
 

@@ -7,5 +7,3 @@ EcalCATIAGainRatiosRcd =  cms.ESSource("EmptyESSource",
                                 )
 
 EcalCATIAGainRatios = cms.ESProducer("EcalCATIAGainRatiosESProducer"),
- 
-timeThresh=cms.double(2.0),

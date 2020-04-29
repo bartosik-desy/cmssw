@@ -1,5 +1,5 @@
-#ifndef EcalSimAlgos_EcalTDigitizer_Ph2_h
-#define EcalSimAlgos_EcalTDigitizer_Ph2_h
+#ifndef SimCalorimetry_EcalSimAlgos_EcalTDigitizer_Ph2_h
+#define SimCalorimetry_EcalSimAlgos_EcalTDigitizer_Ph2_h
 
 /** Turns hits into digis.  Assumes that 
     there's an ElectroncsSim class with the

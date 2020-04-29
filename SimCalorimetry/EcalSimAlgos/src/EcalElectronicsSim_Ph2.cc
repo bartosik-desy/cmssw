@@ -1,7 +1,7 @@
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalElectronicsSim_Ph2.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalCoder_Ph2.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalSimParameterMap_Ph2.h"
-#include "DataFormats/EcalDigi/interface/EcalDataFrame_Ph2.h" 
+#include "DataFormats/EcalDigi/interface/EcalDataFrame_Ph2.h"
 
 #include "CLHEP/Random/RandGaussQ.h"
 

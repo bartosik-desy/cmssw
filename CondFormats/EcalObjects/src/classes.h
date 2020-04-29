@@ -97,9 +97,9 @@ namespace CondFormats_EcalObjects {
     EcalCondObjectContainer<EcalPedestal> pedmap;  //typedef EcalPedestals
 
     //ECAL PH2:
-    std::vector<EcalLiteDTUPed> v_ecalDTUPed;
-    EcalContainer<EBDetId, EcalLiteDTUPed> ec_ebDetId_ecalLiteDTUPed;
-    EcalCondObjectContainer<EcalLiteDTUPed> pedmapDTU;  //typedef EcalPedestals
+    std::vector<EcalLiteDTUPedestals> v_ecalDTUPedestals;
+    EcalContainer<EBDetId, EcalLiteDTUPedestals> ec_ebDetId_ecalLiteDTUPedestals;
+    EcalCondObjectContainer<EcalLiteDTUPedestals> pedmapDTU;  //typedef EcalPedestals
 
     std::vector<EcalTPGCrystalStatusCode> v_ecalTPGCrystalStatusCode;
     EcalContainer<EEDetId, EcalTPGCrystalStatusCode> ec_eeDetId_ecalTPGCrystalStatusCode;

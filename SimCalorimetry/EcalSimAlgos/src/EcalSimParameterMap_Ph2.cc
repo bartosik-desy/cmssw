@@ -10,9 +10,9 @@
  */
 
 EcalSimParameterMap_Ph2::EcalSimParameterMap_Ph2()
-    : theBarrelParameters(2250., 1. / 2250., 1., 0, 16, 6, true, true){}//,
-      //theEndcapParameters(1800., 1./1800., 1., 0, 16, 6, true, true),
-      //theESParameters(1., 1., 1., 20., 3, 2, false, true) {}
+    : theBarrelParameters(2250., 1. / 2250., 1., 0, 16, 6, true, true) {}  //,
+//theEndcapParameters(1800., 1./1800., 1., 0, 16, 6, true, true),
+//theESParameters(1., 1., 1., 20., 3, 2, false, true) {}
 
 EcalSimParameterMap_Ph2::EcalSimParameterMap_Ph2(double simHitToPhotoelectronsBarrel,
                                                  //double simHitToPhotoelectronsEndcap,
@@ -31,11 +31,11 @@ EcalSimParameterMap_Ph2::EcalSimParameterMap_Ph2(double simHitToPhotoelectronsBa
                           readoutFrameSize,
                           binOfMaximum,
                           doPhotostatistics,
-                          syncPhase){}//,
-      //theEndcapParameters(simHitToPhotoelectronsEndcap, photoelectronsToAnalogEndcap,
-      //samplingFactor, timePhase,
-      //readoutFrameSize, binOfMaximum, doPhotostatistics, syncPhase),
-      //theESParameters(1., 1., 1., 20., 3, 2, false, syncPhase) {}
+                          syncPhase) {}  //,
+//theEndcapParameters(simHitToPhotoelectronsEndcap, photoelectronsToAnalogEndcap,
+//samplingFactor, timePhase,
+//readoutFrameSize, binOfMaximum, doPhotostatistics, syncPhase),
+//theESParameters(1., 1., 1., 20., 3, 2, false, syncPhase) {}
 
 /*
   CaloSimParameters(double simHitToPhotoelectrons, double photoelectronsToAnalog, 
@@ -46,9 +46,9 @@ EcalSimParameterMap_Ph2::EcalSimParameterMap_Ph2(double simHitToPhotoelectronsBa
 
 const CaloSimParameters& EcalSimParameterMap_Ph2::simParameters(const DetId& detId) const {
   //if (EcalSubdetector(detId.subdetId()) == EcalBarrel)
-    return theBarrelParameters;
+  return theBarrelParameters;
   //else if (EcalSubdetector(detId.subdetId()) == EcalEndcap)
   //return theEndcapParameters;
   //else
-    //return theESParameters;
+  //return theESParameters;
 }

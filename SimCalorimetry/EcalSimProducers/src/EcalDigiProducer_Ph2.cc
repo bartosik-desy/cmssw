@@ -26,16 +26,8 @@
 #include "SimGeneral/MixingModule/interface/PileUpEventPrincipal.h"
 #include "SimDataFormats/CaloHit/interface/PCaloHit.h"
 #include "Geometry/Records/interface/CaloGeometryRecord.h"
-//My changing:
-//************************************
-//From
-//#include "CondFormats/EcalObjects/interface/EcalPedestals.h"
-//#include "CondFormats/DataRecord/interface/EcalPedestalsRcd.h"
-//to
 #include "CondFormats/EcalObjects/interface/EcalLiteDTUPedestals.h"
 #include "CondFormats/DataRecord/interface/EcalLiteDTUPedestalsRcd.h"
-//***********************************
-
 #include "CondFormats/EcalObjects/interface/EcalIntercalibConstantsMC.h"
 #include "CondFormats/DataRecord/interface/EcalIntercalibConstantsMCRcd.h"
 #include "CalibCalorimetry/EcalLaserCorrection/interface/EcalLaserDbService.h"
@@ -297,9 +289,9 @@ void EcalDigiProducer_Ph2::beginLuminosityBlock(edm::LuminosityBlock const& lumi
 void EcalDigiProducer_Ph2::checkCalibrations(const edm::Event& event, const edm::EventSetup& eventSetup) {
   // Pedestals from event setup
 
-  edm::ESHandle<EcalLiteDTUPedestals> dbPed;
+  edm::ESHandle<EcalLiteDTUPedestalsMap> dbPed;
   eventSetup.get<EcalLiteDTUPedestalsRcd>().get(dbPed);
-  const EcalLiteDTUPedestals* pedestals(dbPed.product());
+  const EcalLiteDTUPedestalsMap* pedestals(dbPed.product());
 
   m_Coder->setPedestals(pedestals);
   if (nullptr != m_APDCoder)

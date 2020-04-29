@@ -1,5 +1,5 @@
-#ifndef EcalSimAlgos_EcalSimParameterMap_Ph2_h
-#define EcalSimAlgos_EcalSimParameterMap_Ph2_h
+#ifndef SimCalorimetry_EcalSimAlgos_EcalSimParameterMap_Ph2_h
+#define SimCalorimetry_EcalSimAlgos_EcalSimParameterMap_Ph2_h
 
 #include "SimCalorimetry/CaloSimAlgos/interface/CaloVSimParameterMap.h"
 #include "SimCalorimetry/CaloSimAlgos/interface/CaloSimParameters.h"

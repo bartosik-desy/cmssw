@@ -1,17 +1,9 @@
-#ifndef DIGIECAL_ECALDATAFRAME_PH2_H
-#define DIGIECAL_ECALDATAFRAME_PH2_H
+#ifndef DataFormats_EcalDigi_EcalDataFrame_Ph2_h
+#define DataFormats_EcalDigi_EcalDataFrame_Ph2_h
 #include "DataFormats/EcalDigi/interface/EcalLiteDTUSample.h"
 #include "DataFormats/DetId/interface/DetId.h"
 #include "DataFormats/Common/interface/DataFrame.h"
 #include "CondFormats/EcalObjects/interface/EcalConstants.h"
-
-
-//#define EcalMgpaBitwiseGain12 1
-//#define EcalMgpaBitwiseGain6 2
-//#define EcalMgpaBitwiseGain1 3
-//#define EcalMgpaBitwiseGain0 0
-
-//#define EcalLiteBitwiseGain1 1
 
 /** \class EcalDataFrame_Ph2
       

@@ -1,11 +1,10 @@
-#ifndef EcalSimAlgos_EcalElectronicsSim_Ph2_h
-#define EcalSimAlgos_EcalElectronicsSim_Ph2_h 1
+#ifndef SimCalorimetry_EcalSimAlgos_EcalElectronicsSim_Ph2_h
+#define SimCalorimetry_EcalSimAlgos_EcalElectronicsSim_Ph2_h
 
 #include "CalibFormats/CaloObjects/interface/CaloTSamples_Ph2.h"
 #include "SimCalorimetry/CaloSimAlgos/interface/CaloVNoiseSignalGenerator.h"
 #include "CondFormats/EcalObjects/interface/EcalConstants.h"
-#include "DataFormats/EcalDigi/interface/EcalDataFrame_Ph2.h" 
-
+#include "DataFormats/EcalDigi/interface/EcalDataFrame_Ph2.h"
 
 class EcalCoder_Ph2;
 //class EcalDataFrame_Ph2;

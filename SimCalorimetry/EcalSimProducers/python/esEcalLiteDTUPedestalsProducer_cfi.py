@@ -7,5 +7,3 @@ EcalLiteDTUPedestalsRcd =  cms.ESSource("EmptyESSource",
                                 )
 
 EcalLiteDTUPedestals = cms.ESProducer("EcalLiteDTUPedestalsESProducer"),
- 
-timeThresh=cms.double(2.0),

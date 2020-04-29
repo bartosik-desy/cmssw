@@ -14,16 +14,12 @@
 //
 //const int kEBChannels = 61200;
 
-
-
-
 class EcalLiteDTUPedestalsESProducer : public edm::ESProducer {
 public:
   EcalLiteDTUPedestalsESProducer(const edm::ParameterSet& iConfig);
 
-  //typedef std::shared_ptr<EcalLiteDTUPedestals> ReturnType;
-  typedef std::unique_ptr<EcalLiteDTUPedestals> ReturnType;
-  
+  typedef std::unique_ptr<EcalLiteDTUPedestalsMap> ReturnType;
+
   ReturnType produce(const EcalLiteDTUPedestalsRcd& iRecord);
 
 private:
@@ -40,13 +36,13 @@ EcalLiteDTUPedestalsESProducer::EcalLiteDTUPedestalsESProducer(const edm::Parame
 EcalLiteDTUPedestalsESProducer::ReturnType EcalLiteDTUPedestalsESProducer::produce(
     const EcalLiteDTUPedestalsRcd& iRecord) {
   //std::cout<<"********Starting Production"<<std::endl;
-  auto prod = std::make_unique<EcalLiteDTUPedestals>();
+  auto prod = std::make_unique<EcalLiteDTUPedestalsMap>();
 
   //std::cout<<"**********Set EB Values "<<std::endl;
 
   for (int iChannel = 0; iChannel < ecalPh2::kEBChannels; iChannel++) {
     EBDetId myEBDetId = EBDetId::unhashIndex(iChannel);
-    EcalLiteDTUPed ped;
+    EcalLiteDTUPedestals ped;
     ped.setMean(0, 15.);
     ped.setRMS(0, 2.5);
 

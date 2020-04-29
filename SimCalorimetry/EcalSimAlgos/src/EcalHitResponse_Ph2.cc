@@ -113,7 +113,7 @@ void EcalHitResponse_Ph2::add(const CaloSamples& hit) {
   }
 
   //std::cout<< "rsize: " << rsize << "  hit.size: " << hit.size() << "\n"
-            //<< std::endl;  //Not printed. Function apparently never used
+  //<< std::endl;  //Not printed. Function apparently never used
 }
 
 bool EcalHitResponse_Ph2::withinBunchRange(int bunchCrossing) const {

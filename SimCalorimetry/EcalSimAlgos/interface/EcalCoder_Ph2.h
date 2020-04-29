@@ -1,8 +1,7 @@
-#ifndef EcalSimAlgos_EcalCoder_Ph2_h
-#define EcalSimAlgos_EcalCoder_Ph2_h
+#ifndef SimCalorimetry_EcalSimAlgos_EcalCoder_Ph2_h
+#define SimCalorimetry_EcalSimAlgos_EcalCoder_Ph2_h
 
 #include "CalibFormats/CaloObjects/interface/CaloTSamples_Ph2.h"
-//#include "CondFormats/EcalObjects/interface/EcalPedestals.h"
 #include "CondFormats/EcalObjects/interface/EcalLiteDTUPedestals.h"
 #include "CondFormats/EcalObjects/interface/EcalIntercalibConstantsMC.h"
 #include "CondFormats/EcalObjects/interface/EcalCATIAGainRatios.h"
@@ -31,9 +30,9 @@ public:
   typedef CorrelatedNoisifier<EcalCorrMatrix_Ph2> Noisifier;
 
   enum {
-   NBITS = ecalPh2::NBITS,     // number of available bits
-   MAXADC = ecalPh2::MAXADC,  // 2^12 -1,  adc max range
-   NGAINS = ecalPh2::NGAINS      // number of electronic gains
+    NBITS = ecalPh2::NBITS,    // number of available bits
+    MAXADC = ecalPh2::MAXADC,  // 2^12 -1,  adc max range
+    NGAINS = ecalPh2::NGAINS   // number of electronic gains
   };
 
   /// ctor
@@ -43,7 +42,7 @@ public:
   virtual ~EcalCoder_Ph2();
 
   /// can be fetched every event from the EventSetup
-  void setPedestals(const EcalLiteDTUPedestals* pedestals);
+  void setPedestals(const EcalLiteDTUPedestalsMap* pedestals);
 
   void setGainRatios(const EcalCATIAGainRatios* gainRatios);
 
@@ -67,7 +66,7 @@ private:
 
   void findIntercalibConstant(const DetId& detId, double& icalconst) const;
 
-  const EcalLiteDTUPedestals* m_peds;
+  const EcalLiteDTUPedestalsMap* m_peds;
 
   const EcalCATIAGainRatios* m_gainRatios;  // the electronics gains
 

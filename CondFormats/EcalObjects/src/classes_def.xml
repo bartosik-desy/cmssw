@@ -82,11 +82,11 @@
    <field name = "ee_" mapping = "blob"/>
 </class>
 
-<class name="EcalLiteDTUPed"/>
+<class name="EcalLiteDTUPedestals"/>
 <!-- templates for EcalCondObjectContainer having the class as template parameter -->
-<class name="std::vector<EcalLiteDTUPed>"/>
-<class name="EcalContainer<EBDetId,EcalLiteDTUPed>"/>
-<class name="EcalCondObjectContainer<EcalLiteDTUPed>">
+<class name="std::vector<EcalLiteDTUPedestals>"/>
+<class name="EcalContainer<EBDetId,EcalLiteDTUPedestals>"/>
+<class name="EcalCondObjectContainer<EcalLiteDTUPedestals>">
    <field name = "eb_" mapping = "blob"/>
 </class>
 

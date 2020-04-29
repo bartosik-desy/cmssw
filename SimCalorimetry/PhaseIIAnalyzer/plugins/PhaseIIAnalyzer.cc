@@ -63,7 +63,6 @@ using namespace edm;
 // constructors and destructor
 //
 
-
 PhaseIIAnalyzer::PhaseIIAnalyzer(const edm::ParameterSet& iConfig) {
   //now do what ever initialization is needed
   usesResource("TFileService");
@@ -134,18 +133,8 @@ PhaseIIAnalyzer::~PhaseIIAnalyzer() {
 
 // ------------ method called for each event  ------------
 void PhaseIIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
-  //LogInfo("PhaseII") << "new event ";
-
   Handle<EBDigiCollectionPh2> pDigiEB;
   iEvent.getByToken(digiTokenEB_, pDigiEB);
-
-  // edm::ESHandle<EcalIntercalibConstantsMC> ical;
-  // iSetup.get<EcalIntercalibConstantsMCRcd>().get(ical);
-  // const EcalIntercalibConstantsMC* ical_map = ical.product();
-  // EcalIntercalibConstantsMC::const_iterator itical = ical_map->getMap().find(2);
-  // cout << "intercalib: " << (*itical) << endl;
-
-  //const int MAXSAMPLES = ecalPh2::sampleSize;
 
   std::vector<double> ebAnalogSignal;
   std::vector<double> ebADCCounts;
@@ -156,19 +145,6 @@ void PhaseIIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
   ebADCCounts.reserve(EBDataFrame::MAXSAMPLES);
   ebADCGains_temp.reserve(EBDataFrame::MAXSAMPLES);
   ebADCGains.reserve(EBDataFrame::MAXSAMPLES);
-
-  //Take Pedestals:
-  //  edm::ESHandle<EcalLiteDTUPedestals> peds;
-  //  iSetup.get<EcalLiteDTUPedestalsRcd>().get(peds);
-  //  const EcalLiteDTUPedestals* myped = peds.product();
-  //   int cnt=0;
-  // for( EcalLiteDTUPedestals::const_iterator it = myped->barrelItems().begin(); it != myped->barrelItems().end(); ++it)
-  //   {
-  //     std::cout << "EcalPedestal: " << " BARREL " << cnt << " "
-  //               << "  mean:  " <<(*it).mean(0) << " rms: " << (*it).rms(0);
-  //     std::cout << std::endl;
-  //           ++cnt;
-  //   }
 
   int nDigis = 0;
   int maxADCValue = 0;
@@ -185,11 +161,8 @@ void PhaseIIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     EBDetId ebid = digi.id();
     nDigis++;
 
-    edm::ESHandle<EcalLiteDTUPedestals> peds;
+    edm::ESHandle<EcalLiteDTUPedestalsMap> peds;
     iSetup.get<EcalLiteDTUPedestalsRcd>().get(peds);
-    //const EcalLiteDTUPedestalsMap* DTUpeds_map = peds.product();
-    //      EcalLiteDTUPedestalsMap::const_iterator itped = DTUpeds_map->getMap().find(ebid);
-    //  cout << "mean dei piedistalli: " << (*itped).mean(0) << "   rms: " << (*itped).rms(0) << endl;
 
     double Emax = 0.;
     int Pmax = 0;
@@ -265,15 +238,6 @@ void PhaseIIAnalyzer::beginJob() {}
 
 // ------------ method called once each job just after ending the event loop  ------------
 void PhaseIIAnalyzer::endJob() {}
-
-// ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void PhaseIIAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
-  //The following says we do not know what parameters are allowed so do no validation
-  // Please change this to state exactly what you do use, even if it is no parameters
-  //edm::ParameterSetDescription desc;
-  //desc.setUnknown();
-  //descriptions.addDefault(desc);
-}
 
 //define this as a plug-in
 DEFINE_FWK_MODULE(PhaseIIAnalyzer);

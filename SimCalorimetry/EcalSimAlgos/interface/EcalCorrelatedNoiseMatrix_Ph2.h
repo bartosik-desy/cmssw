@@ -1,5 +1,5 @@
-#ifndef EcalSimAlgos_EcalCorrelatedNoiseMatrix_Ph2_h
-#define EcalSimAlgos_EcalCorrelatedNoiseMatrix_Ph2_h
+#ifndef SimCalorimetry_EcalSimAlgos_EcalCorrelatedNoiseMatrix_Ph2_h
+#define SimCalorimetry_EcalSimAlgos_EcalCorrelatedNoiseMatrix_Ph2_h
 
 #include "DataFormats/Math/interface/Error.h"
 #include "CalibFormats/CaloObjects/interface/CaloSamples.h"

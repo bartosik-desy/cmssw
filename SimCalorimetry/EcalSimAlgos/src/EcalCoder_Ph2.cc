@@ -48,7 +48,7 @@ void EcalCoder_Ph2::setFullScaleEnergy(double EBscale) {
   m_maxEneEB = ecalPh2::maxEneEB;  //I don 't know where is setFullScaleEnergy first call
 }
 
-void EcalCoder_Ph2::setPedestals(const EcalLiteDTUPedestals* pedestals) { m_peds = pedestals; }
+void EcalCoder_Ph2::setPedestals(const EcalLiteDTUPedestalsMap* pedestals) { m_peds = pedestals; }
 
 void EcalCoder_Ph2::setGainRatios(const EcalCATIAGainRatios* gainRatios) { m_gainRatios = gainRatios; }
 
@@ -59,12 +59,16 @@ double EcalCoder_Ph2::fullScaleEnergy(const DetId& detId) const {
   return m_maxEneEB;
 }
 
-void EcalCoder_Ph2::analogToDigital(CLHEP::HepRandomEngine* engine, const EcalSamples& clf, EcalDataFrame_Ph2& df) const {
+void EcalCoder_Ph2::analogToDigital(CLHEP::HepRandomEngine* engine,
+                                    const EcalSamples& clf,
+                                    EcalDataFrame_Ph2& df) const {
   df.setSize(clf.size());
   encode(clf, df, engine);
 }
 
-void EcalCoder_Ph2::encode(const EcalSamples& ecalSamples, EcalDataFrame_Ph2& df, CLHEP::HepRandomEngine* engine) const {
+void EcalCoder_Ph2::encode(const EcalSamples& ecalSamples,
+                           EcalDataFrame_Ph2& df,
+                           CLHEP::HepRandomEngine* engine) const {
   assert(nullptr != m_peds);
 
   const unsigned int csize(ecalSamples.size());
@@ -109,7 +113,7 @@ void EcalCoder_Ph2::encode(const EcalSamples& ecalSamples, EcalDataFrame_Ph2& df
   const Noisifier* noisy[NGAINS] = {m_ebCorrNoise[0], m_ebCorrNoise[1]};
 
   if (m_addNoise) {
-//#warning noise generation to be checked
+    //#warning noise generation to be checked
     noisy[0]->noisify(noiseframe[0], engine);  // high gain
     //if( nullptr == noisy[1] ) noisy[0]->noisify( noiseframe[1] ,
     //                                             engine,
@@ -164,7 +168,7 @@ void EcalCoder_Ph2::encode(const EcalSamples& ecalSamples, EcalDataFrame_Ph2& df
         adctrace[i][igain] = adc;
 
       //if (ecalSamples[i] > 0.) {
-        //           std::cout<<" igain = "<<igain<<" pedestals[igain] = "<<pedestals[igain]<<" i = "<<i<<" trueRMS[igain] = "<<trueRMS[igain]<<" noiseframe[igain][i] = "<<noiseframe[igain][i]<<" asignal = "<<asignal<<" isignal = "<<isignal<<" adc = "<<adc<<std::endl;
+      //           std::cout<<" igain = "<<igain<<" pedestals[igain] = "<<pedestals[igain]<<" i = "<<i<<" trueRMS[igain] = "<<trueRMS[igain]<<" noiseframe[igain][i] = "<<noiseframe[igain][i]<<" asignal = "<<asignal<<" isignal = "<<isignal<<" adc = "<<adc<<std::endl;
       //}
 
     }  // for adc

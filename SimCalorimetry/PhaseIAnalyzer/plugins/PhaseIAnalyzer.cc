@@ -64,7 +64,6 @@ using namespace edm;
 //
 
 PhaseIAnalyzer::PhaseIAnalyzer(const edm::ParameterSet& iConfig) {
-	
   //now do what ever initialization is needed
   usesResource("TFileService");
 
@@ -136,18 +135,8 @@ PhaseIAnalyzer::~PhaseIAnalyzer() {
 
 // ------------ method called for each event  ------------
 void PhaseIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
-  //LogInfo("PhaseI") << "new event ";
-
   Handle<EBDigiCollection> pDigiEB;
   iEvent.getByToken(digiTokenEB_, pDigiEB);
-
-  // edm::ESHandle<EcalIntercalibConstantsMC> ical;
-  // iSetup.get<EcalIntercalibConstantsMCRcd>().get(ical);
-  // const EcalIntercalibConstantsMC* ical_map = ical.product();
-  // EcalIntercalibConstantsMC::const_iterator itical = ical_map->getMap().find(2);
-  // cout << "intercalib: " << (*itical) << endl;
-
-  //const int MAXSAMPLES = ecalPh1::sampleSize;
 
   std::vector<double> ebAnalogSignal;
   std::vector<double> ebADCCounts;
@@ -158,19 +147,6 @@ void PhaseIAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   ebADCCounts.reserve(EBDataFrame::MAXSAMPLES);
   ebADCGains_temp.reserve(EBDataFrame::MAXSAMPLES);
   ebADCGains.reserve(EBDataFrame::MAXSAMPLES);
-
-  //Take Pedestals:
-  //  edm::ESHandle<EcalLiteDTUPedestals> peds;
-  //  iSetup.get<EcalLiteDTUPedestalsRcd>().get(peds);
-  //  const EcalLiteDTUPedestals* myped = peds.product();
-  //   int cnt=0;
-  // for( EcalLiteDTUPedestals::const_iterator it = myped->barrelItems().begin(); it != myped->barrelItems().end(); ++it)
-  //   {
-  //     std::cout << "EcalPedestal: " << " BARREL " << cnt << " "
-  //               << "  mean:  " <<(*it).mean(0) << " rms: " << (*it).rms(0);
-  //     std::cout << std::endl;
-  //           ++cnt;
-  //   }
 
   int nDigis = 0;
   int LowGain(0), MidGain(0), HighGain(0);
@@ -273,15 +249,6 @@ void PhaseIAnalyzer::beginJob() {}
 
 // ------------ method called once each job just after ending the event loop  ------------
 void PhaseIAnalyzer::endJob() {}
-
-// ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void PhaseIAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
-  //The following says we do not know what parameters are allowed so do no validation
-  // Please change this to state exactly what you do use, even if it is no parameters
-  //edm::ParameterSetDescription desc;
-  //desc.setUnknown();
-  //descriptions.addDefault(desc);
-}
 
 //define this as a plug-in
 DEFINE_FWK_MODULE(PhaseIAnalyzer);

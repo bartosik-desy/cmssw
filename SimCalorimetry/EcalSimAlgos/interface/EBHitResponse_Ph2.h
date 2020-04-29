@@ -1,5 +1,5 @@
-#ifndef EcalSimAlgos_EBHitResponse_Ph2_h
-#define EcalSimAlgos_EBHitResponse_Ph2_h
+#ifndef SimCalorimetry_EcalSimAlgos_EBHitResponse_Ph2_h
+#define SimCalorimetry_EcalSimAlgos_EBHitResponse_Ph2_h
 
 #include "CalibFormats/CaloObjects/interface/CaloTSamples.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalHitResponse_Ph2.h"

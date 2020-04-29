@@ -1,3 +1,6 @@
+#ifndef SimCalorimetry_PhaseIIAnalyzer_PhaseIIAnalyzer_h
+#define SimCalorimetry_PhaseIIAnalyzer_PhaseIIAnalyzer_h
+
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
@@ -11,7 +14,6 @@
 #include <fstream>
 #include "CondFormats/EcalObjects/interface/EcalConstants.h"
 
-//using namespace std;
 //
 // class declaration
 //
@@ -20,8 +22,6 @@ class PhaseIIAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> {
 public:
   explicit PhaseIIAnalyzer(const edm::ParameterSet&);
   ~PhaseIIAnalyzer();
-
-  static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
 private:
   virtual void beginJob();
@@ -68,3 +68,5 @@ private:
 
   TF1* f;
 };
+
+#endif

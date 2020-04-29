@@ -1,16 +1,13 @@
-#ifndef DIGIECAL_ECALDIGICOLLECTION_PH2_H
-#define DIGIECAL_ECALDIGICOLLECTION_PH2_H
+#ifndef DataFormats_EcalDigi_EcalDigiCollections_Ph2_h
+#define DataFormats_EcalDigi_EcalDigiCollections_Ph2_h
 
 #include "DataFormats/EcalDigi/interface/EBDataFrame.h"
-//#include "DataFormats/EcalDigi/interface/EEDataFrame.h"
-//#include "DataFormats/EcalDigi/interface/ESDataFrame.h"
 #include "DataFormats/EcalDigi/interface/EcalTimeDigi.h"
-#include "DataFormats/EcalDigi/interface/EcalTriggerPrimitiveDigi.h"
-#include "DataFormats/EcalDigi/interface/EcalEBTriggerPrimitiveDigi.h"
-#include "DataFormats/EcalDigi/interface/EcalTrigPrimCompactColl.h"
+//#include "DataFormats/EcalDigi/interface/EcalTriggerPrimitiveDigi.h"
+//#include "DataFormats/EcalDigi/interface/EcalEBTriggerPrimitiveDigi.h"
+//#include "DataFormats/EcalDigi/interface/EcalTrigPrimCompactColl.h"
 #include "DataFormats/EcalDigi/interface/EcalPseudoStripInputDigi.h"
 #include "DataFormats/EcalDigi/interface/EBSrFlag.h"
-//#include "DataFormats/EcalDigi/interface/EESrFlag.h"
 #include "DataFormats/EcalDigi/interface/EcalPnDiodeDigi.h"
 #include "DataFormats/EcalDigi/interface/EcalMatacqDigi.h"
 #include "DataFormats/Common/interface/SortedCollection.h"
@@ -50,8 +47,8 @@ inline void swap(EBDigiCollectionPh2& lhs, EBDigiCollectionPh2& rhs) { lhs.swap(
 
 typedef edm::SortedCollection<EcalTimeDigi> EcalTimeDigiCollection;
 //DA ELIMINARE???
-typedef edm::SortedCollection<EcalTriggerPrimitiveDigi> EcalTrigPrimDigiCollection;
-typedef edm::SortedCollection<EcalEBTriggerPrimitiveDigi> EcalEBTrigPrimDigiCollection;
+//typedef edm::SortedCollection<EcalTriggerPrimitiveDigi> EcalTrigPrimDigiCollection;
+//typedef edm::SortedCollection<EcalEBTriggerPrimitiveDigi> EcalEBTrigPrimDigiCollection;
 
 typedef edm::SortedCollection<EcalPseudoStripInputDigi> EcalPSInputDigiCollection;
 typedef edm::SortedCollection<EBSrFlag> EBSrFlagCollection;

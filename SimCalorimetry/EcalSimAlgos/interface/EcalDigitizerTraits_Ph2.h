@@ -1,5 +1,5 @@
-#ifndef EcalSimAlgos_EcalDigitizerTraits_Ph2_h
-#define EcalSimAlgos_EcalDigitizerTraits_Ph2_h
+#ifndef SimCalorimetry_EcalSimAlgos_EcalDigitizerTraits_Ph2_h
+#define SimCalorimetry_EcalSimAlgos_EcalDigitizerTraits_Ph2_h
 
 #include "DataFormats/EcalDigi/interface/EcalDigiCollections_Ph2.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalElectronicsSim_Ph2.h"
