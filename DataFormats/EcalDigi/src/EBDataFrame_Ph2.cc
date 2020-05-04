@@ -1,8 +1,8 @@
-#include "DataFormats/EcalDigi/interface/EBDataFrame.h"
+#include "DataFormats/EcalDigi/interface/EBDataFrame_Ph2.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include <iostream>
 //#warning[DataFormats/EcalDigi/src/EBDataFrame.cc] spike estimator contains a suspicious 10
-float EBDataFrame::spikeEstimator() const {
+float EBDataFrame_Ph2::spikeEstimator() const {
   if (size() != 10) {
     edm::LogError("InvalidNumberOfSamples")
         << "This method only applies to signals sampled 10 times (" << size() << " samples found)";
@@ -26,7 +26,7 @@ float EBDataFrame::spikeEstimator() const {
   return 0.18 * (sample(4).adc() - ped) / (sample(5).adc() - ped) + (sample(6).adc() - ped) / (sample(5).adc() - ped);
 }
 
-std::ostream& operator<<(std::ostream& s, const EBDataFrame& digi) {
+std::ostream& operator<<(std::ostream& s, const EBDataFrame_Ph2& digi) {
   s << digi.id() << " " << digi.size() << " samples " << std::endl;
   for (int i = 0; i < digi.size(); i++)
     s << "  " << digi[i] << std::endl;
