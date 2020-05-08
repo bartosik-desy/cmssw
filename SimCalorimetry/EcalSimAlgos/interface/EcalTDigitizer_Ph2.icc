@@ -2,12 +2,12 @@
 #define EcalSimAlgos_EcalTDigitizer_Ph2_icc
 
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalTDigitizer_Ph2.h"
-#include "SimCalorimetry/EcalSimAlgos/interface/EcalHitResponse_Ph2.h"
+#include "SimCalorimetry/EcalSimAlgos/interface/EcalHitResponse.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalBaseSignalGenerator.h"
 #include "CalibFormats/CaloObjects/interface/CaloSamples.h"
 
 template <class Traits>
-EcalTDigitizer_Ph2<Traits>::EcalTDigitizer_Ph2(EcalHitResponse_Ph2* hitResponse,
+EcalTDigitizer_Ph2<Traits>::EcalTDigitizer_Ph2(EcalHitResponse* hitResponse,
                                                ElectronicsSim_Ph2* electronicsSim,
                                                bool addNoise)
     : m_hitResponse(hitResponse),
@@ -84,7 +84,7 @@ bool EcalTDigitizer_Ph2<Traits>::addNoise() const {
 }
 
 template <class Traits>
-const EcalHitResponse_Ph2* EcalTDigitizer_Ph2<Traits>::hitResponse() const {
+const EcalHitResponse* EcalTDigitizer_Ph2<Traits>::hitResponse() const {
   return m_hitResponse;
 }
 

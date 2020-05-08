@@ -1,4 +1,4 @@
-#include "SimCalorimetry/EcalSimAlgos/interface/EBHitResponse_Ph2.h"
+#include "SimCalorimetry/EcalSimAlgos/interface/EBHitResponse.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/APDSimParameters.h"
 #include "SimCalorimetry/CaloSimAlgos/interface/CaloVSimParameterMap.h"
 #include "SimCalorimetry/CaloSimAlgos/interface/CaloSimParameters.h"
@@ -12,18 +12,14 @@
 #include "FWCore/Utilities/interface/isFinite.h"
 #include "FWCore/Utilities/interface/Exception.h"
 
-#include "CondFormats/EcalObjects/interface/EcalConstants.h"
-
-//using namespace ecalPh2;
-
-EBHitResponse_Ph2::EBHitResponse_Ph2(const CaloVSimParameterMap* parameterMap,
-                                     const CaloVShape* shape,
-                                     bool apdOnly,
-                                     const APDSimParameters* apdPars = nullptr,
-                                     const CaloVShape* apdShape = nullptr)
+template<class constset> EBHitResponseImpl<constset>::EBHitResponseImpl(const CaloVSimParameterMap* parameterMap,
+                             const CaloVShape* shape,
+                             bool apdOnly,
+                             const APDSimParameters* apdPars,
+                             const CaloVShape* apdShape)
     :
 
-      EcalHitResponse_Ph2(parameterMap, shape),
+      EcalHitResponse(parameterMap, shape),
 
       m_apdOnly(apdOnly),
       m_apdPars(apdPars),
@@ -55,26 +51,29 @@ EBHitResponse_Ph2::EBHitResponse_Ph2(const CaloVSimParameterMap* parameterMap,
   }
 }
 
-EBHitResponse_Ph2::~EBHitResponse_Ph2() {}
+template <class constset> EBHitResponseImpl<constset>::~EBHitResponseImpl() {}
 
-void EBHitResponse_Ph2::initialize(CLHEP::HepRandomEngine* engine) {
+template <class constset> void EBHitResponseImpl<constset>::initialize(CLHEP::HepRandomEngine* engine) {
   m_isInitialized = true;
   for (unsigned int i(0); i != kNOffsets; ++i) {
     m_timeOffVec[i] += CLHEP::RandGaussQ::shoot(engine, 0, apdParameters()->timeOffWidth());
   }
 }
 
-const APDSimParameters* EBHitResponse_Ph2::apdParameters() const {
+template <class constset>
+const APDSimParameters* EBHitResponseImpl<constset>::apdParameters() const {
   assert(nullptr != m_apdPars);
   return m_apdPars;
 }
 
-const CaloVShape* EBHitResponse_Ph2::apdShape() const {
+template <class constset>
+const CaloVShape* EBHitResponseImpl<constset>::apdShape() const {
   assert(nullptr != m_apdShape);
   return m_apdShape;
 }
 
-void EBHitResponse_Ph2::putAPDSignal(const DetId& detId, double npe, double time) {
+template <class constset>
+void EBHitResponseImpl<constset>::putAPDSignal(const DetId& detId, double npe, double time) {
   const CaloSimParameters& parameters(*params(detId));
 
   const double energyFac(1. / parameters.simHitToPhotoelectrons(detId));
@@ -88,11 +87,11 @@ void EBHitResponse_Ph2::putAPDSignal(const DetId& detId, double npe, double time
   const double jitter(time - timeOfFlight(detId));
 
   if (!m_isInitialized) {
-    throw cms::Exception("LogicError") << "EBHitResponse_Ph2::putAPDSignal called without initializing\n";
+    throw cms::Exception("LogicError") << "EBHitResponse::putAPDSignal called without initializing\n";
   }
 
   const double tzero(apdShape()->timeToRise() - jitter - offsets()[EBDetId(detId).denseIndex() % kNOffsets] -
-                     ecalPh2::Samp_Period * (parameters.binOfMaximum() - phaseShift()));
+                     kSamplePeriod * (parameters.binOfMaximum() - phaseShift()));
 
   double binTime(tzero);
 
@@ -100,11 +99,12 @@ void EBHitResponse_Ph2::putAPDSignal(const DetId& detId, double npe, double time
 
   for (unsigned int bin(0); bin != result.size(); ++bin) {
     result[bin] += (*apdShape())(binTime)*signal;
-    binTime += ecalPh2::Samp_Period;
+    binTime += kSamplePeriod;
   }
 }
 
-double EBHitResponse_Ph2::apdSignalAmplitude(const PCaloHit& hit, CLHEP::HepRandomEngine* engine) const {
+template <class constset>
+double EBHitResponseImpl<constset>::apdSignalAmplitude(const PCaloHit& hit, CLHEP::HepRandomEngine* engine) const {
   int iddepth = (hit.depth() & PCaloHit::kEcalDepthIdMask);
   assert(1 == iddepth || 2 == iddepth);
 
@@ -121,7 +121,7 @@ double EBHitResponse_Ph2::apdSignalAmplitude(const PCaloHit& hit, CLHEP::HepRand
 
   npe *= fac;
 
-  //   edm::LogError( "EBHitResponse_Ph2" ) << "--- # photoelectrons for "
+  //   edm::LogError( "EBHitResponse" ) << "--- # photoelectrons for "
   /*   std::cout << "--- # photoelectrons for "
 	     << EBDetId( hit.id() ) 
 	     <<" is " << npe //;
@@ -130,13 +130,15 @@ double EBHitResponse_Ph2::apdSignalAmplitude(const PCaloHit& hit, CLHEP::HepRand
   return npe;
 }
 
-void EBHitResponse_Ph2::setIntercal(const EcalIntercalibConstantsMC* ical) { m_intercal = ical; }
+template <class constset>
+void EBHitResponseImpl<constset>::setIntercal(const EcalIntercalibConstantsMC* ical) { m_intercal = ical; }
 
-void EBHitResponse_Ph2::findIntercalibConstant(const DetId& detId, double& icalconst) const {
+template <class constset>
+void EBHitResponseImpl<constset>::findIntercalibConstant(const DetId& detId, double& icalconst) const {
   EcalIntercalibConstantMC thisconst(1.);
 
   if (nullptr == m_intercal) {
-    edm::LogError("EBHitResponse_Ph2") << "No intercal constant defined for EBHitResponse_Ph2";
+    edm::LogError("EBHitResponse") << "No intercal constant defined for EBHitResponse";
   } else {
     const EcalIntercalibConstantMCMap& icalMap(m_intercal->getMap());
     EcalIntercalibConstantMCMap::const_iterator icalit(icalMap.find(detId));
@@ -145,14 +147,15 @@ void EBHitResponse_Ph2::findIntercalibConstant(const DetId& detId, double& icalc
       if (thisconst == 0.)
         thisconst = 1.;
     } else {
-      edm::LogError("EBHitResponse_Ph2") << "No intercalib const found for xtal " << detId.rawId()
-                                         << "! something wrong with EcalIntercalibConstants in your DB? ";
+      edm::LogError("EBHitResponse") << "No intercalib const found for xtal " << detId.rawId()
+                                     << "! something wrong with EcalIntercalibConstants in your DB? ";
     }
   }
   icalconst = thisconst;
 }
 
-void EBHitResponse_Ph2::initializeHits() {
+template <class constset>
+void EBHitResponseImpl<constset>::initializeHits() {
   if (!index().empty())
     blankOutUsedSamples();
 
@@ -164,7 +167,8 @@ void EBHitResponse_Ph2::initializeHits() {
   }
 }
 
-void EBHitResponse_Ph2::finalizeHits() {
+template <class constset>
+void EBHitResponseImpl<constset>::finalizeHits() {
   const unsigned int bSize(EBDetId::kSizeForDenseIndexing);
   if (apdParameters()->addToBarrel() || m_apdOnly) {
     for (unsigned int i(0); i != bSize; ++i) {
@@ -179,7 +183,8 @@ void EBHitResponse_Ph2::finalizeHits() {
   }
 }
 
-void EBHitResponse_Ph2::add(const PCaloHit& hit, CLHEP::HepRandomEngine* engine) {
+template <class constset>
+void EBHitResponseImpl<constset>::add(const PCaloHit& hit, CLHEP::HepRandomEngine* engine) {
   if (!edm::isNotFinite(hit.time()) && (nullptr == hitFilter() || hitFilter()->accepts(hit))) {
     int iddepth = (hit.depth() & PCaloHit::kEcalDepthIdMask);
     if (0 == iddepth)  // for now take only nonAPD hits
@@ -198,7 +203,8 @@ void EBHitResponse_Ph2::add(const PCaloHit& hit, CLHEP::HepRandomEngine* engine)
   }
 }
 
-void EBHitResponse_Ph2::run(MixCollection<PCaloHit>& hits, CLHEP::HepRandomEngine* engine) {
+template <class constset>
+void EBHitResponseImpl<constset>::run(MixCollection<PCaloHit>& hits, CLHEP::HepRandomEngine* engine) {
   if (!index().empty())
     blankOutUsedSamples();
 
@@ -244,16 +250,23 @@ void EBHitResponse_Ph2::run(MixCollection<PCaloHit>& hits, CLHEP::HepRandomEngin
   }
 }
 
-unsigned int EBHitResponse_Ph2::samplesSize() const { return m_vSam.size(); }
+template <class constset>
+unsigned int EBHitResponseImpl<constset>::samplesSize() const { return m_vSam.size(); }
 
-unsigned int EBHitResponse_Ph2::samplesSizeAll() const { return m_vSam.size(); }
+template <class constset>
+unsigned int EBHitResponseImpl<constset>::samplesSizeAll() const { return m_vSam.size(); }
 
-const EcalHitResponse_Ph2::EcalSamples* EBHitResponse_Ph2::operator[](unsigned int i) const { return &m_vSam[i]; }
+template <class constset>
+const EcalHitResponse::EcalSamples* EBHitResponseImpl<constset>::operator[](unsigned int i) const { return &m_vSam[i]; }
 
-EcalHitResponse_Ph2::EcalSamples* EBHitResponse_Ph2::operator[](unsigned int i) { return &m_vSam[i]; }
+template <class constset>
+EcalHitResponse::EcalSamples* EBHitResponseImpl<constset>::operator[](unsigned int i) { return &m_vSam[i]; }
 
-EcalHitResponse_Ph2::EcalSamples* EBHitResponse_Ph2::vSam(unsigned int i) { return &m_vSam[i]; }
+template <class constset>
+EcalHitResponse::EcalSamples* EBHitResponseImpl<constset>::vSam(unsigned int i) { return &m_vSam[i]; }
 
-EcalHitResponse_Ph2::EcalSamples* EBHitResponse_Ph2::vSamAll(unsigned int i) { return &m_vSam[i]; }
+template <class constset>
+EcalHitResponse::EcalSamples* EBHitResponseImpl<constset>::vSamAll(unsigned int i) { return &m_vSam[i]; }
 
-const EcalHitResponse_Ph2::EcalSamples* EBHitResponse_Ph2::vSamAll(unsigned int i) const { return &m_vSam[i]; }
+template <class constset>
+const EcalHitResponse::EcalSamples* EBHitResponseImpl<constset>::vSamAll(unsigned int i) const { return &m_vSam[i]; }

@@ -1,7 +1,7 @@
-#ifndef SimCalorimetry_EcalSimAlgos_EcalCoder_Ph2_h
-#define SimCalorimetry_EcalSimAlgos_EcalCoder_Ph2_h
+#ifndef SimCalorimetry_EcalSimAlgos_EcalLiteDTUCoder_h
+#define SimCalorimetry_EcalSimAlgos_EcalLiteDTUCoder_h
 
-#include "CalibFormats/CaloObjects/interface/CaloTSamples_Ph2.h"
+#include "CalibFormats/CaloObjects/interface/CaloTSamples.h"
 #include "CondFormats/EcalObjects/interface/EcalLiteDTUPedestals.h"
 #include "CondFormats/EcalObjects/interface/EcalIntercalibConstantsMC.h"
 #include "CondFormats/EcalObjects/interface/EcalCATIAGainRatios.h"
@@ -21,11 +21,10 @@ namespace CLHEP {
   class HepRandomEngine;
 }
 
-class EcalCoder_Ph2 {
+class EcalLiteDTUCoder {
 public:
-  typedef CaloTSamples_Ph2<float, ecalPh2::sampleSize> EcalSamples;
+  typedef CaloTSamples<float, ecalPh2::sampleSize> EcalSamples;
 
-  //typedef CaloTSamples_Ph2<float,10> EcalSamples ;
 
   typedef CorrelatedNoisifier<EcalCorrMatrix_Ph2> Noisifier;
 
@@ -36,10 +35,10 @@ public:
   };
 
   /// ctor
-  EcalCoder_Ph2(bool addNoise, bool PreMix1, Noisifier* ebCorrNoise0, Noisifier* ebCorrNoise1 = nullptr);
+  EcalLiteDTUCoder(bool addNoise, bool PreMix1, Noisifier* ebCorrNoise0, Noisifier* ebCorrNoise1 = nullptr);
 
   /// dtor
-  virtual ~EcalCoder_Ph2();
+  virtual ~EcalLiteDTUCoder();
 
   /// can be fetched every event from the EventSetup
   void setPedestals(const EcalLiteDTUPedestalsMap* pedestals);

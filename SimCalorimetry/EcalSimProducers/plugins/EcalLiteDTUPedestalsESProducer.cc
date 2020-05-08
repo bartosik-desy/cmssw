@@ -40,7 +40,7 @@ EcalLiteDTUPedestalsESProducer::ReturnType EcalLiteDTUPedestalsESProducer::produ
 
   //std::cout<<"**********Set EB Values "<<std::endl;
 
-  for (int iChannel = 0; iChannel < ecalPh2::kEBChannels; iChannel++) {
+  for (unsigned int iChannel = 0; iChannel < ecalPh2::kEBChannels; iChannel++) {
     EBDetId myEBDetId = EBDetId::unhashIndex(iChannel);
     EcalLiteDTUPedestals ped;
     ped.setMean(0, 15.);

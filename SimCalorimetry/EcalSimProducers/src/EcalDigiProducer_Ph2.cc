@@ -1,11 +1,11 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "SimCalorimetry/EcalSimProducers/interface/EcalDigiProducer_Ph2.h"
-#include "SimCalorimetry/EcalSimAlgos/interface/EBHitResponse_Ph2.h"
+#include "SimCalorimetry/EcalSimAlgos/interface/EBHitResponse.h"
 #include "SimCalorimetry/CaloSimAlgos/interface/CaloHitResponse.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalSimParameterMap_Ph2.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/APDSimParameters.h"
-#include "DataFormats/EcalDigi/interface/EcalDigiCollections_Ph2.h"
-#include "SimCalorimetry/EcalSimAlgos/interface/EcalCoder_Ph2.h"
+#include "DataFormats/EcalDigi/interface/EcalDigiCollections.h"
+#include "SimCalorimetry/EcalSimAlgos/interface/EcalLiteDTUCoder.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalElectronicsSim_Ph2.h"
 #include "Geometry/CaloGeometry/interface/CaloGeometry.h"
 #include "CalibFormats/CaloObjects/interface/CaloSamples.h"
@@ -166,13 +166,13 @@ EcalDigiProducer_Ph2::EcalDigiProducer_Ph2(const edm::ParameterSet& params, edm:
   m_EBCorrNoise[1].reset(new CorrelatedNoisifier<EcalCorrMatrix_Ph2>(ebMatrix[1]));
 
   //std::cout<<"[EcalDigiProducer_Ph2] More reset"<<std::endl;
-  m_Coder.reset(new EcalCoder_Ph2(addNoise, m_PreMix1, m_EBCorrNoise[0].get(), m_EBCorrNoise[1].get()));
+  m_Coder.reset(new EcalLiteDTUCoder(addNoise, m_PreMix1, m_EBCorrNoise[0].get(), m_EBCorrNoise[1].get()));
 
   m_ElectronicsSim.reset(
       new EcalElectronicsSim_Ph2(m_ParameterMap.get(), m_Coder.get(), applyConstantTerm, rmsConstantTerm));
 
   if (m_apdSeparateDigi) {
-    m_APDCoder.reset(new EcalCoder_Ph2(false, m_PreMix1, m_EBCorrNoise[0].get(), m_EBCorrNoise[1].get()));
+    m_APDCoder.reset(new EcalLiteDTUCoder(false, m_PreMix1, m_EBCorrNoise[0].get(), m_EBCorrNoise[1].get()));
 
     m_APDElectronicsSim.reset(
         new EcalElectronicsSim_Ph2(m_ParameterMap.get(), m_APDCoder.get(), applyConstantTerm, rmsConstantTerm));

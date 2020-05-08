@@ -12,7 +12,7 @@
 #include "CalibFormats/CaloObjects/interface/CaloTSamplesBase.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalBaseSignalGenerator.h"
 
-class EcalHitResponse_Ph2;
+class EcalHitResponse;
 class EcalBaseSignalGenerator;
 
 namespace CLHEP {
@@ -27,7 +27,7 @@ public:
   typedef typename Traits::DigiCollection DigiCollection;
   typedef typename Traits::EcalSamples EcalSamples;
 
-  EcalTDigitizer_Ph2<Traits>(EcalHitResponse_Ph2* hitResponse, ElectronicsSim_Ph2* electronicsSim, bool addNoise);
+  EcalTDigitizer_Ph2<Traits>(EcalHitResponse* hitResponse, ElectronicsSim_Ph2* electronicsSim, bool addNoise);
 
   virtual ~EcalTDigitizer_Ph2<Traits>();
 
@@ -46,12 +46,12 @@ public:
 protected:
   bool addNoise() const;
 
-  const EcalHitResponse_Ph2* hitResponse() const;
+  const EcalHitResponse* hitResponse() const;
 
   const ElectronicsSim_Ph2* elecSim() const;
 
 private:
-  EcalHitResponse_Ph2* m_hitResponse;
+  EcalHitResponse* m_hitResponse;
   ElectronicsSim_Ph2* m_electronicsSim;
   bool m_addNoise;
 

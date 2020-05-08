@@ -1,5 +1,4 @@
-#include <boost/cstdint.hpp>
-
+#include <cstdint>
 #include "CondFormats/EcalObjects/interface/EcalCondObjectContainer.h"
 #include "CondFormats/EcalObjects/interface/EcalCondTowerObjectContainer.h"
 #include "CondFormats/EcalObjects/interface/EcalPedestals.h"

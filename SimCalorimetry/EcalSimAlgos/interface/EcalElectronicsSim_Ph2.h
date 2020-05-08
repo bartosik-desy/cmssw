@@ -1,12 +1,12 @@
 #ifndef SimCalorimetry_EcalSimAlgos_EcalElectronicsSim_Ph2_h
 #define SimCalorimetry_EcalSimAlgos_EcalElectronicsSim_Ph2_h
 
-#include "CalibFormats/CaloObjects/interface/CaloTSamples_Ph2.h"
+#include "CalibFormats/CaloObjects/interface/CaloTSamples.h"
 #include "SimCalorimetry/CaloSimAlgos/interface/CaloVNoiseSignalGenerator.h"
 #include "CondFormats/EcalObjects/interface/EcalConstants.h"
 #include "DataFormats/EcalDigi/interface/EcalDataFrame_Ph2.h"
 
-class EcalCoder_Ph2;
+class EcalLiteDTUCoder;
 //class EcalDataFrame_Ph2;
 class EcalSimParameterMap_Ph2;
 
@@ -21,9 +21,9 @@ namespace CLHEP {
 
 class EcalElectronicsSim_Ph2 {
 public:
-  typedef CaloTSamples_Ph2<float, ecalPh2::sampleSize> EcalSamples;
+  typedef CaloTSamples<float, ecalPh2::sampleSize> EcalSamples;
   EcalElectronicsSim_Ph2(const EcalSimParameterMap_Ph2* parameterMap,
-                         EcalCoder_Ph2* coder,
+                         EcalLiteDTUCoder* coder,
                          bool applyConstantTerm,
                          double rmsConstantTerm);
 
@@ -48,7 +48,7 @@ private:
 
   const CaloVNoiseSignalGenerator* theNoiseSignalGenerator;
 
-  EcalCoder_Ph2* m_theCoder;
+  EcalLiteDTUCoder* m_theCoder;
 
   const double m_thisCT;
   const bool m_applyConstantTerm;

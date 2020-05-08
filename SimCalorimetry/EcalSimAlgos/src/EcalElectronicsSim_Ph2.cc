@@ -1,5 +1,5 @@
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalElectronicsSim_Ph2.h"
-#include "SimCalorimetry/EcalSimAlgos/interface/EcalCoder_Ph2.h"
+#include "SimCalorimetry/EcalSimAlgos/interface/EcalLiteDTUCoder.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalSimParameterMap_Ph2.h"
 #include "DataFormats/EcalDigi/interface/EcalDataFrame_Ph2.h"
 
@@ -12,7 +12,7 @@
 #include <fstream>
 
 EcalElectronicsSim_Ph2::EcalElectronicsSim_Ph2(const EcalSimParameterMap_Ph2* parameterMap,
-                                               EcalCoder_Ph2* coder,
+                                               EcalLiteDTUCoder* coder,
                                                bool applyConstantTerm,
                                                double rmsConstantTerm)
     : m_simMap(parameterMap), m_theCoder(coder), m_thisCT(rmsConstantTerm), m_applyConstantTerm(applyConstantTerm) {}

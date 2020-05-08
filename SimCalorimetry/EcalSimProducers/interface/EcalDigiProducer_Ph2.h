@@ -12,16 +12,15 @@
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalTDigitizer_Ph2.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalDigitizerTraits_Ph2.h"
 #include "SimGeneral/MixingModule/interface/DigiAccumulatorMixMod.h"
-
+#include "SimCalorimetry/EcalSimAlgos/interface/EBHitResponse.h"
 #include <vector>
 
 typedef EcalTDigitizer_Ph2<EBDigitizerTraits_Ph2> EBDigitizer_Ph2;
 
 class APDSimParameters;
-class EBHitResponse_Ph2;
 class CaloHitResponse;
 class EcalSimParameterMap_Ph2;
-class EcalCoder_Ph2;
+class EcalLiteDTUCoder;
 class EcalElectronicsSim_Ph2;
 class EcalBaseSignalGenerator;
 class CaloGeometry;
@@ -108,10 +107,10 @@ private:
   std::unique_ptr<EBDigitizer_Ph2> m_BarrelDigitizer;
 
   std::unique_ptr<EcalElectronicsSim_Ph2> m_ElectronicsSim;
-  std::unique_ptr<EcalCoder_Ph2> m_Coder;
+  std::unique_ptr<EcalLiteDTUCoder> m_Coder;
 
   std::unique_ptr<EcalElectronicsSim_Ph2> m_APDElectronicsSim;
-  std::unique_ptr<EcalCoder_Ph2> m_APDCoder;
+  std::unique_ptr<EcalLiteDTUCoder> m_APDCoder;
 
   const CaloGeometry* m_Geometry;
 

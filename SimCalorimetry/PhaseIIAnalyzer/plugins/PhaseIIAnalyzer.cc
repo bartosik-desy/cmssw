@@ -27,7 +27,7 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
 //My includes
-#include "DataFormats/EcalDigi/interface/EcalDigiCollections_Ph2.h"
+#include "DataFormats/EcalDigi/interface/EcalDigiCollections.h"
 #include "CondFormats/EcalObjects/interface/EcalPedestals.h"
 #include "CondFormats/DataRecord/interface/EcalPedestalsRcd.h"
 #include "CondFormats/EcalObjects/interface/EcalLiteDTUPedestals.h"
@@ -75,7 +75,7 @@ PhaseIIAnalyzer::PhaseIIAnalyzer(const edm::ParameterSet& iConfig) {
   edm::Service<TFileService> fs;
   //Histograms
 
-  for (int isample = 0; isample < ecalPh2::sampleSize; isample++) {
+  for (unsigned int isample = 0; isample < ecalPh2::sampleSize; isample++) {
     EBEnergyHisto[isample] =
         fs->make<TH1I>(Form("EnergyEB_%d", isample), Form("Energy sample %d  Barrel;ADC", isample), 950, 100, 2000);
     EBGainHisto[isample] =
@@ -99,7 +99,7 @@ PhaseIIAnalyzer::PhaseIIAnalyzer(const edm::ParameterSet& iConfig) {
   sprintf(histo, "EcalDigiTaskBarrelDigisMultiplicity");
   meEBDigiMultiplicity_ = fs->make<TH1D>(histo, histo, 612, 0., 61200);
 
-  for (int i = 0; i < ecalPh2::sampleSize; i++) {
+  for (unsigned int i = 0; i < ecalPh2::sampleSize; i++) {
     sprintf(histo, "EcalDigiTaskBarrelAnalogPulse%02d", i + 1);
     meEBDigiADCAnalog_[i] = fs->make<TH1D>(histo, histo, 4000, 0., 400.);
 
