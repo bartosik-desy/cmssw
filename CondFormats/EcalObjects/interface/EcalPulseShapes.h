@@ -5,9 +5,9 @@
 
 #include "CondFormats/EcalObjects/interface/EcalCondObjectContainer.h"
 
-struct EcalPulseShape {
+struct EcalPulseShape <template size_t nsamples>{
 public:
-  static const int TEMPLATESAMPLES = 12;
+  static const int TEMPLATESAMPLES = nsamples;
 
   EcalPulseShape();
 
@@ -18,8 +18,13 @@ public:
   COND_SERIALIZABLE;
 };
 
-typedef EcalCondObjectContainer<EcalPulseShape> EcalPulseShapesMap;
+typedef EcalCondObjectContainer<EcalPulseShape<12>> EcalPulseShapesMap;
 typedef EcalPulseShapesMap::const_iterator EcalPulseShapesMapIterator;
 typedef EcalPulseShapesMap EcalPulseShapes;
+
+typedef EcalCondObjectContainer<EcalPulseShape<16>> EcalPhase2PulseShapesMap;
+typedef EcalPhase2PulseShapesMap::const_iterator EcalPhase2PulseShapesMapIterator;
+typedef EcalPhase2PulseShapesMap EcalPhase2PulseShapes;
+
 
 #endif

@@ -4,6 +4,7 @@
 #include "CalibFormats/CaloObjects/interface/CaloTSamples.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalHitResponse.h"
 #include "CondFormats/EcalObjects/interface/EcalIntercalibConstantsMC.h"
+#include "CondFormats/EcalObjects/interface/EcalConstants.h"
 
 class APDSimParameters;
 
@@ -11,21 +12,23 @@ namespace CLHEP {
   class HepRandomEngine;
 }
 
-class EBHitResponse : public EcalHitResponse {
+template class EBHitResponseImpl<size_t nsamples, size_t noffsets, double sampleperiod > : public EcalHitResponse {
 public:
-  typedef CaloTSamples<float, 10> EBSamples;
+  typedef CaloTSamples<float, nsamples> EBSamples;
 
   typedef std::vector<double> VecD;
 
-  enum { kNOffsets = 2000 };
+  enum { kNOffsets = noffsets };
 
-  EBHitResponse(const CaloVSimParameterMap* parameterMap,
+  constexpr double kSamplePeriod = sampleperiod;
+  
+  EBHitResponseImpl(const CaloVSimParameterMap* parameterMap,
                 const CaloVShape* shape,
                 bool apdOnly,
                 const APDSimParameters* apdPars,
                 const CaloVShape* apdShape);
 
-  ~EBHitResponse() override;
+  ~EBHitResponseImpl() override;
 
   void initialize(CLHEP::HepRandomEngine*);
 
@@ -95,4 +98,9 @@ private:
 
   bool m_isInitialized;
 };
+
+
+typedef EBHitResponseImpl<ecalPh1::sampleSize,2000,EcalHitResponse::BUNCHSPACE> EBHitResponse;
+typedef EBHitResponseImpl<ecalPh2::sampleSize,ecalPh2::kNOffsets,ecalPh2::Samp_Period> EBHitResponse_Ph2;
+
 #endif
