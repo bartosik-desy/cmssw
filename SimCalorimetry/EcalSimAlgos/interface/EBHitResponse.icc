@@ -12,11 +12,12 @@
 #include "FWCore/Utilities/interface/isFinite.h"
 #include "FWCore/Utilities/interface/Exception.h"
 
-template<class constset> EBHitResponseImpl<constset>::EBHitResponseImpl(const CaloVSimParameterMap* parameterMap,
-                             const CaloVShape* shape,
-                             bool apdOnly,
-                             const APDSimParameters* apdPars,
-                             const CaloVShape* apdShape)
+template <class constset>
+EBHitResponseImpl<constset>::EBHitResponseImpl(const CaloVSimParameterMap* parameterMap,
+                                               const CaloVShape* shape,
+                                               bool apdOnly,
+                                               const APDSimParameters* apdPars,
+                                               const CaloVShape* apdShape)
     :
 
       EcalHitResponse(parameterMap, shape),
@@ -51,9 +52,11 @@ template<class constset> EBHitResponseImpl<constset>::EBHitResponseImpl(const Ca
   }
 }
 
-template <class constset> EBHitResponseImpl<constset>::~EBHitResponseImpl() {}
+template <class constset>
+EBHitResponseImpl<constset>::~EBHitResponseImpl() {}
 
-template <class constset> void EBHitResponseImpl<constset>::initialize(CLHEP::HepRandomEngine* engine) {
+template <class constset>
+void EBHitResponseImpl<constset>::initialize(CLHEP::HepRandomEngine* engine) {
   m_isInitialized = true;
   for (unsigned int i(0); i != kNOffsets; ++i) {
     m_timeOffVec[i] += CLHEP::RandGaussQ::shoot(engine, 0, apdParameters()->timeOffWidth());
@@ -131,7 +134,9 @@ double EBHitResponseImpl<constset>::apdSignalAmplitude(const PCaloHit& hit, CLHE
 }
 
 template <class constset>
-void EBHitResponseImpl<constset>::setIntercal(const EcalIntercalibConstantsMC* ical) { m_intercal = ical; }
+void EBHitResponseImpl<constset>::setIntercal(const EcalIntercalibConstantsMC* ical) {
+  m_intercal = ical;
+}
 
 template <class constset>
 void EBHitResponseImpl<constset>::findIntercalibConstant(const DetId& detId, double& icalconst) const {
@@ -251,22 +256,36 @@ void EBHitResponseImpl<constset>::run(MixCollection<PCaloHit>& hits, CLHEP::HepR
 }
 
 template <class constset>
-unsigned int EBHitResponseImpl<constset>::samplesSize() const { return m_vSam.size(); }
+unsigned int EBHitResponseImpl<constset>::samplesSize() const {
+  return m_vSam.size();
+}
 
 template <class constset>
-unsigned int EBHitResponseImpl<constset>::samplesSizeAll() const { return m_vSam.size(); }
+unsigned int EBHitResponseImpl<constset>::samplesSizeAll() const {
+  return m_vSam.size();
+}
 
 template <class constset>
-const EcalHitResponse::EcalSamples* EBHitResponseImpl<constset>::operator[](unsigned int i) const { return &m_vSam[i]; }
+const EcalHitResponse::EcalSamples* EBHitResponseImpl<constset>::operator[](unsigned int i) const {
+  return &m_vSam[i];
+}
 
 template <class constset>
-EcalHitResponse::EcalSamples* EBHitResponseImpl<constset>::operator[](unsigned int i) { return &m_vSam[i]; }
+EcalHitResponse::EcalSamples* EBHitResponseImpl<constset>::operator[](unsigned int i) {
+  return &m_vSam[i];
+}
 
 template <class constset>
-EcalHitResponse::EcalSamples* EBHitResponseImpl<constset>::vSam(unsigned int i) { return &m_vSam[i]; }
+EcalHitResponse::EcalSamples* EBHitResponseImpl<constset>::vSam(unsigned int i) {
+  return &m_vSam[i];
+}
 
 template <class constset>
-EcalHitResponse::EcalSamples* EBHitResponseImpl<constset>::vSamAll(unsigned int i) { return &m_vSam[i]; }
+EcalHitResponse::EcalSamples* EBHitResponseImpl<constset>::vSamAll(unsigned int i) {
+  return &m_vSam[i];
+}
 
 template <class constset>
-const EcalHitResponse::EcalSamples* EBHitResponseImpl<constset>::vSamAll(unsigned int i) const { return &m_vSam[i]; }
+const EcalHitResponse::EcalSamples* EBHitResponseImpl<constset>::vSamAll(unsigned int i) const {
+  return &m_vSam[i];
+}

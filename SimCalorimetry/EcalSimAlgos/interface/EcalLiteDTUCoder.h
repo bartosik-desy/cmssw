@@ -25,7 +25,6 @@ class EcalLiteDTUCoder {
 public:
   typedef CaloTSamples<float, ecalPh2::sampleSize> EcalSamples;
 
-
   typedef CorrelatedNoisifier<EcalCorrMatrix_Ph2> Noisifier;
 
   enum {

@@ -24,9 +24,9 @@
 const float DTUVersion = 1.0;
 
 EcalLiteDTUCoder::EcalLiteDTUCoder(bool addNoise,
-                             bool PreMix1,
-                             EcalLiteDTUCoder::Noisifier* ebCorrNoise0,
-                             EcalLiteDTUCoder::Noisifier* ebCorrNoise1)
+                                   bool PreMix1,
+                                   EcalLiteDTUCoder::Noisifier* ebCorrNoise0,
+                                   EcalLiteDTUCoder::Noisifier* ebCorrNoise1)
     : m_peds(nullptr),
       m_gainRatios(nullptr),
       m_intercals(nullptr),
@@ -60,15 +60,15 @@ double EcalLiteDTUCoder::fullScaleEnergy(const DetId& detId) const {
 }
 
 void EcalLiteDTUCoder::analogToDigital(CLHEP::HepRandomEngine* engine,
-                                    const EcalSamples& clf,
-                                    EcalDataFrame_Ph2& df) const {
+                                       const EcalSamples& clf,
+                                       EcalDataFrame_Ph2& df) const {
   df.setSize(clf.size());
   encode(clf, df, engine);
 }
 
 void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
-                           EcalDataFrame_Ph2& df,
-                           CLHEP::HepRandomEngine* engine) const {
+                              EcalDataFrame_Ph2& df,
+                              CLHEP::HepRandomEngine* engine) const {
   assert(nullptr != m_peds);
 
   const unsigned int csize(ecalSamples.size());
@@ -79,8 +79,8 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
   //....initialisation
   if (ecalSamples[5] > 0.)
     LogDebug("EcalLiteDTUCoder") << "Input caloSample"
-                              << "\n"
-                              << ecalSamples;
+                                 << "\n"
+                                 << ecalSamples;
 
   //N Gains set to 2 in the .h
   double pedestals[ecalPh2::NGAINS];
@@ -201,11 +201,11 @@ void EcalLiteDTUCoder::findPedestal(const DetId& detId, int gainId, double& ped,
 
   if ((detId.subdetId() != EcalBarrel) && (detId.subdetId() != EcalEndcap)) {
     edm::LogError("EcalLiteDTUCoder") << "Could not find pedestal for " << detId.rawId() << " among the "
-                                   << m_peds->getMap().size();
+                                      << m_peds->getMap().size();
   }
 
   LogDebug("EcalLiteDTUCoder") << "Pedestals for " << detId.rawId() << " gain range " << gainId << " : \n"
-                            << "Mean = " << ped << " rms = " << width;
+                               << "Mean = " << ped << " rms = " << width;
 }
 
 // void
@@ -235,7 +235,7 @@ void EcalLiteDTUCoder::findIntercalibConstant(const DetId& detId, double& icalco
     }
   } else {
     edm::LogError("EcalLiteDTUCoder") << "No intercalib const found for xtal " << detId.rawId()
-                                   << "! something wrong with EcalIntercalibConstants in your DB? ";
+                                      << "! something wrong with EcalIntercalibConstants in your DB? ";
   }
   icalconst = thisconst;
 }
