@@ -21,12 +21,12 @@
 class PhaseIAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> {
 public:
   explicit PhaseIAnalyzer(const edm::ParameterSet&);
-  ~PhaseIAnalyzer();
+  ~PhaseIAnalyzer() override;
 
 private:
-  virtual void beginJob();
+  void beginJob() override;
   void analyze(const edm::Event&, const edm::EventSetup&) override;
-  virtual void endJob();
+  void endJob() override;
 
   edm::InputTag digiTagEB_;
 
