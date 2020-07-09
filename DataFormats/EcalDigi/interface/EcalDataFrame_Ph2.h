@@ -26,7 +26,7 @@ public:
   void setSize(int) {}
   void setSample(int i, EcalLiteDTUSample sam) { m_data[i] = sam; }
 
-  int MAXSAMPLES = ecalPh2::sampleSize;
+  static constexpr int MAXSAMPLES = ecalPh2::sampleSize;
 
   edm::DataFrame const& frame() const { return m_data; }
   edm::DataFrame& frame() { return m_data; }

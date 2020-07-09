@@ -6,7 +6,7 @@ class ecalPh2 {
 public:
   static constexpr double Samp_Period = 6.25;
   static constexpr unsigned int NGAINS = 2;
-  static constexpr float gains[2] = {10., 1.};
+  static constexpr float gains[NGAINS] = {10., 1.};
   static constexpr unsigned int gainId1 = 1;
   static constexpr unsigned int gainId10 = 0;
   static constexpr unsigned int sampleSize = 16;

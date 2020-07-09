@@ -7,9 +7,6 @@
 
 class EcalLiteDTUPedestals {
 public:
-  float meanarray[2] = {13., 8.};
-  float rmsarray[2] = {2.8, 1.2};
-
   int setMean(unsigned int i, float value) {
     if (i >= ecalPh2::NGAINS)
       return -1;
@@ -30,6 +27,9 @@ public:
 
   float rms(unsigned int i) const { return rmsarray[i]; }
 
+private:
+  float meanarray[2] = {13., 8.};
+  float rmsarray[2] = {2.8, 1.2};
   COND_SERIALIZABLE;
 };
 
