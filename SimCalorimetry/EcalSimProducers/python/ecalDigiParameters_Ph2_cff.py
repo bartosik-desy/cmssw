@@ -4,7 +4,7 @@ ecal_digi_parameters = cms.PSet(
     EBdigiCollectionPh2 = cms.string(''),
     UseLCcorrection  = cms.untracked.bool(True),
 
-    #Adding Phase2 noise correlation matrices (dimension 16): FIXME
+    #NOTE: Phase2 noise correlation matrices with fake numbers to simply test the code flow.
 
     EBCorrNoiseMatrixG10Ph2 = cms.vdouble (
     1.00000, 0.71073, 0.55721, 0.46089, 0.40449,

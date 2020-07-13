@@ -8,19 +8,19 @@
 
 #include <iostream>
 
-//#include "Geometry/CaloGeometry/interface/CaloGenericDetId.h"
 
 /////////////////////
 //NOTE:
 //TO BE CORRECTLY IMPLEMENTED!
 //Simona Cometti, [20.03.20 12:05]
 //[In reply to Dario Soldi]
-//Allora nella versione 1 i samples a gain 1 erano solo 8
-//Centrati così:
-//Quindi 2 samples prima e 5 dopo a quello saturato
-//Nella versione 1.2 c'è la possibilità di avere 8 samples o 16 samples dal gain 1
-//Quando è selezionata l'opzione dei 16 samples:
-//5 samples prima, il sample saturo e poi 10 samples dopo
+//In the Lite DTU v1 the gain 1 samples were 8.
+//The saturated one was the sample 5:
+//Two samples before and  5 after the one saturated.
+//In the Lite DTU v1.2 there is the possibility of having  8 samples or 16 samples with gain 1
+//When the gain 1 is selected we have:
+//5 samples before the saturated sample and 10 samples after.
+//When we have N consecutive saturated samples, the window at gain 1 is extended of N samples after (still to be implemented - to be double checked in the Cometti's PhD thesis)
 const float DTUVersion = 1.0;
 
 EcalLiteDTUCoder::EcalLiteDTUCoder(bool addNoise,
@@ -30,22 +30,19 @@ EcalLiteDTUCoder::EcalLiteDTUCoder(bool addNoise,
     : m_peds(nullptr),
       m_gainRatios(nullptr),
       m_intercals(nullptr),
-      //   m_maxEneEB    (      1668.3 ) , // 4095(MAXADC)*12(gain 2)*0.035(GeVtoADC)*0.97
       m_maxEneEB(ecalPh2::maxEneEB),  // Maximum for CATIA: LSB gain 10: 0.048 MeV
       m_addNoise(addNoise),
       m_PreMix1(PreMix1)
 
 {
   m_ebCorrNoise[0] = ebCorrNoise0;
-  assert(nullptr != m_ebCorrNoise[0]);
   m_ebCorrNoise[1] = ebCorrNoise1;
 }
 
 EcalLiteDTUCoder::~EcalLiteDTUCoder() {}
 
 void EcalLiteDTUCoder::setFullScaleEnergy(double EBscale) {
-  //   m_maxEneEB = EBscale ;
-  m_maxEneEB = ecalPh2::maxEneEB;  //I don 't know where is setFullScaleEnergy first call
+  m_maxEneEB = ecalPh2::maxEneEB; 
 }
 
 void EcalLiteDTUCoder::setPedestals(const EcalLiteDTUPedestalsMap* pedestals) { m_peds = pedestals; }
@@ -55,7 +52,6 @@ void EcalLiteDTUCoder::setGainRatios(const EcalCATIAGainRatios* gainRatios) { m_
 void EcalLiteDTUCoder::setIntercalibConstants(const EcalIntercalibConstantsMC* ical) { m_intercals = ical; }
 
 double EcalLiteDTUCoder::fullScaleEnergy(const DetId& detId) const {
-  //return detId.subdetId() == EcalBarrel ? m_maxEneEB : m_maxEneEE ;
   return m_maxEneEB;
 }
 
@@ -85,14 +81,13 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
   //N Gains set to 2 in the .h
   double pedestals[ecalPh2::NGAINS];
   double widths[ecalPh2::NGAINS];
-  //float  gains[ecalPh2::NGAINS];
   double LSB[ecalPh2::NGAINS];
   double trueRMS[ecalPh2::NGAINS];
 
   double icalconst = 1.;
   findIntercalibConstant(detId, icalconst);
 
-  for (unsigned int igain(0); igain < NGAINS; ++igain) {
+  for (unsigned int igain(0); igain < ecalPh2::NGAINS; ++igain) {
     // fill in the pedestal and width
 
     findPedestal(detId, igain, pedestals[igain], widths[igain]);
@@ -102,7 +97,7 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
     // set nominal value first
     //findGains( detId , gains  );
 
-    LSB[igain] = Emax / (MAXADC * ecalPh2::gains[igain]);
+    LSB[igain] = Emax / (ecalPh2::MAXADC * ecalPh2::gains[igain]);
   }
 
   CaloSamples noiseframe[] = {
@@ -110,7 +105,7 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
       CaloSamples(detId, csize),
   };
 
-  const Noisifier* noisy[NGAINS] = {m_ebCorrNoise[0], m_ebCorrNoise[1]};
+  const Noisifier* noisy[ecalPh2::NGAINS] = {m_ebCorrNoise[0], m_ebCorrNoise[1]};
 
   if (m_addNoise) {
     //#warning noise generation to be checked
@@ -126,18 +121,16 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
   unsigned int saturatedSample[] = {0, 0};
 
   for (unsigned int i(0); i != csize; ++i)
-    adctrace[i].resize(NGAINS);
+    adctrace[i].resize(ecalPh2::NGAINS);
 
-  for (unsigned int igain = 0; igain < NGAINS; ++igain) {
+  for (unsigned int igain = 0; igain < ecalPh2::NGAINS; ++igain) {
     for (unsigned int i(0); i != csize; ++i) {
       adctrace[i][igain] = -1;
     }
   }
 
   // fill ADC trace in gain 0 (x10) and gain 1 (x1)
-  //NOTE: Before was  pedestals[igain], widths[igain]
-
-  for (unsigned int igain = 0; igain < NGAINS; ++igain) {
+  for (unsigned int igain = 0; igain < ecalPh2::NGAINS; ++igain) {
     for (unsigned int i(0); i != csize; ++i) {
       double asignal = 0;
 
@@ -155,9 +148,9 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
       }
       int isignal = asignal;
 
-      int adc = asignal - (double)isignal < 0.5 ? isignal : isignal + 1;
-      if (adc > MAXADC) {
-        adc = MAXADC;
+      unsigned int adc = asignal - (double)isignal < 0.5 ? isignal : isignal + 1;
+      if (adc > ecalPh2::MAXADC) {
+        adc = ecalPh2::MAXADC;
         isSaturated[igain] = true;
         saturatedSample[igain] = i;
       }

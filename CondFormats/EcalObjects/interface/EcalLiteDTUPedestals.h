@@ -28,8 +28,8 @@ public:
   float rms(unsigned int i) const { return rmsarray[i]; }
 
 private:
-  float meanarray[2] = {13., 8.};
-  float rmsarray[2] = {2.8, 1.2};
+  float meanarray[ecalPh2::NGAINS] = {13., 8.};
+  float rmsarray[ecalPh2::NGAINS] = {2.8, 1.2};
   COND_SERIALIZABLE;
 };
 

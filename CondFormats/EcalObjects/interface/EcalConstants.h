@@ -24,7 +24,7 @@ class ecalPh1 {
 public:
   static constexpr double Samp_Period = 25.;
   static constexpr unsigned int NGAINS = 4;
-  static constexpr float gains[4] = {0., 12., 6., 1.};
+  static constexpr float gains[NGAINS] = {0., 12., 6., 1.};
   static constexpr unsigned int sampleSize = 10;
   static constexpr unsigned int kNOffsets = 2000;
 };  // namespace ecalPh1

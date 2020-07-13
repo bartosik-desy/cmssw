@@ -74,7 +74,7 @@ simEcalDigis = cms.EDProducer("EcalSelectiveReadoutProducer",
 )
 
 
-simEcalDigisPh2 = cms.EDProducer("EcalSelectiveReadoutProducer",
+_simEcalDigisPh2 = cms.EDProducer("EcalSelectiveReadoutProducer",
     # Label of input EB and EE digi collections
     digiProducer = cms.string('simEcalUnsuppressedDigis'),
 
@@ -145,7 +145,6 @@ simEcalDigisPh2 = cms.EDProducer("EcalSelectiveReadoutProducer",
     # 4: forced low interest, 5: forced mid interest, 7: forced high interest
     defaultTtf = cms.int32(4)
 )
-
 
 
 

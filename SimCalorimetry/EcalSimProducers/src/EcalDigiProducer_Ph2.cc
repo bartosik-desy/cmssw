@@ -331,7 +331,7 @@ void EcalDigiProducer_Ph2::checkCalibrations(const edm::Event& event, const edm:
   if (nullptr != m_APDCoder)
     m_APDCoder->setGainRatios(gr);
 
-  const double EBscale((agc->getEBValue()) * ecalPh2::gains[1] * (m_Coder->MAXADC) * m_EBs25notCont);
+  const double EBscale((agc->getEBValue()) * ecalPh2::gains[1] * (ecalPh2::MAXADC) * m_EBs25notCont);
 
   LogDebug("EcalDigi") << " GeV/ADC = " << agc->getEBValue() << "\n"
                        << " notCont = " << m_EBs25notCont << "\n"

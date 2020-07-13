@@ -12,7 +12,6 @@
 //
 // class declaration
 //
-//const int kEBChannels = 61200;
 
 class EcalLiteDTUPedestalsESProducer : public edm::ESProducer {
 public:

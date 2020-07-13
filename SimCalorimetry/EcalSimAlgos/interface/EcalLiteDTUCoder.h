@@ -5,7 +5,7 @@
 #include "CondFormats/EcalObjects/interface/EcalLiteDTUPedestals.h"
 #include "CondFormats/EcalObjects/interface/EcalIntercalibConstantsMC.h"
 #include "CondFormats/EcalObjects/interface/EcalCATIAGainRatios.h"
-#include "SimCalorimetry/EcalSimAlgos/interface/EcalCorrelatedNoiseMatrix_Ph2.h"
+#include "SimCalorimetry/EcalSimAlgos/interface/EcalCorrelatedNoiseMatrix.h"
 #include "CondFormats/EcalObjects/interface/EcalConstants.h"
 
 template <typename M>
@@ -27,11 +27,6 @@ public:
 
   typedef CorrelatedNoisifier<EcalCorrMatrix_Ph2> Noisifier;
 
-  enum {
-    NBITS = ecalPh2::NBITS,    // number of available bits
-    MAXADC = ecalPh2::MAXADC,  // 2^12 -1,  adc max range
-    NGAINS = ecalPh2::NGAINS   // number of electronic gains
-  };
 
   /// ctor
   EcalLiteDTUCoder(bool addNoise, bool PreMix1, Noisifier* ebCorrNoise0, Noisifier* ebCorrNoise1 = nullptr);
@@ -75,7 +70,7 @@ private:
   bool m_addNoise;  // whether add noise to the pedestals and the gains
   bool m_PreMix1;   // Follow necessary steps for PreMixing input
 
-  const Noisifier* m_ebCorrNoise[NGAINS];
+  const Noisifier* m_ebCorrNoise[ecalPh2::NGAINS];
 };
 
 #endif

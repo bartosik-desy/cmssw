@@ -16,7 +16,6 @@ class EcalCATIAGainRatiosESProducer : public edm::ESProducer {
 public:
   EcalCATIAGainRatiosESProducer(const edm::ParameterSet& iConfig);
 
-  //typedef std::shared_ptr<EcalCATIAGainRatios> ReturnType;
   typedef std::unique_ptr<EcalCATIAGainRatios> ReturnType;
 
   ReturnType produce(const EcalCATIAGainRatiosRcd& iRecord);

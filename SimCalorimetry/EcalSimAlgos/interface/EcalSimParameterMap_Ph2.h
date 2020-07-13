@@ -29,12 +29,7 @@ public:
   const CaloSimParameters& simParameters(const DetId& id) const override;
 
 private:
-  /// EB
   CaloSimParameters theBarrelParameters;
-  /// EE
-  //CaloSimParameters theEndcapParameters;
-  /// ES
-  //CaloSimParameters theESParameters;
 };
 
 #endif
