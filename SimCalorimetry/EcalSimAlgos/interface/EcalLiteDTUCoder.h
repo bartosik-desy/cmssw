@@ -27,7 +27,6 @@ public:
 
   typedef CorrelatedNoisifier<EcalCorrMatrix_Ph2> Noisifier;
 
-
   /// ctor
   EcalLiteDTUCoder(bool addNoise, bool PreMix1, Noisifier* ebCorrNoise0, Noisifier* ebCorrNoise1 = nullptr);
 

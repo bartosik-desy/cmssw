@@ -27,7 +27,7 @@ EcalSimParameterMap_Ph2::EcalSimParameterMap_Ph2(double simHitToPhotoelectronsBa
                           readoutFrameSize,
                           binOfMaximum,
                           doPhotostatistics,
-                          syncPhase) {}  
+                          syncPhase) {}
 
 const CaloSimParameters& EcalSimParameterMap_Ph2::simParameters(const DetId& detId) const {
   return theBarrelParameters;

@@ -8,7 +8,6 @@
 
 #include <iostream>
 
-
 /////////////////////
 //NOTE:
 //TO BE CORRECTLY IMPLEMENTED!
@@ -41,9 +40,7 @@ EcalLiteDTUCoder::EcalLiteDTUCoder(bool addNoise,
 
 EcalLiteDTUCoder::~EcalLiteDTUCoder() {}
 
-void EcalLiteDTUCoder::setFullScaleEnergy(double EBscale) {
-  m_maxEneEB = ecalPh2::maxEneEB; 
-}
+void EcalLiteDTUCoder::setFullScaleEnergy(double EBscale) { m_maxEneEB = ecalPh2::maxEneEB; }
 
 void EcalLiteDTUCoder::setPedestals(const EcalLiteDTUPedestalsMap* pedestals) { m_peds = pedestals; }
 
@@ -51,9 +48,7 @@ void EcalLiteDTUCoder::setGainRatios(const EcalCATIAGainRatios* gainRatios) { m_
 
 void EcalLiteDTUCoder::setIntercalibConstants(const EcalIntercalibConstantsMC* ical) { m_intercals = ical; }
 
-double EcalLiteDTUCoder::fullScaleEnergy(const DetId& detId) const {
-  return m_maxEneEB;
-}
+double EcalLiteDTUCoder::fullScaleEnergy(const DetId& detId) const { return m_maxEneEB; }
 
 void EcalLiteDTUCoder::analogToDigital(CLHEP::HepRandomEngine* engine,
                                        const EcalSamples& clf,
