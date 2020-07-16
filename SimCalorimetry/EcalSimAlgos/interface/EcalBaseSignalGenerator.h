@@ -3,7 +3,7 @@
 
 #include "SimCalorimetry/CaloSimAlgos/interface/CaloVNoiseSignalGenerator.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalSimParameterMap.h"
-class EcalElectronicsSim;
+
 
 class EcalBaseSignalGenerator : public CaloVNoiseSignalGenerator {
 public:
