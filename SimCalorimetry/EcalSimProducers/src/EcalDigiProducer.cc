@@ -236,7 +236,6 @@ EcalDigiProducer::EcalDigiProducer(const edm::ParameterSet &params, edm::Consume
                               m_EBCorrNoise[2].get(),
                               m_EECorrNoise[2].get()));
 
- 
   m_ElectronicsSim.reset(
       new EcalElectronicsSim_Ph1(m_ParameterMap.get(), m_Coder.get(), applyConstantTerm, rmsConstantTerm));
 

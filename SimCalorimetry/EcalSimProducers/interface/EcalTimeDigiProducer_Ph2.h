@@ -13,7 +13,6 @@
 
 #include <vector>
 
-
 class CaloGeometry;
 class PileUpEventPrincipal;
 class EcalTimeMapDigitizer;

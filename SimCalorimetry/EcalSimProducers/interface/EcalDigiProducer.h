@@ -24,7 +24,6 @@ typedef EcalTDigitizer<EBDigitizerTraits> EBDigitizer;
 typedef EcalTDigitizer<EEDigitizerTraits> EEDigitizer;
 typedef CaloTDigitizer<ESOldDigitizerTraits> ESOldDigitizer;
 
-
 class ESDigitizer;
 
 class APDSimParameters;
@@ -142,7 +141,7 @@ private:
   std::unique_ptr<EBDigitizer> m_BarrelDigitizer;
   std::unique_ptr<EEDigitizer> m_EndcapDigitizer;
 
-  typedef CaloTSamples<float,10> EcalSamples;
+  typedef CaloTSamples<float, 10> EcalSamples;
 
   typedef EcalElectronicsSim<EcalCoder, EcalSamples, EcalDataFrame> EcalElectronicsSim_Ph1;
   std::unique_ptr<EcalElectronicsSim_Ph1> m_ElectronicsSim;

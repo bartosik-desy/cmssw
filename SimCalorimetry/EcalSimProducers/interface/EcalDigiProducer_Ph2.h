@@ -15,8 +15,6 @@
 #include "SimCalorimetry/EcalSimAlgos/interface/EBHitResponse.h"
 #include <vector>
 
-
-
 class APDSimParameters;
 class CaloHitResponse;
 class EcalSimParameterMap;
@@ -44,10 +42,9 @@ namespace CLHEP {
 
 class EcalDigiProducer_Ph2 : public DigiAccumulatorMixMod {
 public:
-
   typedef EcalTDigitizer<EBDigitizerTraits_Ph2> EBDigitizer_Ph2;
-  typedef EBDigitizerTraits_Ph2::ElectronicsSim  EcalElectronicsSim_Ph2;
-    
+  typedef EBDigitizerTraits_Ph2::ElectronicsSim EcalElectronicsSim_Ph2;
+
   EcalDigiProducer_Ph2(const edm::ParameterSet& params,
                        edm::ProducesCollector producesCollector,
                        edm::ConsumesCollector& iC);
@@ -105,14 +102,13 @@ private:
   const bool m_PreMix1;
   const bool m_PreMix2;
 
-
   std::unique_ptr<EBDigitizer_Ph2> m_APDDigitizer;
   std::unique_ptr<EBDigitizer_Ph2> m_BarrelDigitizer;
 
   std::unique_ptr<EcalElectronicsSim_Ph2> m_ElectronicsSim;
   std::unique_ptr<EcalLiteDTUCoder> m_Coder;
 
-  typedef CaloTSamples<float,ecalPh2::sampleSize> EcalSamples_Ph2 ;
+  typedef CaloTSamples<float, ecalPh2::sampleSize> EcalSamples_Ph2;
   std::unique_ptr<EcalElectronicsSim<EcalLiteDTUCoder, EcalSamples_Ph2, EcalDataFrame_Ph2> > m_APDElectronicsSim;
   std::unique_ptr<EcalLiteDTUCoder> m_APDCoder;
 

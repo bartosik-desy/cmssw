@@ -4,7 +4,6 @@
 #include "SimCalorimetry/CaloSimAlgos/interface/CaloVNoiseSignalGenerator.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalSimParameterMap.h"
 
-
 class EcalBaseSignalGenerator : public CaloVNoiseSignalGenerator {
 public:
   EcalBaseSignalGenerator() {}

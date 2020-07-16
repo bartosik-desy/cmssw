@@ -24,8 +24,7 @@ public:
   typedef EBDataFrame Digi;
   /// the electronics simulation
   typedef CaloTSamples<float, 10> EcalSamples;
-  typedef EcalElectronicsSim<EcalCoder,EcalSamples,EcalDataFrame> ElectronicsSim;
-
+  typedef EcalElectronicsSim<EcalCoder, EcalSamples, EcalDataFrame> ElectronicsSim;
 
   static void fix(Digi& digi, edm::DataFrame df){};
 };
@@ -38,8 +37,7 @@ public:
   typedef EEDataFrame Digi;
   /// the electronics simulation
   typedef CaloTSamples<float, 10> EcalSamples;
-  typedef EcalElectronicsSim<EcalCoder,EcalSamples,EcalDataFrame> ElectronicsSim;
-
+  typedef EcalElectronicsSim<EcalCoder, EcalSamples, EcalDataFrame> ElectronicsSim;
 
   static void fix(Digi& digi, edm::DataFrame df) {}
 };
@@ -78,7 +76,6 @@ public:
   //      typedef CaloTSamples<float,3> EcalSamples ;
 };
 
-
 class EBDigitizerTraits_Ph2 {
 public:
   /// the digis collection
@@ -87,12 +84,9 @@ public:
   typedef EcalDataFrame_Ph2 Digi;
   /// the electronics simulation
   typedef CaloTSamples<float, ecalPh2::sampleSize> EcalSamples;
-  typedef EcalElectronicsSim<EcalLiteDTUCoder,EcalSamples,Digi> ElectronicsSim;
-
+  typedef EcalElectronicsSim<EcalLiteDTUCoder, EcalSamples, Digi> ElectronicsSim;
 
   static void fix(Digi& digi, edm::DataFrame df){};
 };
-
-
 
 #endif
