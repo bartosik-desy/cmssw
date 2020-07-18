@@ -60,14 +60,12 @@ void EcalLiteDTUCoder::analogToDigital(CLHEP::HepRandomEngine* engine,
 void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
                               EcalDataFrame_Ph2& df,
                               CLHEP::HepRandomEngine* engine) const {
-
-
   const unsigned int csize(ecalSamples.size());
 
   DetId detId = ecalSamples.id();
   double Emax = fullScaleEnergy(detId);
 
-   //N Gains set to 2 in the .h
+  //N Gains set to 2 in the .h
   double pedestals[ecalPh2::NGAINS];
   double widths[ecalPh2::NGAINS];
   double LSB[ecalPh2::NGAINS];
@@ -77,7 +75,6 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
   findIntercalibConstant(detId, icalconst);
 
   for (unsigned int igain(0); igain < ecalPh2::NGAINS; ++igain) {
-
     // fill in the pedestal and width
     findPedestal(detId, igain, pedestals[igain], widths[igain]);
     // insert an absolute value in the trueRMS
@@ -93,13 +90,13 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
 
   const Noisifier* noisy[ecalPh2::NGAINS] = {m_ebCorrNoise[0], m_ebCorrNoise[1]};
 
-  for (unsigned int  ig; ig < ecalPh2::NGAINS; ++ig){
-     if (m_addNoise) { 
-       noisy[ig]->noisify(noiseframe[0], engine); 
-     }
+  for (unsigned int ig; ig < ecalPh2::NGAINS; ++ig) {
+    if (m_addNoise) {
+      noisy[ig]->noisify(noiseframe[0], engine);
+    }
   }
 
-  bool  isSaturated[ecalPh2::NGAINS] = {false, false};
+  bool isSaturated[ecalPh2::NGAINS] = {false, false};
   std::vector<std::vector<int>> adctrace(csize);
   unsigned int saturatedSample[] = {0, 0};
 
@@ -118,11 +115,9 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
       double asignal = 0;
 
       if (!m_PreMix1) {
-        asignal =
-            pedestals[igain] + ecalSamples[i] / (LSB[igain] * icalconst) +
-            trueRMS[igain] *noiseframe[igain][i];
-            //Analog signal value for each sample in ADC.
-            //It is corrected by the intercalibration constants
+        asignal = pedestals[igain] + ecalSamples[i] / (LSB[igain] * icalconst) + trueRMS[igain] * noiseframe[igain][i];
+        //Analog signal value for each sample in ADC.
+        //It is corrected by the intercalibration constants
 
       } else {
         //  no noise nor pedestal when premixing
@@ -152,7 +147,7 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
 
   // Note: we assume that Pileup generates small signals, and we will not saturate when adding pedestals
   for (unsigned int j = 0; j < ecalSamples.size(); ++j) {
-     if (isSaturated[0] and j >= (saturatedSample[0] - 5) and j < (saturatedSample[0] + 10))
+    if (isSaturated[0] and j >= (saturatedSample[0] - 5) and j < (saturatedSample[0] + 10))
       igain = 1;
 
     else
@@ -167,20 +162,19 @@ void EcalLiteDTUCoder::findPedestal(const DetId& detId, int gainId, double& ped,
   ped = (*itped).mean(gainId);
   width = (*itped).rms(gainId);
 
-
   LogDebug("EcalLiteDTUCoder") << "Pedestals for " << detId.rawId() << " gain range " << gainId << " : \n"
                                << "Mean = " << ped << " rms = " << width;
 }
-
 
 void EcalLiteDTUCoder::findIntercalibConstant(const DetId& detId, double& icalconst) const {
   EcalIntercalibConstantMC thisconst = 1.;
   // find intercalib constant for this xtal
   const EcalIntercalibConstantMCMap& icalMap = m_intercals->getMap();
   EcalIntercalibConstantMCMap::const_iterator icalit = icalMap.find(detId);
- 
+
   thisconst = (*icalit);
-  if (icalconst == 0.) thisconst = 1.;
- 
+  if (icalconst == 0.)
+    thisconst = 1.;
+
   icalconst = thisconst;
 }
