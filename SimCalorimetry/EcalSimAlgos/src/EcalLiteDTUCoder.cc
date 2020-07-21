@@ -10,7 +10,7 @@
 
 /////////////////////
 //NOTE:
-//TO BE CORRECTLY IMPLEMENTED!
+//TO BE FINALISED
 //Simona Cometti, [20.03.20 12:05]
 //[In reply to Dario Soldi]
 //In the Lite DTU v1 the gain 1 samples were 8.
