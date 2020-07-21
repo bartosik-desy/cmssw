@@ -26,12 +26,12 @@ EcalLiteDTUCoder::EcalLiteDTUCoder(bool addNoise,
                                    bool PreMix1,
                                    EcalLiteDTUCoder::Noisifier* ebCorrNoise0,
                                    EcalLiteDTUCoder::Noisifier* ebCorrNoise1)
-  : m_peds(nullptr),
-    m_gainRatios(nullptr),
-    m_intercals(nullptr),
-    m_maxEneEB(ecalPh2::maxEneEB),  // Maximum for CATIA: LSB gain 10: 0.048 MeV
-    m_addNoise(addNoise),
-    m_PreMix1(PreMix1)
+    : m_peds(nullptr),
+      m_gainRatios(nullptr),
+      m_intercals(nullptr),
+      m_maxEneEB(ecalPh2::maxEneEB),  // Maximum for CATIA: LSB gain 10: 0.048 MeV
+      m_addNoise(addNoise),
+      m_PreMix1(PreMix1)
 
 {
   m_ebCorrNoise[0] = ebCorrNoise0;
@@ -71,7 +71,6 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
   double LSB[ecalPh2::NGAINS];
   double trueRMS[ecalPh2::NGAINS];
 
-
   double icalconst = 1.;
   findIntercalibConstant(detId, icalconst);
 
@@ -85,8 +84,8 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
   }
 
   CaloSamples noiseframe[ecalPh2::NGAINS] = {
-    CaloSamples(detId, nSamples),
-    CaloSamples(detId, nSamples),
+      CaloSamples(detId, nSamples),
+      CaloSamples(detId, nSamples),
   };
 
   const Noisifier* noisy[ecalPh2::NGAINS] = {m_ebCorrNoise[0], m_ebCorrNoise[1]};
@@ -110,7 +109,6 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
     }
   }
 
-
   // fill ADC trace in gain 0 (x10) and gain 1 (x1)
   for (unsigned int igain = 0; igain < ecalPh2::NGAINS; ++igain) {
     for (unsigned int i(0); i != nSamples; ++i) {
@@ -129,7 +127,7 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
       unsigned int adc = asignal - (double)isignal < 0.5 ? isignal : isignal + 1;
 
       if (adc > ecalPh2::MAXADC) {
-	adc = ecalPh2::MAXADC;
+        adc = ecalPh2::MAXADC;
         isSaturated[igain] = true;
         saturatedSample[igain] = i;
       }
@@ -140,20 +138,20 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
         adctrace[i][igain] = adc;
       }  // for adc
     }
-      if (!isSaturated[0]) {
-	break;  //  gain 0 (x10) is not saturated, so don't bother with gain 1
-      } 
-  }           // for igain
+    if (!isSaturated[0]) {
+      break;  //  gain 0 (x10) is not saturated, so don't bother with gain 1
+    }
+  }  // for igain
 
   int igain = 0;
-  const int previousSaturatedSamples=5;
-  const int nextSaturatedSamples=10;
+  const int previousSaturatedSamples = 5;
+  const int nextSaturatedSamples = 10;
   // Note: we assume that Pileup generates small signals, and we will not saturate when adding pedestals
   for (unsigned int j = 0; j < nSamples; ++j) {
-    if (isSaturated[0] and j >= (saturatedSample[0] - previousSaturatedSamples) and j < (saturatedSample[0] + nextSaturatedSamples)) {
+    if (isSaturated[0] and j >= (saturatedSample[0] - previousSaturatedSamples) and
+        j < (saturatedSample[0] + nextSaturatedSamples)) {
       igain = 1;
-    }
-    else {
+    } else {
       igain = 0;
     }
     df.setSample(j, EcalLiteDTUSample(adctrace[j][igain], igain));

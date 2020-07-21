@@ -35,17 +35,16 @@ using namespace edm;
 EcalLiteDTUPedestalsESProducer::EcalLiteDTUPedestalsESProducer(const edm::ParameterSet& p) {
   std::string myname = p.getParameter<std::string>("ComponentName");
   meanPedestalsGain10_ = p.getParameter<double>("MeanPedestalsGain10");
-  rmsPedestalsGain10_  = p.getParameter<double>("RMSPedestalsGain10");
-  meanPedestalsGain1_  = p.getParameter<double>("MeanPedestalsGain1");
-  rmsPedestalsGain1_   = p.getParameter<double>("RMSPedestalsGain1");
+  rmsPedestalsGain10_ = p.getParameter<double>("RMSPedestalsGain10");
+  meanPedestalsGain1_ = p.getParameter<double>("MeanPedestalsGain1");
+  rmsPedestalsGain1_ = p.getParameter<double>("RMSPedestalsGain1");
   pset_ = p;
   setWhatProduced(this);
 }
 ////
 EcalLiteDTUPedestalsESProducer::ReturnType EcalLiteDTUPedestalsESProducer::produce(
-const EcalLiteDTUPedestalsRcd& iRecord) {
+    const EcalLiteDTUPedestalsRcd& iRecord) {
   auto prod = std::make_unique<EcalLiteDTUPedestalsMap>();
-
 
   for (unsigned int iChannel = 0; iChannel < ecalPh2::kEBChannels; iChannel++) {
     EBDetId myEBDetId = EBDetId::unhashIndex(iChannel);
@@ -53,12 +52,12 @@ const EcalLiteDTUPedestalsRcd& iRecord) {
     ped.setMean(0, meanPedestalsGain10_);
     ped.setRMS(0, rmsPedestalsGain10_);
 
-    ped.setMean(1,meanPedestalsGain1_);
+    ped.setMean(1, meanPedestalsGain1_);
     ped.setRMS(1, rmsPedestalsGain1_);
 
     prod->insert(std::make_pair(myEBDetId, ped));
   }
-  
+
   return prod;
 }
 

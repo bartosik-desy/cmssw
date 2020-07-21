@@ -31,9 +31,9 @@ using namespace edm;
 
 EcalCATIAGainRatiosESProducer::EcalCATIAGainRatiosESProducer(const edm::ParameterSet& p) {
   std::string myname = p.getParameter<std::string>("ComponentName");
-  catiaGainRatio_ =  p.getParameter<double>("CATIAGainRatio"); 
+  catiaGainRatio_ = p.getParameter<double>("CATIAGainRatio");
   pset_ = p;
-  setWhatProduced(this); 
+  setWhatProduced(this);
 }
 ////
 EcalCATIAGainRatiosESProducer::ReturnType EcalCATIAGainRatiosESProducer::produce(const EcalCATIAGainRatiosRcd& iRecord) {
