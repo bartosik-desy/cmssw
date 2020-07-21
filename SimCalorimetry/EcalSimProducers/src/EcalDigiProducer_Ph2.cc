@@ -89,7 +89,7 @@ EcalDigiProducer_Ph2::EcalDigiProducer_Ph2(const edm::ParameterSet& params, edm:
                                                          params.getParameter<double>("apdTimeOffWidth"),
                                                          params.getParameter<bool>("apdDoPEStats"),
                                                          m_apdDigiTag,
-                                                         params.getParameter<std::vector<double> >("apdNonlParms"))),
+                                                         params.getParameter<std::vector<double>>("apdNonlParms"))),
 
       m_APDResponse(!m_apdSeparateDigi
                         ? nullptr
@@ -115,10 +115,10 @@ EcalDigiProducer_Ph2::EcalDigiProducer_Ph2(const edm::ParameterSet& params, edm:
       m_EBCorrNoise({{nullptr, nullptr}})
 
 {
-  iC.consumes<std::vector<PCaloHit> >(edm::InputTag(m_hitsProducerTag, "EcalHitsEB"));
+  iC.consumes<std::vector<PCaloHit>>(edm::InputTag(m_hitsProducerTag, "EcalHitsEB"));
 
-  const std::vector<double> ebCorMatG10Ph2 = params.getParameter<std::vector<double> >("EBCorrNoiseMatrixG10Ph2");
-  const std::vector<double> ebCorMatG01Ph2 = params.getParameter<std::vector<double> >("EBCorrNoiseMatrixG01Ph2");
+  const std::vector<double> ebCorMatG10Ph2 = params.getParameter<std::vector<double>>("EBCorrNoiseMatrixG10Ph2");
+  const std::vector<double> ebCorMatG01Ph2 = params.getParameter<std::vector<double>>("EBCorrNoiseMatrixG01Ph2");
 
   const bool applyConstantTerm = params.getParameter<bool>("applyConstantTerm");
   const double rmsConstantTerm = params.getParameter<double>("ConstantTerm");
@@ -154,18 +154,19 @@ EcalDigiProducer_Ph2::EcalDigiProducer_Ph2(const edm::ParameterSet& params, edm:
   m_EBCorrNoise[1] = std::make_unique<CorrelatedNoisifier<EcalCorrMatrix_Ph2>>(ebMatrix[1]);
   //  m_Coder.reset(new EcalLiteDTUCoder(addNoise, m_PreMix1, m_EBCorrNoise[0].get(), m_EBCorrNoise[1].get()));
   m_Coder = std::make_unique<EcalLiteDTUCoder>(addNoise, m_PreMix1, m_EBCorrNoise[0].get(), m_EBCorrNoise[1].get());
-  m_ElectronicsSim = std::make_unique<EcalElectronicsSim_Ph2>(m_ParameterMap.get(), m_Coder.get(), applyConstantTerm, rmsConstantTerm);
-
+  m_ElectronicsSim =
+      std::make_unique<EcalElectronicsSim_Ph2>(m_ParameterMap.get(), m_Coder.get(), applyConstantTerm, rmsConstantTerm);
 
   if (m_apdSeparateDigi) {
-    m_APDCoder= std::make_unique<EcalLiteDTUCoder>(false, m_PreMix1, m_EBCorrNoise[0].get(), m_EBCorrNoise[1].get());
+    m_APDCoder = std::make_unique<EcalLiteDTUCoder>(false, m_PreMix1, m_EBCorrNoise[0].get(), m_EBCorrNoise[1].get());
 
-    m_APDElectronicsSim=std::make_unique<EcalElectronicsSim_Ph2>(m_ParameterMap.get(), m_APDCoder.get(), applyConstantTerm, rmsConstantTerm);
+    m_APDElectronicsSim = std::make_unique<EcalElectronicsSim_Ph2>(
+        m_ParameterMap.get(), m_APDCoder.get(), applyConstantTerm, rmsConstantTerm);
 
-    m_APDDigitizer=std::make_unique<EBDigitizer_Ph2>(m_APDResponse.get(), m_APDElectronicsSim.get(), false);
+    m_APDDigitizer = std::make_unique<EBDigitizer_Ph2>(m_APDResponse.get(), m_APDElectronicsSim.get(), false);
   }
 
-  m_BarrelDigitizer=std::make_unique<EBDigitizer_Ph2>(m_EBResponse.get(), m_ElectronicsSim.get(), addNoise);
+  m_BarrelDigitizer = std::make_unique<EBDigitizer_Ph2>(m_EBResponse.get(), m_ElectronicsSim.get(), addNoise);
 }
 
 EcalDigiProducer_Ph2::~EcalDigiProducer_Ph2() {}
@@ -195,7 +196,7 @@ void EcalDigiProducer_Ph2::accumulateCaloHits(HitsHandle const& ebHandle, int bu
 
 void EcalDigiProducer_Ph2::accumulate(edm::Event const& e, edm::EventSetup const& eventSetup) {
   // Step A: Get Inputs
-  edm::Handle<std::vector<PCaloHit> > ebHandle;
+  edm::Handle<std::vector<PCaloHit>> ebHandle;
 
   m_EBShape.setEventSetup(eventSetup);   // need to set the eventSetup here, otherwise pre-mixing module will not wrk
   m_APDShape.setEventSetup(eventSetup);  //
@@ -209,7 +210,7 @@ void EcalDigiProducer_Ph2::accumulate(PileUpEventPrincipal const& e,
                                       edm::EventSetup const& eventSetup,
                                       edm::StreamID const& streamID) {
   // Step A: Get Inputs
-  edm::Handle<std::vector<PCaloHit> > ebHandle;
+  edm::Handle<std::vector<PCaloHit>> ebHandle;
 
   edm::InputTag ebTag(m_hitsProducerTag, "EcalHitsEB");
   e.getByLabel(ebTag, ebHandle);
