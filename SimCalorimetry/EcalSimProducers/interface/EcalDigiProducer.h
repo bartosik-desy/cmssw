@@ -17,6 +17,7 @@
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalDigitizerTraits.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalTDigitizer.h"
 #include "SimGeneral/MixingModule/interface/DigiAccumulatorMixMod.h"
+
 #include "SimCalorimetry/EcalSimAlgos/interface/EBHitResponse.h"
 #include <vector>
 

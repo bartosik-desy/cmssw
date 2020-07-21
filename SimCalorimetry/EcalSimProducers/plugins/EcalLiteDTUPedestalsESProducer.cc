@@ -23,7 +23,6 @@ public:
   ReturnType produce(const EcalLiteDTUPedestalsRcd& iRecord);
 
 private:
-  edm::ParameterSet pset_;
   double meanPedestalsGain10_;
   double rmsPedestalsGain10_;
   double meanPedestalsGain1_;
@@ -38,7 +37,6 @@ EcalLiteDTUPedestalsESProducer::EcalLiteDTUPedestalsESProducer(const edm::Parame
   rmsPedestalsGain10_ = p.getParameter<double>("RMSPedestalsGain10");
   meanPedestalsGain1_ = p.getParameter<double>("MeanPedestalsGain1");
   rmsPedestalsGain1_ = p.getParameter<double>("RMSPedestalsGain1");
-  pset_ = p;
   setWhatProduced(this);
 }
 ////

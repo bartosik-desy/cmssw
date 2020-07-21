@@ -6,4 +6,7 @@ EcalCATIAGainRatiosRcd =  cms.ESSource("EmptyESSource",
                                 iovIsRunNotTime = cms.bool(True)
                                 )
 
-EcalCATIAGainRatios = cms.ESProducer("EcalCATIAGainRatiosESProducer"),
+EcalCATIAGainRatios = cms.ESProducer("EcalCATIAGainRatiosESProducer",
+                                     ComponentName = cms.string('EcalCatiaGainProducer'),
+                                     CATIAGainRatio = cms.double(10.))
+

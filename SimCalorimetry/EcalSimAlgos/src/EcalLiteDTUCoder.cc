@@ -98,7 +98,7 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
 
   bool isSaturated[ecalPh2::NGAINS] = {false, false};
   std::vector<std::vector<int>> adctrace(nSamples);
-  unsigned int saturatedSample[] = {0, 0};
+  unsigned int saturatedSample[ecalPh2::NGAINS] = {0, 0};
 
   for (unsigned int i(0); i != nSamples; ++i)
     adctrace[i].resize(ecalPh2::NGAINS);

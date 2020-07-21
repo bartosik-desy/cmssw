@@ -23,7 +23,6 @@ public:
   ReturnType produce(const EcalCATIAGainRatiosRcd& iRecord);
 
 private:
-  edm::ParameterSet pset_;
   double catiaGainRatio_;
 };
 
@@ -32,7 +31,6 @@ using namespace edm;
 EcalCATIAGainRatiosESProducer::EcalCATIAGainRatiosESProducer(const edm::ParameterSet& p) {
   std::string myname = p.getParameter<std::string>("ComponentName");
   catiaGainRatio_ = p.getParameter<double>("CATIAGainRatio");
-  pset_ = p;
   setWhatProduced(this);
 }
 ////
