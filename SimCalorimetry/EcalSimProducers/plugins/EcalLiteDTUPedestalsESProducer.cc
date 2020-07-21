@@ -1,4 +1,5 @@
 #include <memory>
+#include <string>
 #include "FWCore/Framework/interface/ModuleFactory.h"
 #include "FWCore/Framework/interface/ESProducer.h"
 #include "FWCore/Framework/interface/ESProductHost.h"
@@ -15,7 +16,7 @@
 
 class EcalLiteDTUPedestalsESProducer : public edm::ESProducer {
 public:
-  EcalLiteDTUPedestalsESProducer(const edm::ParameterSet& iConfig);
+  EcalLiteDTUPedestalsESProducer(const edm::ParameterSet& p);
 
   typedef std::unique_ptr<EcalLiteDTUPedestalsMap> ReturnType;
 
@@ -23,37 +24,41 @@ public:
 
 private:
   edm::ParameterSet pset_;
+  double meanPedestalsGain10_;
+  double rmsPedestalsGain10_;
+  double meanPedestalsGain1_;
+  double rmsPedestalsGain1_;
 };
 
-EcalLiteDTUPedestalsESProducer::EcalLiteDTUPedestalsESProducer(const edm::ParameterSet& iConfig) : pset_(iConfig) {
-  //the following line is needed to tell the framework what
-  // data is being produced
-  //std::cout<<"*********Creating EcalLiteDTUPedestalsESProducer"<<std::endl;
+using namespace edm;
+
+EcalLiteDTUPedestalsESProducer::EcalLiteDTUPedestalsESProducer(const edm::ParameterSet& p) {
+  std::string myname = p.getParameter<std::string>("ComponentName");
+  meanPedestalsGain10_ = p.getParameter<double>("MeanPedestalsGain10");
+  rmsPedestalsGain10_  = p.getParameter<double>("RMSPedestalsGain10");
+  meanPedestalsGain1_  = p.getParameter<double>("MeanPedestalsGain1");
+  rmsPedestalsGain1_   = p.getParameter<double>("RMSPedestalsGain1");
+  pset_ = p;
   setWhatProduced(this);
 }
 ////
 EcalLiteDTUPedestalsESProducer::ReturnType EcalLiteDTUPedestalsESProducer::produce(
-    const EcalLiteDTUPedestalsRcd& iRecord) {
-  //std::cout<<"********Starting Production"<<std::endl;
+const EcalLiteDTUPedestalsRcd& iRecord) {
   auto prod = std::make_unique<EcalLiteDTUPedestalsMap>();
 
-  //std::cout<<"**********Set EB Values "<<std::endl;
 
   for (unsigned int iChannel = 0; iChannel < ecalPh2::kEBChannels; iChannel++) {
     EBDetId myEBDetId = EBDetId::unhashIndex(iChannel);
     EcalLiteDTUPedestals ped;
-    ped.setMean(0, 15.);
-    ped.setRMS(0, 2.5);
+    ped.setMean(0, meanPedestalsGain10_);
+    ped.setRMS(0, rmsPedestalsGain10_);
 
-    ped.setMean(1, 12.);
-    ped.setRMS(1, 2.);
+    ped.setMean(1,meanPedestalsGain1_);
+    ped.setRMS(1, rmsPedestalsGain1_);
 
     prod->insert(std::make_pair(myEBDetId, ped));
   }
-
-  //std::cout<<prod->size()<<std::endl;
-
-  //std::cout<<"***********Returning"<<std::endl;
+  
   return prod;
 }
 

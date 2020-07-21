@@ -37,5 +37,5 @@ phase2_hgcal.toModify( ecalDigitizer, doEE = cms.bool(False) )
 
 #phase 2 digitization
 from Configuration.Eras.Modifier_phase2_ecal_cff import phase2_ecal
-from SimGeneral.MixingModule.ecalDigitizer_Ph2_cfi import *
-phase2_ecal.toReplaceWith(ecalDigitizer,ecalDigitizer_Ph2)
+from SimGeneral.MixingModule.ecalDigitizer_Ph2_cfi import ecalDigitizer_Ph2 as _ecalDigitizer_Ph2
+phase2_ecal.toReplaceWith(ecalDigitizer,_ecalDigitizer_Ph2)

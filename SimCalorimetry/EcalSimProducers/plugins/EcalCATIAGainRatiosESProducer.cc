@@ -1,4 +1,6 @@
 #include <memory>
+#include <string>
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Framework/interface/ModuleFactory.h"
 #include "FWCore/Framework/interface/ESProducer.h"
 #include "FWCore/Framework/interface/ESProductHost.h"
@@ -14,7 +16,7 @@ const int kEBChannels = ecalPh2::kEBChannels;
 
 class EcalCATIAGainRatiosESProducer : public edm::ESProducer {
 public:
-  EcalCATIAGainRatiosESProducer(const edm::ParameterSet& iConfig);
+  EcalCATIAGainRatiosESProducer(const edm::ParameterSet& p);
 
   typedef std::unique_ptr<EcalCATIAGainRatios> ReturnType;
 
@@ -22,17 +24,23 @@ public:
 
 private:
   edm::ParameterSet pset_;
+  double catiaGainRatio_;
 };
 
-EcalCATIAGainRatiosESProducer::EcalCATIAGainRatiosESProducer(const edm::ParameterSet& iConfig) : pset_(iConfig) {
-  setWhatProduced(this);
+using namespace edm;
+
+EcalCATIAGainRatiosESProducer::EcalCATIAGainRatiosESProducer(const edm::ParameterSet& p) {
+  std::string myname = p.getParameter<std::string>("ComponentName");
+  catiaGainRatio_ =  p.getParameter<double>("CATIAGainRatio"); 
+  pset_ = p;
+  setWhatProduced(this); 
 }
 ////
 EcalCATIAGainRatiosESProducer::ReturnType EcalCATIAGainRatiosESProducer::produce(const EcalCATIAGainRatiosRcd& iRecord) {
   auto prod = std::make_unique<EcalCATIAGainRatios>();
   for (int iChannel = 0; iChannel < kEBChannels; iChannel++) {
     EBDetId myEBDetId = EBDetId::unhashIndex(iChannel);
-    float val = 10.;
+    double val = catiaGainRatio_;
     prod->setValue(myEBDetId.rawId(), val);
   }
 

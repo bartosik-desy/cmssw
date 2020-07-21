@@ -3,7 +3,6 @@
 
 #include "SimCalorimetry/CaloSimAlgos/interface/CaloVNoiseSignalGenerator.h"
 #include "CLHEP/Random/RandGaussQ.h"
-#include "SimCalorimetry/EcalSimAlgos/interface/EcalElectronicsSim.h"
 #include "SimCalorimetry/EcalSimAlgos/interface/EcalSimParameterMap.h"
 
 class EcalSimParameterMap;
@@ -31,7 +30,6 @@ public:
   void analogToDigital(CLHEP::HepRandomEngine* engine, SamplesType& clf, DataFrameType& df) const {
     // input signal is in pe.  Converted in GeV
     amplify(clf, engine);
-
     m_theCoder->analogToDigital(engine, clf, df);
   }
 
