@@ -68,17 +68,6 @@ EcalDigiProducer_Ph2::EcalDigiProducer_Ph2(const edm::ParameterSet& params, edm:
       m_EBs25notCont(params.getParameter<double>("EBs25notContainment")),
 
       m_readoutFrameSize(params.getParameter<int>("readoutFrameSize")),
-      //m_ParameterMap(std::make_unique<EcalSimParameterMap>(params.getParameter<double>("simHitToPhotoelectronsBarrel"),
-      //                                       params.getParameter<double>("photoelectronsToAnalogBarrel"),
-      //                                       0,  // endcap parameters not needed
-      //                                       0,
-      //                                       params.getParameter<double>("samplingFactor"),
-      //                                       params.getParameter<double>("timePhase"),
-      //                                       m_readoutFrameSize,
-      //                                       params.getParameter<int>("binOfMaximum"),
-      //                                       params.getParameter<bool>("doPhotostatistics"),
-      //                                       params.getParameter<bool>("syncPhase"))),
-
 
       m_ParameterMap(std::make_unique<EcalSimParameterMap>(params.getParameter<double>("simHitToPhotoelectronsBarrel"),
                                              0,  // endcap parameters not needed
