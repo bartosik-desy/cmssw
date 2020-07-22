@@ -152,7 +152,6 @@ EcalDigiProducer_Ph2::EcalDigiProducer_Ph2(const edm::ParameterSet& params, edm:
   }
   m_EBCorrNoise[0] = std::make_unique<CorrelatedNoisifier<EcalCorrMatrix_Ph2>>(ebMatrix[0]);
   m_EBCorrNoise[1] = std::make_unique<CorrelatedNoisifier<EcalCorrMatrix_Ph2>>(ebMatrix[1]);
-  //  m_Coder.reset(new EcalLiteDTUCoder(addNoise, m_PreMix1, m_EBCorrNoise[0].get(), m_EBCorrNoise[1].get()));
   m_Coder = std::make_unique<EcalLiteDTUCoder>(addNoise, m_PreMix1, m_EBCorrNoise[0].get(), m_EBCorrNoise[1].get());
   m_ElectronicsSim =
       std::make_unique<EcalElectronicsSim_Ph2>(m_ParameterMap.get(), m_Coder.get(), applyConstantTerm, rmsConstantTerm);
@@ -220,9 +219,11 @@ void EcalDigiProducer_Ph2::accumulate(PileUpEventPrincipal const& e,
 
 void EcalDigiProducer_Ph2::finalizeEvent(edm::Event& event, edm::EventSetup const& eventSetup) {
   // Step B: Create empty output
-  std::unique_ptr<EBDigiCollectionPh2> apdResult(!m_apdSeparateDigi ? nullptr : new EBDigiCollectionPh2());
-  std::unique_ptr<EBDigiCollectionPh2> barrelResult(new EBDigiCollectionPh2());
-
+  std::unique_ptr<EBDigiCollectionPh2> apdResult(nullptr);
+  std::unique_ptr<EBDigiCollectionPh2> barrelResult = std::make_unique<EBDigiCollectionPh2>();
+  if (m_apdSeparateDigi) {
+    apdResult = std::make_unique<EBDigiCollectionPh2>();
+  }
   // run the algorithm
 
   m_BarrelDigitizer->run(*barrelResult, randomEngine_);

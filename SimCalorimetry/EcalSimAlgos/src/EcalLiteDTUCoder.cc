@@ -90,9 +90,9 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
 
   const Noisifier* noisy[ecalPh2::NGAINS] = {m_ebCorrNoise[0], m_ebCorrNoise[1]};
 
-  for (unsigned int ig; ig < ecalPh2::NGAINS; ++ig) {
-    if (m_addNoise) {
-      noisy[ig]->noisify(noiseframe[0], engine);
+  if (m_addNoise) {
+    for (unsigned int ig=0; ig < ecalPh2::NGAINS; ++ig) {
+      noisy[ig]->noisify(noiseframe[ig], engine);
     }
   }
 
