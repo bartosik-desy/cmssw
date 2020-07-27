@@ -10,7 +10,6 @@
 #include "DataFormats/Provenance/interface/Timestamp.h"
 #include "CondFormats/EcalObjects/interface/EcalConstants.h"
 
-
 #include <unordered_map>
 #include <vector>
 
