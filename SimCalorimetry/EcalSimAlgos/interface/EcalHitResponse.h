@@ -33,11 +33,11 @@ public:
 
   typedef std::unordered_map<uint32_t, double> CalibCache;
 
-  enum { BUNCHSPACE = 25 };
-
   EcalHitResponse(const CaloVSimParameterMap* parameterMap, const CaloVShape* shape);
 
   virtual ~EcalHitResponse();
+
+  const float kSamplePeriod = 25;
 
   void setBunchRange(int minBunch, int maxBunch);
 
@@ -116,14 +116,17 @@ protected:
 
   const CaloVHitFilter* hitFilter() const;
 
-private:
-  const CaloVSimParameterMap* m_parameterMap;
+
+ const CaloVSimParameterMap* m_parameterMap;
   const CaloVShape* m_shape;
   const CaloVHitCorrection* m_hitCorrection;
   const CaloVPECorrection* m_PECorrection;
   const CaloVHitFilter* m_hitFilter;
   const CaloSubdetectorGeometry* m_geometry;
   const EcalLaserDbService* m_lasercals;
+private:
+
+ 
 
   int m_minBunch;
   int m_maxBunch;

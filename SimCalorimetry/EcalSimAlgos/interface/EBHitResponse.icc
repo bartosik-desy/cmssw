@@ -4,6 +4,7 @@
 #include "SimCalorimetry/CaloSimAlgos/interface/CaloSimParameters.h"
 #include "SimCalorimetry/CaloSimAlgos/interface/CaloVHitFilter.h"
 #include "SimCalorimetry/CaloSimAlgos/interface/CaloVShape.h"
+#include "SimCalorimetry/CaloSimAlgos/interface/CaloVHitCorrection.h"
 #include "Geometry/CaloGeometry/interface/CaloGenericDetId.h"
 #include "CLHEP/Random/RandPoissonQ.h"
 #include "CLHEP/Random/RandGaussQ.h"
@@ -81,10 +82,6 @@ void EBHitResponseImpl<constset>::putAPDSignal(const DetId& detId, double npe, d
 
   const double energyFac(1. / parameters.simHitToPhotoelectrons(detId));
 
-  //   std::cout<<"******** Input APD Npe="<<npe<<", Efactor="<<energyFac
-  //	    <<", Energy="<<npe*energyFac
-  //	    <<", nonlFunc="<<nonlFunc( npe*energyFac )<<std::endl ;
-
   const double signal(npe * nonlFunc(npe * energyFac));
 
   const double jitter(time - timeOfFlight(detId));
@@ -107,6 +104,36 @@ void EBHitResponseImpl<constset>::putAPDSignal(const DetId& detId, double npe, d
 }
 
 template <class constset>
+void EBHitResponseImpl<constset>::putAnalogSignal(const PCaloHit& hit, CLHEP::HepRandomEngine* engine) {
+  const DetId detId(hit.id());
+
+  const CaloSimParameters& parameters(*params(detId));
+
+  const double signal(analogSignalAmplitude(detId, hit.energy(), engine));
+
+  double time = hit.time();
+
+ if (m_hitCorrection) {
+    time += m_hitCorrection->delay(hit, engine);
+  }
+  
+  const double jitter(time - timeOfFlight(detId));
+
+  const double tzero = (shape()->timeToRise() + parameters.timePhase() - jitter -
+                        kSamplePeriod * (parameters.binOfMaximum() - phaseShift()));
+  double binTime(tzero);
+
+  EcalSamples& result(*findSignal(detId));
+
+  const unsigned int rsize(result.size());
+
+  for (unsigned int bin(0); bin != rsize; ++bin) {
+    result[bin] += (*shape())(binTime)*signal;
+    binTime += kSamplePeriod;
+  }
+}
+
+template <class constset>
 double EBHitResponseImpl<constset>::apdSignalAmplitude(const PCaloHit& hit, CLHEP::HepRandomEngine* engine) const {
   int iddepth = (hit.depth() & PCaloHit::kEcalDepthIdMask);
   assert(1 == iddepth || 2 == iddepth);
@@ -123,13 +150,7 @@ double EBHitResponseImpl<constset>::apdSignalAmplitude(const PCaloHit& hit, CLHE
   findIntercalibConstant(hit.id(), fac);
 
   npe *= fac;
-
-  //   edm::LogError( "EBHitResponse" ) << "--- # photoelectrons for "
-  /*   std::cout << "--- # photoelectrons for "
-	     << EBDetId( hit.id() ) 
-	     <<" is " << npe //;
-	     <<std::endl ;*/
-
+  
   return npe;
 }
 

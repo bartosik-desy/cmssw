@@ -27,7 +27,8 @@ public:
                     const CaloVShape* shape,
                     bool apdOnly,
                     const APDSimParameters* apdPars = nullptr,
-                    const CaloVShape* apdShape = nullptr);
+                    const CaloVShape* apdShape = nullptr
+		    );
 
   ~EBHitResponseImpl() override;
 
@@ -62,6 +63,9 @@ protected:
 
   void putAPDSignal(const DetId& detId, double npe, double time);
 
+  void putAnalogSignal(const PCaloHit& inputHit, CLHEP::HepRandomEngine*) override;
+
+    
 private:
   const VecD& offsets() const { return m_timeOffVec; }
 

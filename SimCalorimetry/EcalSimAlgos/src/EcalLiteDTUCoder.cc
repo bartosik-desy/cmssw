@@ -8,30 +8,16 @@
 
 #include <iostream>
 
-/////////////////////
-//NOTE:
-//TO BE FINALISED
-//Simona Cometti, [20.03.20 12:05]
-//[In reply to Dario Soldi]
-//In the Lite DTU v1 the gain 1 samples were 8.
-//The saturated one was the sample 5:
-//Two samples before and  5 after the one saturated.
-//In the Lite DTU v1.2 there is the possibility of having  8 samples or 16 samples with gain 1
-//When the gain 1 is selected we have:
-//5 samples before the saturated sample and 10 samples after.
-//When we have N consecutive saturated samples, the window at gain 1 is extended of N samples after (still to be implemented - to be double checked in the Cometti's PhD thesis)
-const float DTUVersion = 1.0;
-
 EcalLiteDTUCoder::EcalLiteDTUCoder(bool addNoise,
                                    bool PreMix1,
                                    EcalLiteDTUCoder::Noisifier* ebCorrNoise0,
                                    EcalLiteDTUCoder::Noisifier* ebCorrNoise1)
-    : m_peds(nullptr),
-      m_gainRatios(nullptr),
-      m_intercals(nullptr),
-      m_maxEneEB(ecalPh2::maxEneEB),  // Maximum for CATIA: LSB gain 10: 0.048 MeV
-      m_addNoise(addNoise),
-      m_PreMix1(PreMix1)
+  : m_peds(nullptr),
+    m_gainRatios(nullptr),
+    m_intercals(nullptr),
+    m_maxEneEB(ecalPh2::maxEneEB),  // Maximum for CATIA: LSB gain 10: 0.048 MeV
+    m_addNoise(addNoise),
+    m_PreMix1(PreMix1)
 
 {
   m_ebCorrNoise[0] = ebCorrNoise0;
@@ -60,7 +46,7 @@ void EcalLiteDTUCoder::analogToDigital(CLHEP::HepRandomEngine* engine,
 void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
                               EcalDataFrame_Ph2& df,
                               CLHEP::HepRandomEngine* engine) const {
-  const unsigned int nSamples(ecalSamples.size());
+  const int nSamples(ecalSamples.size());
 
   DetId detId = ecalSamples.id();
   double Emax = fullScaleEnergy(detId);
@@ -70,10 +56,10 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
   double widths[ecalPh2::NGAINS];
   double LSB[ecalPh2::NGAINS];
   double trueRMS[ecalPh2::NGAINS];
-
+  int nSaturatedSamples=0;
   double icalconst = 1.;
   findIntercalibConstant(detId, icalconst);
-
+  
   for (unsigned int igain(0); igain < ecalPh2::NGAINS; ++igain) {
     // fill in the pedestal and width
     findPedestal(detId, igain, pedestals[igain], widths[igain]);
@@ -84,8 +70,8 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
   }
 
   CaloSamples noiseframe[ecalPh2::NGAINS] = {
-      CaloSamples(detId, nSamples),
-      CaloSamples(detId, nSamples),
+    CaloSamples(detId, nSamples),
+    CaloSamples(detId, nSamples),
   };
 
   const Noisifier* noisy[ecalPh2::NGAINS] = {m_ebCorrNoise[0], m_ebCorrNoise[1]};
@@ -96,22 +82,21 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
     }
   }
 
-  bool isSaturated[ecalPh2::NGAINS] = {false, false};
   std::vector<std::vector<int>> adctrace(nSamples);
-  unsigned int saturatedSample[ecalPh2::NGAINS] = {0, 0};
+  int firstSaturatedSample[ecalPh2::NGAINS] = {0, 0};
 
-  for (unsigned int i(0); i != nSamples; ++i)
+  for (int i(0); i != nSamples; ++i)
     adctrace[i].resize(ecalPh2::NGAINS);
 
   for (unsigned int igain = 0; igain < ecalPh2::NGAINS; ++igain) {
-    for (unsigned int i(0); i != nSamples; ++i) {
+    for (int i(0); i != nSamples; ++i) {
       adctrace[i][igain] = -1;
     }
   }
 
   // fill ADC trace in gain 0 (x10) and gain 1 (x1)
   for (unsigned int igain = 0; igain < ecalPh2::NGAINS; ++igain) {
-    for (unsigned int i(0); i != nSamples; ++i) {
+    for (int i(0); i != nSamples; ++i) {
       double asignal = 0;
       if (!m_PreMix1) {
         asignal = pedestals[igain] + ecalSamples[i] / (LSB[igain] * icalconst) + trueRMS[igain] * noiseframe[igain][i];
@@ -123,38 +108,49 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
         asignal = ecalSamples[i] / (LSB[igain] * icalconst);
       }
       int isignal = asignal;
-
+      
       unsigned int adc = asignal - (double)isignal < 0.5 ? isignal : isignal + 1;
-
+      // gain 0 (x10) channel is saturated, readout will use gain 1 (x10), but I count the number of saturated samples
       if (adc > ecalPh2::MAXADC) {
         adc = ecalPh2::MAXADC;
-        isSaturated[igain] = true;
-        saturatedSample[igain] = i;
+        if (nSaturatedSamples==0) firstSaturatedSample[igain] = i;
+	nSaturatedSamples++;
       }
-
-      if (isSaturated[0] && igain == 0) {
-        break;  // gain 0 (x10) channel is saturated, readout will use gain 1 (x10)
-      } else {
-        adctrace[i][igain] = adc;
-      }  // for adc
+      adctrace[i][igain] = adc;
     }
-    if (!isSaturated[0]) {
+    if (nSaturatedSamples==0) {
       break;  //  gain 0 (x10) is not saturated, so don't bother with gain 1
     }
   }  // for igain
 
   int igain = 0;
-  const int previousSaturatedSamples = 5;
-  const int nextSaturatedSamples = 10;
-  // Note: we assume that Pileup generates small signals, and we will not saturate when adding pedestals
-  for (unsigned int j = 0; j < nSamples; ++j) {
-    if (isSaturated[0] and j >= (saturatedSample[0] - previousSaturatedSamples) and
-        j < (saturatedSample[0] + nextSaturatedSamples)) {
+  
+  //Limits of gain 1:
+  //The Lite DTU sends 5 samples before the saturating one, and 10 after with gain 1.
+  //we put the maximum in bin 5, but could happen that the system saturates before.
+
+  int previousSaturatedSamples=5; 
+  int nextSaturatedSamples=10;
+  int startingLowerGainSample=0;
+  int endingLowerGainSample = (firstSaturatedSample[0] + nextSaturatedSamples + (nSaturatedSamples));
+
+  if(nSaturatedSamples!=0 and (firstSaturatedSample[0] - previousSaturatedSamples) < 0) {
+    startingLowerGainSample=0;
+  }
+  else {
+    startingLowerGainSample = (firstSaturatedSample[0] - previousSaturatedSamples);
+  }
+  
+  //Setting values to the samples:
+  for (int j = 0; j < nSamples; ++j) {
+    if (nSaturatedSamples!=0 and j >= startingLowerGainSample and j < endingLowerGainSample) {
       igain = 1;
     } else {
       igain = 0;
     }
     df.setSample(j, EcalLiteDTUSample(adctrace[j][igain], igain));
+    if (nSaturatedSamples!=0) {
+    }
   }
 }
 
