@@ -12,12 +12,12 @@ EcalLiteDTUCoder::EcalLiteDTUCoder(bool addNoise,
                                    bool PreMix1,
                                    EcalLiteDTUCoder::Noisifier* ebCorrNoise0,
                                    EcalLiteDTUCoder::Noisifier* ebCorrNoise1)
-  : m_peds(nullptr),
-    m_gainRatios(0),
-    m_intercals(nullptr),
-    m_maxEneEB(ecalPh2::maxEneEB),  // Maximum for CATIA: LSB gain 10: 0.048 MeV
-    m_addNoise(addNoise),
-    m_PreMix1(PreMix1)
+    : m_peds(nullptr),
+      m_gainRatios(0),
+      m_intercals(nullptr),
+      m_maxEneEB(ecalPh2::maxEneEB),  // Maximum for CATIA: LSB gain 10: 0.048 MeV
+      m_addNoise(addNoise),
+      m_PreMix1(PreMix1)
 
 {
   m_ebCorrNoise[0] = ebCorrNoise0;

@@ -8,6 +8,8 @@
 #include "SimDataFormats/CaloHit/interface/PCaloHit.h"
 #include "CalibCalorimetry/EcalLaserCorrection/interface/EcalLaserDbService.h"
 #include "DataFormats/Provenance/interface/Timestamp.h"
+#include "CondFormats/EcalObjects/interface/EcalConstants.h"
+
 
 #include <unordered_map>
 #include <vector>
@@ -37,7 +39,7 @@ public:
 
   virtual ~EcalHitResponse();
 
-  const float kSamplePeriod = 25;
+  const float kSamplePeriod = ecalPh1::Samp_Period;
 
   void setBunchRange(int minBunch, int maxBunch);
 

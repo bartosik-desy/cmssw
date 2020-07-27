@@ -294,9 +294,9 @@ void EcalDigiProducer_Ph2::checkCalibrations(const edm::Event& event, const edm:
   eventSetup.get<EcalADCToGeVConstantRcd>().get(pAgc);
   const EcalADCToGeVConstant* agc = pAgc.product();
 
-  m_Coder->setGainRatios(ecalPh2::gains[0]/ecalPh2::gains[1]);
+  m_Coder->setGainRatios(ecalPh2::gains[0] / ecalPh2::gains[1]);
   if (nullptr != m_APDCoder)
-    m_APDCoder->setGainRatios(ecalPh2::gains[0]/ecalPh2::gains[1]);
+    m_APDCoder->setGainRatios(ecalPh2::gains[0] / ecalPh2::gains[1]);
 
   const double EBscale((agc->getEBValue()) * ecalPh2::gains[1] * (ecalPh2::MAXADC)*m_EBs25notCont);
 
