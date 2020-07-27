@@ -36,7 +36,7 @@ public:
   /// can be fetched every event from the EventSetup
   void setPedestals(const EcalLiteDTUPedestalsMap* pedestals);
 
-  void setGainRatios(const EcalCATIAGainRatios* gainRatios);
+  void setGainRatios(float gainRatios);
 
   void setFullScaleEnergy(double EBscale);
 
@@ -60,7 +60,7 @@ private:
 
   const EcalLiteDTUPedestalsMap* m_peds;
 
-  const EcalCATIAGainRatios* m_gainRatios;  // the electronics gains
+  float m_gainRatios;  // the electronics gains
 
   const EcalIntercalibConstantsMC* m_intercals;  //record specific for simulation of gain variation in MC
 

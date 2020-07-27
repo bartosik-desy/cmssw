@@ -113,10 +113,10 @@ void EBHitResponseImpl<constset>::putAnalogSignal(const PCaloHit& hit, CLHEP::He
 
   double time = hit.time();
 
- if (m_hitCorrection) {
+  if (m_hitCorrection) {
     time += m_hitCorrection->delay(hit, engine);
   }
-  
+
   const double jitter(time - timeOfFlight(detId));
 
   const double tzero = (shape()->timeToRise() + parameters.timePhase() - jitter -
@@ -150,7 +150,7 @@ double EBHitResponseImpl<constset>::apdSignalAmplitude(const PCaloHit& hit, CLHE
   findIntercalibConstant(hit.id(), fac);
 
   npe *= fac;
-  
+
   return npe;
 }
 

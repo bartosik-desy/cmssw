@@ -13,7 +13,7 @@ EcalLiteDTUCoder::EcalLiteDTUCoder(bool addNoise,
                                    EcalLiteDTUCoder::Noisifier* ebCorrNoise0,
                                    EcalLiteDTUCoder::Noisifier* ebCorrNoise1)
   : m_peds(nullptr),
-    m_gainRatios(nullptr),
+    m_gainRatios(0),
     m_intercals(nullptr),
     m_maxEneEB(ecalPh2::maxEneEB),  // Maximum for CATIA: LSB gain 10: 0.048 MeV
     m_addNoise(addNoise),
@@ -30,7 +30,7 @@ void EcalLiteDTUCoder::setFullScaleEnergy(double EBscale) { m_maxEneEB = ecalPh2
 
 void EcalLiteDTUCoder::setPedestals(const EcalLiteDTUPedestalsMap* pedestals) { m_peds = pedestals; }
 
-void EcalLiteDTUCoder::setGainRatios(const EcalCATIAGainRatios* gainRatios) { m_gainRatios = gainRatios; }
+void EcalLiteDTUCoder::setGainRatios(float gainRatios) { m_gainRatios = gainRatios; }
 
 void EcalLiteDTUCoder::setIntercalibConstants(const EcalIntercalibConstantsMC* ical) { m_intercals = ical; }
 
@@ -56,10 +56,10 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
   double widths[ecalPh2::NGAINS];
   double LSB[ecalPh2::NGAINS];
   double trueRMS[ecalPh2::NGAINS];
-  int nSaturatedSamples=0;
+  int nSaturatedSamples = 0;
   double icalconst = 1.;
   findIntercalibConstant(detId, icalconst);
-  
+
   for (unsigned int igain(0); igain < ecalPh2::NGAINS; ++igain) {
     // fill in the pedestal and width
     findPedestal(detId, igain, pedestals[igain], widths[igain]);
@@ -70,14 +70,14 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
   }
 
   CaloSamples noiseframe[ecalPh2::NGAINS] = {
-    CaloSamples(detId, nSamples),
-    CaloSamples(detId, nSamples),
+      CaloSamples(detId, nSamples),
+      CaloSamples(detId, nSamples),
   };
 
   const Noisifier* noisy[ecalPh2::NGAINS] = {m_ebCorrNoise[0], m_ebCorrNoise[1]};
 
   if (m_addNoise) {
-    for (unsigned int ig=0; ig < ecalPh2::NGAINS; ++ig) {
+    for (unsigned int ig = 0; ig < ecalPh2::NGAINS; ++ig) {
       noisy[ig]->noisify(noiseframe[ig], engine);
     }
   }
@@ -108,48 +108,48 @@ void EcalLiteDTUCoder::encode(const EcalSamples& ecalSamples,
         asignal = ecalSamples[i] / (LSB[igain] * icalconst);
       }
       int isignal = asignal;
-      
+
       unsigned int adc = asignal - (double)isignal < 0.5 ? isignal : isignal + 1;
       // gain 0 (x10) channel is saturated, readout will use gain 1 (x10), but I count the number of saturated samples
       if (adc > ecalPh2::MAXADC) {
         adc = ecalPh2::MAXADC;
-        if (nSaturatedSamples==0) firstSaturatedSample[igain] = i;
-	nSaturatedSamples++;
+        if (nSaturatedSamples == 0)
+          firstSaturatedSample[igain] = i;
+        nSaturatedSamples++;
       }
       adctrace[i][igain] = adc;
     }
-    if (nSaturatedSamples==0) {
+    if (nSaturatedSamples == 0) {
       break;  //  gain 0 (x10) is not saturated, so don't bother with gain 1
     }
   }  // for igain
 
   int igain = 0;
-  
+
   //Limits of gain 1:
   //The Lite DTU sends 5 samples before the saturating one, and 10 after with gain 1.
   //we put the maximum in bin 5, but could happen that the system saturates before.
 
-  int previousSaturatedSamples=5; 
-  int nextSaturatedSamples=10;
-  int startingLowerGainSample=0;
+  int previousSaturatedSamples = 5;
+  int nextSaturatedSamples = 10;
+  int startingLowerGainSample = 0;
   int endingLowerGainSample = (firstSaturatedSample[0] + nextSaturatedSamples + (nSaturatedSamples));
 
-  if(nSaturatedSamples!=0 and (firstSaturatedSample[0] - previousSaturatedSamples) < 0) {
-    startingLowerGainSample=0;
-  }
-  else {
+  if (nSaturatedSamples != 0 and (firstSaturatedSample[0] - previousSaturatedSamples) < 0) {
+    startingLowerGainSample = 0;
+  } else {
     startingLowerGainSample = (firstSaturatedSample[0] - previousSaturatedSamples);
   }
-  
+
   //Setting values to the samples:
   for (int j = 0; j < nSamples; ++j) {
-    if (nSaturatedSamples!=0 and j >= startingLowerGainSample and j < endingLowerGainSample) {
+    if (nSaturatedSamples != 0 and j >= startingLowerGainSample and j < endingLowerGainSample) {
       igain = 1;
     } else {
       igain = 0;
     }
     df.setSample(j, EcalLiteDTUSample(adctrace[j][igain], igain));
-    if (nSaturatedSamples!=0) {
+    if (nSaturatedSamples != 0) {
     }
   }
 }

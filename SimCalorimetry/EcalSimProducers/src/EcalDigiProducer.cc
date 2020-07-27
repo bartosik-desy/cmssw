@@ -81,7 +81,7 @@ EcalDigiProducer::EcalDigiProducer(const edm::ParameterSet &params, edm::Consume
       m_EBs25notCont(params.getParameter<double>("EBs25notContainment")),
       m_EEs25notCont(params.getParameter<double>("EEs25notContainment")),
 
-      m_readoutFrameSize(params.getParameter<int>("readoutFrameSize")),
+      m_readoutFrameSize(ecalPh1::sampleSize),
       m_ParameterMap(new EcalSimParameterMap(params.getParameter<double>("simHitToPhotoelectronsBarrel"),
                                              params.getParameter<double>("simHitToPhotoelectronsEndcap"),
                                              params.getParameter<double>("photoelectronsToAnalogBarrel"),

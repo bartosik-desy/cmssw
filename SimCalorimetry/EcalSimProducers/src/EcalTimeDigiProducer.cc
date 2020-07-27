@@ -27,7 +27,7 @@ EcalTimeDigiProducer::EcalTimeDigiProducer(const edm::ParameterSet &params,
   producesCollector.produces<EcalTimeDigiCollection>(m_EBdigiCollection);
 
   m_BarrelDigitizer = new EcalTimeMapDigitizer(EcalBarrel);
-  
+
 #ifdef ecal_time_debug
   std::cout << "[EcalTimeDigiProducer]::Create EB " << m_EBdigiCollection << " "
             << " collection and digitizer" << std::endl;
@@ -45,8 +45,7 @@ void EcalTimeDigiProducer::initializeEvent(edm::Event const &event, edm::EventSe
   m_BarrelDigitizer->initializeMap();
 }
 
-void EcalTimeDigiProducer::accumulateCaloHits(HitsHandle const &ebHandle,
-                                              int bunchCrossing) {
+void EcalTimeDigiProducer::accumulateCaloHits(HitsHandle const &ebHandle, int bunchCrossing) {
   // accumulate the simHits and do the averages in a given layer per bunch
   // crossing
   if (ebHandle.isValid()) {
@@ -93,7 +92,6 @@ void EcalTimeDigiProducer::finalizeEvent(edm::Event &event, edm::EventSetup cons
 #endif
 
   edm::LogInfo("TimeDigiInfo") << "EB time Digis: " << barrelResult->size();
-
 
 #ifdef ecal_time_debug
   std::cout << "[EcalTimeDigiProducer]::putting EcalTimeDigiCollection into the event " << std::endl;

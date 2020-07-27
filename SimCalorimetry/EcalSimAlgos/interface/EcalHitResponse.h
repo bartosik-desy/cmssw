@@ -116,18 +116,15 @@ protected:
 
   const CaloVHitFilter* hitFilter() const;
 
-
- const CaloVSimParameterMap* m_parameterMap;
+  const CaloVSimParameterMap* m_parameterMap;
   const CaloVShape* m_shape;
   const CaloVHitCorrection* m_hitCorrection;
   const CaloVPECorrection* m_PECorrection;
   const CaloVHitFilter* m_hitFilter;
   const CaloSubdetectorGeometry* m_geometry;
   const EcalLaserDbService* m_lasercals;
+
 private:
-
- 
-
   int m_minBunch;
   int m_maxBunch;
   double m_phaseShift;

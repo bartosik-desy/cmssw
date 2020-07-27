@@ -2,7 +2,6 @@ import FWCore.ParameterSet.Config as cms
 
 ecal_sim_parameter_map = cms.PSet(
     photoelectronsToAnalogEndcap = cms.double(0.000555555),
-    readoutFrameSize = cms.int32(10),
     binOfMaximum = cms.int32(6),
     simHitToPhotoelectronsEndcap = cms.double(1800.0),
     samplingFactor = cms.double(1.0),
@@ -14,7 +13,6 @@ ecal_sim_parameter_map = cms.PSet(
 )
 
 ecal_sim_parameter_map_ph2 = cms.PSet(
-    readoutFrameSize = cms.int32(16),
     binOfMaximum = cms.int32(6),
     samplingFactor = cms.double(1.0),
     timePhase = cms.double(0.0),
