@@ -6,7 +6,7 @@
  *                           time using a ratio method                                                                                                                             
  *                           chi2 using express method  
  *
- *  \author R. Bruneliere - A. Zabi
+ *
  */
 
 #include "RecoLocalCalo/EcalRecProducers/interface/EcalUncalibRecHitWorkerBaseClass.h"
@@ -19,16 +19,17 @@
 #include "CondFormats/EcalObjects/interface/EcalTimeCalibConstants.h"
 #include "CondFormats/EcalObjects/interface/EcalTimeOffsetConstant.h"
 #include "CondFormats/EcalObjects/interface/EcalLiteDTUPedestals.h"
-#include "CondFormats/EcalObjects/interface
-/EcalCATIAGainRatios.h"
+#include "CondFormats/EcalObjects/interface/EcalCATIAGainRatios.h"
 #include "CondFormats/EcalObjects/interface/EcalWeightXtalGroups.h"
 #include "CondFormats/EcalObjects/interface/EcalTBWeights.h"
 #include "CondFormats/EcalObjects/interface/EcalSampleMask.h"
 #include "CondFormats/EcalObjects/interface/EcalTimeBiasCorrections.h"
 #include "CondFormats/EcalObjects/interface/EcalPhase2SamplesCorrelation.h"
-#include "CondFormats/EcalObjects/interface/EcalPhase2PulseShapes.h"
-#include "CondFormats/EcalObjects/interface/EcalPhase2PulseCovariances.h"
+#include "CondFormats/EcalObjects/interface/EcalPulseShapes.h"
+#include "CondFormats/EcalObjects/interface/EcalPulseCovariances.h"
 #include "RecoLocalCalo/EcalRecAlgos/interface/EigenMatrixTypes.h"
+#include "DataFormats/EcalDigi/interface/EcalDigiCollections_Ph2.h"
+#include "DataFormats/EcalDigi/interface/EcalDataFrame_Ph2.h"
 
 namespace edm {
   class Event;
@@ -37,16 +38,14 @@ namespace edm {
   class ParameterSetDescription;
 }  // namespace edm
 
-class EcalPhase2UncalibRecHitWorkerMultiFit {
+class EcalPhase2UncalibRecHitWorkerMultiFit final : public EcalUncalibRecHitWorkerBaseClass {
 public:
-  EcalUncalibRecHitWorkerMultiFit(const edm::ParameterSet&, edm::ConsumesCollector& c);
-  EcalUncalibRecHitWorkerMultiFit(){};
-  ~EcalUncalibRecHitWorkerMultiFit() override{};
+  EcalPhase2UncalibRecHitWorkerMultiFit(const edm::ParameterSet&, edm::ConsumesCollector& c);
 
 private:
   void set(const edm::EventSetup& es) override;
   void set(const edm::Event& evt) override;
-  void run(const edm::Event& evt, const EcalDigiCollectionPh2& digis, EcalUncalibratedRecHitCollection& result) override;
+  void run(const edm::Event& evt, const EcalDigiCollectionPh2& digis, EcalUncalibratedRecHitCollection& result) ;
 
 public:
   edm::ParameterSetDescription getAlgoDescription() override;
@@ -54,17 +53,18 @@ public:
 private:
   edm::ESHandle<EcalLiteDTUPedestals> peds;
   edm::ESHandle<EcalCATIAGainRatios> gains;
-  edm::ESHandle<EcalSamplesCorrelation> noisecovariances;
+  edm::ESHandle<EcalPhase2SamplesCorrelation> noisecovariances;
   edm::ESHandle<EcalPhase2PulseShapes> pulseshapes;
   edm::ESHandle<EcalPhase2PulseCovariances> pulsecovariances;
 
   double timeCorrection(float ampli, const std::vector<float>& amplitudeBins, const std::vector<float>& shiftBins);
 
-  const SampleMatrix& noisecor(bool barrel, int gain) const { return noisecors_[barrel ? 1 : 0][gain]; }
-  const SampleMatrixGainArray& noisecor(bool barrel) const { return noisecors_[barrel ? 1 : 0]; }
+  const ecalph2::SampleMatrix& noisecor(int gain) const { return noisecors_[gain]; }
+  const ecalph2::SampleMatrixGainArray& noisecor() const { return noisecors_; }
 
   // multifit method
-  std::array<ecal2:SampleMatrixGainArray, 2> noisecors_;
+  ecalph2::SampleMatrixGainArray noisecors_;
+
   BXVector activeBX;
   bool ampErrorCalculation_;
   bool useLumiInfoRunHeader_;
@@ -100,14 +100,14 @@ private:
   std::vector<double> EBamplitudeFitParameters_;
   std::pair<double, double> EBtimeFitLimits_;
   
-  EcalUncalibRecHitRatioMethodAlgo<EBDataFrame_Ph2> ratioMethod_barrel_;
+  EcalUncalibRecHitRatioMethodAlgo<EcalDataFrame_Ph2> ratioMethod_barrel_;
   
 
   double EBtimeConstantTerm_;
   double EBtimeNconst_;
   double outOfTimeThreshG10pEB_;
-  double outOfTimeThreshG1mEB_;
-  double outOfTimeThreshG10pEB_;
+  double outOfTimeThreshG1pEB_;
+  double outOfTimeThreshG10mEB_;
   double outOfTimeThreshG1mEB_;
   double amplitudeThreshEB_;
   double ebSpikeThresh_;

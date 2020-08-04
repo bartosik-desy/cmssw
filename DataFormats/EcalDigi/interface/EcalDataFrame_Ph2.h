@@ -40,7 +40,7 @@ public:
   //bool hasSwitchToGain6() const;
   //bool hasSwitchToGain1() const;
 
-  int MAXSAMPLES = ecalPh2::sampleSize;
+  static const int MAXSAMPLES = ecalPh2::sampleSize;
 
   edm::DataFrame const& frame() const { return m_data; }
   edm::DataFrame& frame() { return m_data; }

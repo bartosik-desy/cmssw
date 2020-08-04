@@ -5,9 +5,9 @@
 #include "CondFormats/EcalObjects/interface/EcalCondObjectContainer.h"
 #include "CondFormats/EcalObjects/interface/EcalConstants.h"
 
-class EcalLiteDTUPedestals {
+class EcalLiteDTUPedestal {
 public:
-  float meanarray[2] = {13., 8.};
+  float meanarray[2] = {13., 8.}; // gain x10 in first position, gain x1 in second position
   float rmsarray[2] = {2.8, 1.2};
 
   int setMean(int i, float value) {
@@ -33,7 +33,8 @@ public:
   COND_SERIALIZABLE;
 };
 
-typedef EcalCondObjectContainer<EcalLiteDTUPedestals> EcalLiteDTUPedestalsMap;
+typedef EcalCondObjectContainer<EcalLiteDTUPedestal> EcalLiteDTUPedestalsMap;
 typedef EcalLiteDTUPedestalsMap::const_iterator EcalLiteDTUPedestalsMapIterator;
+typedef EcalLiteDTUPedestalsMap EcalLiteDTUPedestals;
 
 #endif

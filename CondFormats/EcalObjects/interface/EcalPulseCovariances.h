@@ -6,7 +6,7 @@
 #include "CondFormats/EcalObjects/interface/EcalPulseShapes.h"
 #include "CondFormats/EcalObjects/interface/EcalCondObjectContainer.h"
 
-struct EcalPulseCovariance<template size_t nsamples> {
+template <unsigned int nsamples> struct EcalPulseCovariance{
 public:
   EcalPulseCovariance();
   float covval[nsamples][nsamples];

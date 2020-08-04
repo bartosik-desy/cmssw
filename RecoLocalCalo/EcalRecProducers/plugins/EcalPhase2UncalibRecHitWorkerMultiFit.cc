@@ -1,28 +1,26 @@
-#include "RecoLocalCalo/EcalRecProducers/plugins/EcalUncalibRecHitWorkerMultiFit.h"
-
+#include "RecoLocalCalo/EcalRecProducers/plugins/EcalPhase2UncalibRecHitWorkerMultiFit.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/Run.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
-
-#include "CondFormats/DataRecord/interface/EcalGainRatiosRcd.h"
-#include "CondFormats/DataRecord/interface/EcalPedestalsRcd.h"
+#include "CondFormats/DataRecord/interface/EcalCATIAGainRatiosRcd.h"
+#include "CondFormats/DataRecord/interface/EcalLiteDTUPedestalsRcd.h"
 #include "CondFormats/DataRecord/interface/EcalWeightXtalGroupsRcd.h"
 #include "CondFormats/DataRecord/interface/EcalTBWeightsRcd.h"
 #include "CondFormats/DataRecord/interface/EcalSampleMaskRcd.h"
 #include "CondFormats/DataRecord/interface/EcalTimeCalibConstantsRcd.h"
 #include "CondFormats/DataRecord/interface/EcalTimeOffsetConstantRcd.h"
 #include "CondFormats/DataRecord/interface/EcalTimeBiasCorrectionsRcd.h"
-#include "CondFormats/DataRecord/interface/EcalSamplesCorrelationRcd.h"
-#include "CondFormats/DataRecord/interface/EcalPulseShapesRcd.h"
-#include "CondFormats/DataRecord/interface/EcalPulseCovariancesRcd.h"
+#include "CondFormats/DataRecord/interface/EcalPhase2SamplesCorrelationRcd.h"
+#include "CondFormats/DataRecord/interface/EcalPhase2PulseShapesRcd.h"
+#include "CondFormats/DataRecord/interface/EcalPhase2PulseCovariancesRcd.h"
 
 #include <FWCore/ParameterSet/interface/ConfigurationDescriptions.h>
 #include <FWCore/ParameterSet/interface/ParameterSetDescription.h>
 #include <FWCore/ParameterSet/interface/EmptyGroupDescription.h>
 
-EcalUncalibRecHitWorkerMultiFit::EcalUncalibRecHitWorkerMultiFit(const edm::ParameterSet& ps, edm::ConsumesCollector& c)
+EcalPhase2UncalibRecHitWorkerMultiFit::EcalPhase2UncalibRecHitWorkerMultiFit(const edm::ParameterSet& ps, edm::ConsumesCollector& c)
     : EcalUncalibRecHitWorkerBaseClass(ps, c) {
   // get the BX for the pulses to be activated
   std::vector<int32_t> activeBXs = ps.getParameter<std::vector<int32_t>>("activeBXs");
@@ -97,17 +95,17 @@ EcalUncalibRecHitWorkerMultiFit::EcalUncalibRecHitWorkerMultiFit(const edm::Para
   
 }
 
-void EcalUncalibRecHitWorkerMultiFit::set(const edm::EventSetup& es) {
+void EcalPhase2UncalibRecHitWorkerMultiFit::set(const edm::EventSetup& es) {
   // common setup
-  es.get<EcalGainRatiosRcd>().get(gains);
-  es.get<EcalPedestalsRcd>().get(peds);
+  es.get<EcalCATIAGainRatiosRcd>().get(gains);
+  es.get<EcalLiteDTUPedestalsRcd>().get(peds);
 
   // for the multifit method
   if (!ampErrorCalculation_)
     multiFitMethod_.disableErrorCalculation();
   es.get<EcalPhase2SamplesCorrelationRcd>().get(noisecovariances);
-  es.get<EcalPulseShapesRcd>().get(pulseshapes);
-  es.get<EcalPulseCovariancesRcd>().get(pulsecovariances);
+  es.get<EcalPhase2PulseShapesRcd>().get(pulseshapes);
+  es.get<EcalPhase2PulseCovariancesRcd>().get(pulsecovariances);
 
   // weights parameters for the time
   es.get<EcalWeightXtalGroupsRcd>().get(grps);
@@ -124,25 +122,23 @@ void EcalUncalibRecHitWorkerMultiFit::set(const edm::EventSetup& es) {
   es.get<EcalTimeBiasCorrectionsRcd>().get(timeCorrBias_);
 
   int nnoise = SampleVector::RowsAtCompileTime;
-  SampleMatrix& noisecorEBg10 = noisecors_[1][0];
-  SampleMatrix& noisecorEBg1 = noisecors_[1][1];
+  ecalph2::SampleMatrix& noisecorEBg10 = noisecors_[0];
+  ecalph2::SampleMatrix& noisecorEBg1 = noisecors_[1];
 
   
 
   for (int i = 0; i < nnoise; ++i) {
     for (int j = 0; j < nnoise; ++j) {
       int vidx = std::abs(j - i);
-      noisecorEBg12(i, j) = noisecovariances->EBG12SamplesCorrelation[vidx];
- 
-      noisecorEBg6(i, j) = noisecovariances->EBG6SamplesCorrelation[vidx];
-  
+
+      noisecorEBg10(i, j) = noisecovariances->EBG10SamplesCorrelation[vidx];
       noisecorEBg1(i, j) = noisecovariances->EBG1SamplesCorrelation[vidx];
   
     }
   }
 }
 
-void EcalUncalibRecHitWorkerMultiFit::set(const edm::Event& evt) {
+void EcalPhase2UncalibRecHitWorkerMultiFit::set(const edm::Event& evt) {
   unsigned int bunchspacing = 450;
 
   if (useLumiInfoRunHeader_) {
@@ -173,7 +169,7 @@ void EcalUncalibRecHitWorkerMultiFit::set(const edm::Event& evt) {
  *
  * @return Jitter (in clock cycles) which will be added to UncalibRechit.setJitter(), 0 if no correction is applied.
  */
-double EcalUncalibRecHitWorkerMultiFit::timeCorrection(float ampli,
+double EcalPhase2UncalibRecHitWorkerMultiFit::timeCorrection(float ampli,
                                                        const std::vector<float>& amplitudeBins,
                                                        const std::vector<float>& shiftBins) {
   // computed initially in ns. Than turned in the BX's, as
@@ -220,8 +216,8 @@ double EcalUncalibRecHitWorkerMultiFit::timeCorrection(float ampli,
   return theCorrection * inv25;
 }
 
-void EcalUncalibRecHitWorkerMultiFit::run(const edm::Event& evt,
-                                          const EcalDigiCollection& digis,
+void EcalPhase2UncalibRecHitWorkerMultiFit::run(const edm::Event& evt,
+                                          const EcalDigiCollectionPh2& digis,
                                           EcalUncalibratedRecHitCollection& result) {
   if (digis.empty())
     return;
@@ -253,11 +249,11 @@ void EcalUncalibRecHitWorkerMultiFit::run(const edm::Event& evt,
     // intelligence for recHit computation
     float offsetTime = 0;
 
-    const EcalPedestals::Item* aped = nullptr;
+    const EcalLiteDTUPedestals::Item* aped = nullptr;
     const EcalCATIAGainRatio* aGain = nullptr;
     const EcalXtalGroupId* gid = nullptr;
-    const EcalPulseShapes::Item* aPulse = nullptr;
-    const EcalPulseCovariances::Item* aPulseCov = nullptr;
+    const EcalPhase2PulseShapes::Item* aPulse = nullptr;
+    const EcalPhase2PulseCovariances::Item* aPulseCov = nullptr;
 
 
     unsigned int hashedIndex = EBDetId(detid).hashedIndex();
@@ -271,15 +267,15 @@ void EcalUncalibRecHitWorkerMultiFit::run(const edm::Event& evt,
 
     
 
-    double pedVec[3] = {aped->mean_x12, aped->mean_x6, aped->mean_x1};
-    double pedRMSVec[3] = {aped->rms_x12, aped->rms_x6, aped->rms_x1};
-    double gainRatios[3] = {1., aGain->gain12Over6(), aGain->gain6Over1() * aGain->gain12Over6()};
+    double pedVec[ecalPh2::NGAINS] = {aped->mean(ecalPh2::gainId10), aped->mean(ecalPh2::gainId1)};
+    double pedRMSVec[ecalPh2::NGAINS] = {aped->rms(ecalPh2::gainId10), aped->rms(ecalPh2::gainId1)};
+    double gainRatios[ecalPh2::NGAINS] = {1., *aGain};
 
-    for (int i = 0; i < EcalPulseShape::TEMPLATESAMPLES; ++i)
+    for (int i = 0; i < EcalPhase2PulseShape::TEMPLATESAMPLES; ++i)
       fullpulse(i + 7) = aPulse->pdfval[i];
 
-    for (int i = 0; i < EcalPulseShape::TEMPLATESAMPLES; i++)
-      for (int j = 0; j < EcalPulseShape::TEMPLATESAMPLES; j++)
+    for (int i = 0; i < EcalPhase2PulseShape::TEMPLATESAMPLES; i++)
+      for (int j = 0; j < EcalPhase2PulseShape::TEMPLATESAMPLES; j++)
         fullpulsecov(i + 7, j + 7) = aPulseCov->covval[i][j];
 
     // compute the right bin of the pulse shape using time calibration constants
@@ -293,8 +289,8 @@ void EcalUncalibRecHitWorkerMultiFit::run(const edm::Event& evt,
     }
 
     int lastSampleBeforeSaturation = -2;
-    for (unsigned int iSample = 0; iSample < EcalDataFrame::MAXSAMPLES; iSample++) {
-      if (((EcalDataFrame)(*itdg)).sample(iSample).gainId() == 0) {
+    for (unsigned int iSample = 0; iSample < EcalDataFrame_Ph2::MAXSAMPLES; iSample++) {
+      if (((EcalDataFrame_Ph2)(*itdg)).sample(iSample).gainId() == 0) {
         lastSampleBeforeSaturation = iSample - 1;
         break;
       }
@@ -323,7 +319,7 @@ void EcalUncalibRecHitWorkerMultiFit::run(const edm::Event& evt,
       uncalibRecHit.setChi2(0);
     } else {
       // multifit
-      const SampleMatrixGainArray& noisecors = noisecor(barrel);
+        const ecalph2::SampleMatrixGainArray& noisecors = noisecor();
 
       result.push_back(multiFitMethod_.makeRecHit(*itdg, aped, aGain, noisecors, fullpulse, fullpulsecov, activeBX));
       auto& uncalibRecHit = result.back();
@@ -422,7 +418,7 @@ void EcalUncalibRecHitWorkerMultiFit::run(const edm::Event& evt,
   }
 }
 
-edm::ParameterSetDescription EcalUncalibRecHitWorkerMultiFit::getAlgoDescription() {
+edm::ParameterSetDescription EcalPhase2UncalibRecHitWorkerMultiFit::getAlgoDescription() {
   edm::ParameterSetDescription psd0;
   psd0.addNode((edm::ParameterDescription<std::vector<double>>("EBPulseShapeTemplate",
                                                                {1.13979e-02,
@@ -571,8 +567,8 @@ edm::ParameterSetDescription EcalUncalibRecHitWorkerMultiFit::getAlgoDescription
 
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "RecoLocalCalo/EcalRecProducers/interface/EcalUncalibRecHitWorkerFactory.h"
-DEFINE_EDM_PLUGIN(EcalUncalibRecHitWorkerFactory, EcalUncalibRecHitWorkerMultiFit, "EcalUncalibRecHitWorkerMultiFit");
+DEFINE_EDM_PLUGIN(EcalUncalibRecHitWorkerFactory, EcalPhase2UncalibRecHitWorkerMultiFit, "EcalPhase2UncalibRecHitWorkerMultiFit");
 #include "RecoLocalCalo/EcalRecProducers/interface/EcalUncalibRecHitFillDescriptionWorkerFactory.h"
 DEFINE_EDM_PLUGIN(EcalUncalibRecHitFillDescriptionWorkerFactory,
-                  EcalUncalibRecHitWorkerMultiFit,
-                  "EcalUncalibRecHitWorkerMultiFit");
+                  EcalPhase2UncalibRecHitWorkerMultiFit,
+                  "EcalPhase2UncalibRecHitWorkerMultiFit");

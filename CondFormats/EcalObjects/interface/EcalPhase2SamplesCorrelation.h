@@ -1,11 +1,6 @@
-#ifndef CondFormats_EcalObjects_EcalSamplesCorrelation_HH
-#define CondFormats_EcalObjects_EcalSamplesCorrelation_HH
+#ifndef CondFormats_EcalObjects_Ecal2SamplesCorrelation_HH
+#define CondFormats_EcalObjects_Ecal2SamplesCorrelation_HH
 
-// -*- C++ -*-
-//
-// Author:      Jean Fay
-// Created:     Monday 24 Nov 2014
-//
 
 #include "CondFormats/Serialization/interface/Serializable.h"
 
@@ -13,11 +8,8 @@
 #include <iostream>
 #include <vector>
 
-class EcalSamplesCorrelation {
+class EcalPhase2SamplesCorrelation {
 public:
-  EcalSamplesCorrelation();
-  EcalSamplesCorrelation(const EcalSamplesCorrelation& aset);
-  ~EcalSamplesCorrelation();
 
   std::vector<double> EBG10SamplesCorrelation;
   std::vector<double> EBG1SamplesCorrelation;
