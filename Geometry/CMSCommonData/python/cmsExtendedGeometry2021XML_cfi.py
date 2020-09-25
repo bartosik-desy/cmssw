@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-## 2015 + new phase 1 pixel detector
+## 2021 Scenario
 
 XMLIdealGeometryESSource = cms.ESSource("XMLIdealGeometryESSource",
     geomXMLFiles = cms.vstring(
@@ -49,7 +49,7 @@ XMLIdealGeometryESSource = cms.ESSource("XMLIdealGeometryESSource",
         'Geometry/TrackerCommonData/data/PhaseI/pixbarlayer1.xml', 
         'Geometry/TrackerCommonData/data/PhaseI/pixbarlayer2.xml', 
         'Geometry/TrackerCommonData/data/PhaseI/pixbarlayer3.xml', 
-        'Geometry/TrackerCommonData/data/PhaseI/pixbar.xml',
+        'Geometry/TrackerCommonData/data/PhaseI/v1/pixbar.xml',
         'Geometry/TrackerCommonData/data/Run2/trackerpatchpannel.xml',
         'Geometry/TrackerCommonData/data/Run2/trackerpixelnose.xml',
         'Geometry/TrackerCommonData/data/tibtidcommonmaterial.xml',
@@ -235,13 +235,13 @@ XMLIdealGeometryESSource = cms.ESSource("XMLIdealGeometryESSource",
         'Geometry/MuonCommonData/data/mb3/2015/v2/mb3.xml',
         'Geometry/MuonCommonData/data/mb4/2015/v2/mb4.xml',
         'Geometry/MuonCommonData/data/mb4Shield/2021/v1/mb4Shield.xml',
-        'Geometry/MuonCommonData/data/muonYoke/2021/v2/muonYoke.xml',
-        'Geometry/MuonCommonData/data/mf/2021/v1/mf.xml',
+        'Geometry/MuonCommonData/data/muonYoke/2021/v3/muonYoke.xml',
+        'Geometry/MuonCommonData/data/mf/2021/v2/mf.xml',
         'Geometry/MuonCommonData/data/rpcf/2015/v1/rpcf.xml',
         'Geometry/MuonCommonData/data/gemf/TDR_BaseLine/gemf.xml',
         'Geometry/MuonCommonData/data/gem11/TDR_BaseLine/gem11.xml',
-        'Geometry/MuonCommonData/data/csc/2021/v1/csc.xml',
-        'Geometry/MuonCommonData/data/mfshield/2017/v1/mfshield.xml',
+        'Geometry/MuonCommonData/data/csc/2021/v2/csc.xml',
+        'Geometry/MuonCommonData/data/mfshield/2017/v2/mfshield.xml',
         'Geometry/ForwardCommonData/data/forwardshield/2017/v1/forwardshield.xml',
         'Geometry/ForwardCommonData/data/brmrotations.xml',
         'Geometry/ForwardCommonData/data/PostLS2/brm.xml',

@@ -639,6 +639,17 @@ namespace dqm::impl {
     return accessRootObject(access, __PRETTY_FUNCTION__, 1)->GetEntries();
   }
 
+  /// get global bin number (for 2-D profiles)
+  int MonitorElement::getBin(int binx, int biny) const {
+    auto access = this->access();
+    if (kind() == Kind::TPROFILE2D)
+      return static_cast<TProfile2D const *>(accessRootObject(access, __PRETTY_FUNCTION__, 1))->GetBin(binx, biny);
+    else {
+      incompatible(__PRETTY_FUNCTION__);
+      return 0;
+    }
+  }
+
   /// get # of bin entries (for profiles)
   double MonitorElement::getBinEntries(int bin) const {
     auto access = this->access();
@@ -650,6 +661,25 @@ namespace dqm::impl {
       incompatible(__PRETTY_FUNCTION__);
       return 0;
     }
+  }
+
+  /// get # of bin entries (for 2-D profiles)
+  double MonitorElement::getBinEntries(int binx, int biny) const {
+    auto access = this->access();
+    if (kind() == Kind::TPROFILE2D) {
+      int globBin =
+          static_cast<TProfile2D const *>(accessRootObject(access, __PRETTY_FUNCTION__, 1))->GetBin(binx, biny);
+      return static_cast<TProfile2D const *>(accessRootObject(access, __PRETTY_FUNCTION__, 1))->GetBinEntries(globBin);
+    } else {
+      incompatible(__PRETTY_FUNCTION__);
+      return 0;
+    }
+  }
+
+  /// get integral of bins
+  double MonitorElement::integral() const {
+    auto access = this->access();
+    return accessRootObject(access, __PRETTY_FUNCTION__, 1)->Integral();
   }
 
   /// get x-, y- or z-axis title (axis=1, 2, 3 respectively)
@@ -717,6 +747,33 @@ namespace dqm::impl {
   void MonitorElement::setEntries(double nentries) {
     auto access = this->accessMut();
     accessRootObject(access, __PRETTY_FUNCTION__, 1)->SetEntries(nentries);
+  }
+
+  /// Replace entries with results of dividing num by denom
+  void MonitorElement::divide(
+      const MonitorElement *num, const MonitorElement *denom, double c1, double c2, const char *options) {
+    if (num->kind() < Kind::TH1F)
+      num->incompatible(__PRETTY_FUNCTION__);
+    if (denom->kind() < Kind::TH1F)
+      denom->incompatible(__PRETTY_FUNCTION__);
+
+    TH1 const *numH = static_cast<TH1 const *>(num->getRootObject());
+    TH1 const *denomH = static_cast<TH1 const *>(denom->getRootObject());
+    TH1 *thisH = getTH1();
+
+    //Need to take locks in a consistent order to avoid deadlocks. Use pointer value order of underlying ROOT object..
+    //This is known as the monitor pattern.
+    std::array<const MonitorElement *, 3> order{{this, num, denom}};
+    std::sort(order.begin(), order.end(), [](auto const *lhs, auto const *rhs) {
+      return lhs->mutable_->data_.value_.object_.get() < rhs->mutable_->data_.value_.object_.get();
+    });
+
+    auto a0 = order[0]->access();
+    auto a1 = order[1]->access();
+    auto a2 = order[2]->access();
+
+    //Have ROOT do check that the types are compatible
+    thisH->Divide(numH, denomH, c1, c2, options);
   }
 
   /// set bin label for x, y or z axis (axis=1, 2, 3 respectively)
@@ -886,6 +943,9 @@ namespace dqm::impl {
                                   MonitorElementData::QReport *&qr,
                                   DQMNet::QValue *&qv) {
     auto access = this->accessMut();
+
+    syncCoreObject(access);
+
     assert(access.value.qreports_.size() == data_.qreports.size());
 
     qr = nullptr;
