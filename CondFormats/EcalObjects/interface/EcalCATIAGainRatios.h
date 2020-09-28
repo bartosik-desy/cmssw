@@ -3,8 +3,9 @@
 
 #include "CondFormats/EcalObjects/interface/EcalCondObjectContainer.h"
 
+
 typedef float EcalCATIAGainRatio;
-typedef EcalFloatCondObjectContainer EcalCATIAGainRatioMap;
+typedef EcalCondObjectContainer<EcalCATIAGainRatio> EcalCATIAGainRatioMap;
 typedef EcalCATIAGainRatioMap EcalCATIAGainRatios;
 
 #endif

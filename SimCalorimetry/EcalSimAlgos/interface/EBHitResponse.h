@@ -12,22 +12,21 @@ namespace CLHEP {
   class HepRandomEngine;
 }
 
-template <class constset>
-class EBHitResponseImpl : public EcalHitResponse {
+template class EBHitResponseImpl<size_t nsamples, size_t noffsets, double sampleperiod > : public EcalHitResponse {
 public:
-  typedef CaloTSamples<float, constset::sampleSize> EBSamples;
+  typedef CaloTSamples<float, nsamples> EBSamples;
 
   typedef std::vector<double> VecD;
 
-  static constexpr size_t kNOffsets = constset::kNOffsets;
+  enum { kNOffsets = noffsets };
 
-  static constexpr double kSamplePeriod = constset::Samp_Period;
-
+  constexpr double kSamplePeriod = sampleperiod;
+  
   EBHitResponseImpl(const CaloVSimParameterMap* parameterMap,
-                    const CaloVShape* shape,
-                    bool apdOnly,
-                    const APDSimParameters* apdPars = nullptr,
-                    const CaloVShape* apdShape = nullptr);
+                const CaloVShape* shape,
+                bool apdOnly,
+                const APDSimParameters* apdPars = nullptr,
+                const CaloVShape* apdShape = nullptr);
 
   ~EBHitResponseImpl() override;
 
@@ -102,7 +101,14 @@ private:
   bool m_isInitialized;
 };
 
+<<<<<<< HEAD
 typedef EBHitResponseImpl<ecalPh1> EBHitResponse;
 typedef EBHitResponseImpl<ecalPh2> EBHitResponse_Ph2;
 #include "EBHitResponse.icc"
+=======
+
+typedef EBHitResponseImpl<ecalPh1::sampleSize,2000,EcalHitResponse::BUNCHSPACE> EBHitResponse;
+typedef EBHitResponseImpl<ecalPh2::sampleSize,ecalPh2::kNOffsets,ecalPh2::Samp_Period> EBHitResponse_Ph2;
+
+>>>>>>> argiro/ecal_phase2reco_stub_11_1_0_p6
 #endif

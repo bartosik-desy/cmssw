@@ -5,10 +5,10 @@
 #include "CondFormats/EcalObjects/interface/EcalCondObjectContainer.h"
 #include "CondFormats/EcalObjects/interface/EcalConstants.h"
 
-class EcalLiteDTUPedestals {
+class EcalLiteDTUPedestal {
 public:
-  int setMean(unsigned int i, float value) {
-    if (i >= ecalPh2::NGAINS)
+  int setMean(int i, float value) {
+    if (i >= ecalPh2::NGAINS || i < 0)
       return -1;
     else
       meanarray[i] = value;
@@ -33,7 +33,8 @@ private:
   COND_SERIALIZABLE;
 };
 
-typedef EcalCondObjectContainer<EcalLiteDTUPedestals> EcalLiteDTUPedestalsMap;
+typedef EcalCondObjectContainer<EcalLiteDTUPedestal> EcalLiteDTUPedestalsMap;
 typedef EcalLiteDTUPedestalsMap::const_iterator EcalLiteDTUPedestalsMapIterator;
+typedef EcalLiteDTUPedestalsMap EcalLiteDTUPedestals;
 
 #endif
