@@ -5,15 +5,17 @@
 
 #include "CondFormats/EcalObjects/interface/EcalCondObjectContainer.h"
 
-template<unsigned int nsamples> struct EcalPulseShapeT {
+template <unsigned int nsamples> struct EcalPulseShapeT {
 public:
-  static const int TEMPLATESAMPLES = nsamples;
+  static const unsigned int TEMPLATESAMPLES = nsamples;
 
-  EcalPulseShapeT();
+  EcalPulseShapeT() {
+    for (unsigned int s = 0; s < TEMPLATESAMPLES; ++s) pdfval[s] = 0.;
+  };
 
   float pdfval[TEMPLATESAMPLES];
 
-  float val(int isample) const { return pdfval[isample]; }
+  float val(unsigned int isample) const { return pdfval[isample]; }
 
   COND_SERIALIZABLE;
 };

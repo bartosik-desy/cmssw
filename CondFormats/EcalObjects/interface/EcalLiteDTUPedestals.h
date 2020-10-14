@@ -7,15 +7,15 @@
 
 class EcalLiteDTUPedestal {
 public:
-  int setMean(int i, float value) {
-    if (i >= ecalPh2::NGAINS || i < 0)
+  int setMean(size_t i, float value) {
+    if (i >= ecalPh2::NGAINS)
       return -1;
     else
       meanarray[i] = value;
     return 1;
   }
 
-  int setRMS(unsigned int i, float value) {
+  int setRMS(size_t i, float value) {
     if (i >= ecalPh2::NGAINS)
       return -1;
     else
@@ -23,9 +23,9 @@ public:
     return 1;
   }
 
-  float mean(unsigned int i) const { return meanarray[i]; }
+  float mean(size_t i) const { return meanarray[i]; }
 
-  float rms(unsigned int i) const { return rmsarray[i]; }
+  float rms(size_t i) const { return rmsarray[i]; }
 
 private:
   float meanarray[ecalPh2::NGAINS] = {13., 8.};
