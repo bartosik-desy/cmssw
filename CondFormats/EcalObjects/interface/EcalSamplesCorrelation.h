@@ -20,10 +20,12 @@ public:
   ~EcalSamplesCorrelation();
 
   std::vector<double> EBG12SamplesCorrelation;
+  std::vector<double> EBG10SamplesCorrelation;
   std::vector<double> EBG6SamplesCorrelation;
   std::vector<double> EBG1SamplesCorrelation;
 
   std::vector<double> EEG12SamplesCorrelation;
+  std::vector<double> EEG10SamplesCorrelation;
   std::vector<double> EEG6SamplesCorrelation;
   std::vector<double> EEG1SamplesCorrelation;
 

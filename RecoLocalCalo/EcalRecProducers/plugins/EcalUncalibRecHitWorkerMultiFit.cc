@@ -300,11 +300,11 @@ void EcalUncalibRecHitWorkerMultiFit::run(const edm::Event& evt,
     double pedRMSVec[3] = {aped->rms_x12, aped->rms_x6, aped->rms_x1};
     double gainRatios[3] = {1., aGain->gain12Over6(), aGain->gain6Over1() * aGain->gain12Over6()};
 
-    for (int i = 0; i < EcalPulseShape::TEMPLATESAMPLES; ++i)
+    for (size_t i = 0; i < EcalPulseShape::TEMPLATESAMPLES; ++i)
       fullpulse(i + 7) = aPulse->pdfval[i];
 
-    for (int i = 0; i < EcalPulseShape::TEMPLATESAMPLES; i++)
-      for (int j = 0; j < EcalPulseShape::TEMPLATESAMPLES; j++)
+    for (size_t i = 0; i < EcalPulseShape::TEMPLATESAMPLES; i++)
+      for (size_t j = 0; j < EcalPulseShape::TEMPLATESAMPLES; j++)
         fullpulsecov(i + 7, j + 7) = aPulseCov->covval[i][j];
 
     // compute the right bin of the pulse shape using time calibration constants
