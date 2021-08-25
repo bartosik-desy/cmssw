@@ -8,16 +8,18 @@
 
 struct EcalPulseSymmCovariance {
 public:
+  static const int TEMPLATESAMPLES = EcalPulseShape::TEMPLATESAMPLES;
+
   EcalPulseSymmCovariance();
 
-  float covval[EcalPulseShape::TEMPLATESAMPLES * (EcalPulseShape::TEMPLATESAMPLES + 1) / 2];
+  float covval[TEMPLATESAMPLES * (TEMPLATESAMPLES + 1) / 2];
 
   float val(int i, int j) const {
     int k = -1;
     if (j >= i)
-      k = j + (EcalPulseShape::TEMPLATESAMPLES - 1) * i;
+      k = j + (TEMPLATESAMPLES - 1) * i;
     else
-      k = i + (EcalPulseShape::TEMPLATESAMPLES - 1) * j;
+      k = i + (TEMPLATESAMPLES - 1) * j;
     return covval[k];
   }
 
@@ -27,5 +29,15 @@ public:
 typedef EcalCondObjectContainer<EcalPulseSymmCovariance> EcalPulseSymmCovariancesMap;
 typedef EcalPulseSymmCovariancesMap::const_iterator EcalPulseSymmCovariancesMapIterator;
 typedef EcalPulseSymmCovariancesMap EcalPulseSymmCovariances;
+
+
+struct EcalPh2PulseSymmCovariance: public EcalPulseSymmCovariance {
+public:
+  static const int TEMPLATESAMPLES = EcalPh2PulseShape::TEMPLATESAMPLES;
+};
+
+typedef EcalCondObjectContainer<EcalPulseSymmCovariance> EcalPh2PulseSymmCovariancesMap;
+typedef EcalPh2PulseSymmCovariancesMap::const_iterator EcalPh2PulseSymmCovariancesMapIterator;
+typedef EcalPh2PulseSymmCovariancesMap EcalPh2PulseSymmCovariances;
 
 #endif
